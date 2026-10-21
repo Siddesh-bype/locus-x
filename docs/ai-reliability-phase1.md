@@ -1,6 +1,6 @@
 # AI reliability: fresh-seed Phase 1 evidence
 
-Status: Phase 1 complete. The frozen v1 model (`ai-reliability-v1`), its 24-feature adapter, and the existing weight policy were not changed or retuned. Phase 2 has not started.
+Status: Phase 1 complete. The frozen v1 model (`ai-reliability-v1`), its 24-feature adapter, and the existing weight policy were not changed or retuned. Phase 2 is documented separately in `docs/ai-reliability-phase2.md`.
 
 ## Provenance and protocol
 
