@@ -1,0 +1,463 @@
+{
+  "diagnostic_only": true,
+  "model": "frozen v1; probabilities are not recalibrated",
+  "overall": {
+    "no_loss": {
+      "samples": 100692,
+      "positives": 36550,
+      "precision": 0.9760766895310918,
+      "recall": 0.9499589603283174,
+      "f1": 0.962840742075927,
+      "roc_auc": 0.9968858416523769,
+      "average_precision": 0.9942743268080071,
+      "brier": 0.020317195111331215,
+      "ece": 0.016670873724756233,
+      "mean_predicted_nlos": 0.34631724846965845,
+      "true_nlos_rate": 0.3629881221944147
+    },
+    "packet_loss": {
+      "samples": 28608,
+      "positives": 12650,
+      "precision": 0.9726717705203992,
+      "recall": 0.7934387351778656,
+      "f1": 0.8739605555313682,
+      "roc_auc": 0.9783754291774802,
+      "average_precision": 0.9746263803523108,
+      "brier": 0.07941496443316044,
+      "ece": 0.08709145993583615,
+      "mean_predicted_nlos": 0.35509254453843675,
+      "true_nlos_rate": 0.4421840044742729
+    }
+  },
+  "stratifications": [
+    {
+      "stratifier": "available_anchors",
+      "no_loss_ece": 0.016670873724756233,
+      "packet_loss_ece": 0.08754275946106585,
+      "no_loss_reweighted_to_packet": 0.022899307395779552,
+      "no_loss_rows": [
+        {
+          "stratum": "3",
+          "frames": 21996,
+          "ece": 0.030381755751074938,
+          "weight": 0.21844833750446907
+        },
+        {
+          "stratum": "4",
+          "frames": 35872,
+          "ece": 0.008139184032348553,
+          "weight": 0.3562547173558972
+        },
+        {
+          "stratum": "6",
+          "frames": 18888,
+          "ece": 0.024355918466301113,
+          "weight": 0.18758193302347753
+        },
+        {
+          "stratum": "8",
+          "frames": 23936,
+          "ece": 0.01079307820824731,
+          "weight": 0.2377150121161562
+        }
+      ],
+      "packet_loss_rows": [
+        {
+          "stratum": "3",
+          "frames": 10872,
+          "ece": 0.08283890114513744,
+          "weight": 0.3800335570469799
+        },
+        {
+          "stratum": "4",
+          "frames": 5888,
+          "ece": 0.11945609297183456,
+          "weight": 0.2058165548098434
+        },
+        {
+          "stratum": "5",
+          "frames": 5540,
+          "ece": 0.08474179571152703,
+          "weight": 0.19365212527964207
+        },
+        {
+          "stratum": "6",
+          "frames": 3816,
+          "ece": 0.08149563150492138,
+          "weight": 0.13338926174496643
+        },
+        {
+          "stratum": "7",
+          "frames": 2492,
+          "ece": 0.048147823406675706,
+          "weight": 0.08710850111856823
+        }
+      ],
+      "reweighted_rows": [
+        {
+          "stratum": "3",
+          "frames": 21996,
+          "ece": 0.030381755751074938,
+          "weight": 0.3800335570469799
+        },
+        {
+          "stratum": "4",
+          "frames": 35872,
+          "ece": 0.008139184032348553,
+          "weight": 0.2058165548098434
+        },
+        {
+          "stratum": "6",
+          "frames": 18888,
+          "ece": 0.024355918466301113,
+          "weight": 0.1333892617449664
+        },
+        {
+          "stratum": "8",
+          "frames": 23936,
+          "ece": 0.01079307820824731,
+          "weight": 0.0
+        }
+      ]
+    },
+    {
+      "stratifier": "frames_since_gap",
+      "no_loss_ece": 0.017494017029948815,
+      "packet_loss_ece": 0.08864862086946795,
+      "no_loss_reweighted_to_packet": 0.022094459310048786,
+      "no_loss_rows": [
+        {
+          "stratum": "0",
+          "frames": 2184,
+          "ece": 0.028948274916088538,
+          "weight": 0.021689905851507568
+        },
+        {
+          "stratum": "1",
+          "frames": 94414,
+          "ece": 0.01672273244193865,
+          "weight": 0.9376514519524888
+        },
+        {
+          "stratum": "2-3",
+          "frames": 3146,
+          "ece": 0.0312979186117698,
+          "weight": 0.031243792952766854
+        },
+        {
+          "stratum": "4+",
+          "frames": 948,
+          "ece": 0.0221109890686128,
+          "weight": 0.009414849243236802
+        }
+      ],
+      "packet_loss_rows": [
+        {
+          "stratum": "0",
+          "frames": 1004,
+          "ece": 0.034889081080148286,
+          "weight": 0.03509507829977629
+        },
+        {
+          "stratum": "1",
+          "frames": 16884,
+          "ece": 0.0900137693930623,
+          "weight": 0.5901845637583892
+        },
+        {
+          "stratum": "2-3",
+          "frames": 9104,
+          "ece": 0.0904617361315524,
+          "weight": 0.3182326621923937
+        },
+        {
+          "stratum": "4+",
+          "frames": 1616,
+          "ece": 0.09757115114799132,
+          "weight": 0.056487695749440715
+        }
+      ],
+      "reweighted_rows": [
+        {
+          "stratum": "0",
+          "frames": 2184,
+          "ece": 0.028948274916088538,
+          "weight": 0.03509507829977629
+        },
+        {
+          "stratum": "1",
+          "frames": 94414,
+          "ece": 0.01672273244193865,
+          "weight": 0.5901845637583892
+        },
+        {
+          "stratum": "2-3",
+          "frames": 3146,
+          "ece": 0.0312979186117698,
+          "weight": 0.3182326621923938
+        },
+        {
+          "stratum": "4+",
+          "frames": 948,
+          "ece": 0.0221109890686128,
+          "weight": 0.05648769574944071
+        }
+      ]
+    },
+    {
+      "stratifier": "geometry_quintile",
+      "no_loss_ece": 0.016877491889573513,
+      "packet_loss_ece": 0.08763151113905975,
+      "no_loss_reweighted_to_packet": 0.017753102811129864,
+      "no_loss_rows": [
+        {
+          "stratum": "0",
+          "frames": 23929,
+          "ece": 0.02239945469791864,
+          "weight": 0.23764549318714495
+        },
+        {
+          "stratum": "1",
+          "frames": 17146,
+          "ece": 0.027962195228304253,
+          "weight": 0.17028165097525125
+        },
+        {
+          "stratum": "2",
+          "frames": 22269,
+          "ece": 0.007231101985142881,
+          "weight": 0.22115957573590753
+        },
+        {
+          "stratum": "3",
+          "frames": 19191,
+          "ece": 0.018159683022604758,
+          "weight": 0.19059110952210703
+        },
+        {
+          "stratum": "4",
+          "frames": 18157,
+          "ece": 0.009608425152832585,
+          "weight": 0.18032217057958924
+        }
+      ],
+      "packet_loss_rows": [
+        {
+          "stratum": "0",
+          "frames": 1930,
+          "ece": 0.10438169960813468,
+          "weight": 0.06746364653243848
+        },
+        {
+          "stratum": "1",
+          "frames": 8712,
+          "ece": 0.0816800359432602,
+          "weight": 0.30453020134228187
+        },
+        {
+          "stratum": "2",
+          "frames": 3593,
+          "ece": 0.08134776551712135,
+          "weight": 0.12559423937360178
+        },
+        {
+          "stratum": "3",
+          "frames": 6661,
+          "ece": 0.09816641146954039,
+          "weight": 0.2328369686800895
+        },
+        {
+          "stratum": "4",
+          "frames": 7712,
+          "ece": 0.08399119929761574,
+          "weight": 0.2695749440715884
+        }
+      ],
+      "reweighted_rows": [
+        {
+          "stratum": "0",
+          "frames": 23929,
+          "ece": 0.02239945469791864,
+          "weight": 0.0674636465324385
+        },
+        {
+          "stratum": "1",
+          "frames": 17146,
+          "ece": 0.027962195228304253,
+          "weight": 0.30453020134228187
+        },
+        {
+          "stratum": "2",
+          "frames": 22269,
+          "ece": 0.007231101985142881,
+          "weight": 0.12559423937360178
+        },
+        {
+          "stratum": "3",
+          "frames": 19191,
+          "ece": 0.018159683022604758,
+          "weight": 0.2328369686800894
+        },
+        {
+          "stratum": "4",
+          "frames": 18157,
+          "ece": 0.009608425152832585,
+          "weight": 0.2695749440715884
+        }
+      ]
+    }
+  ],
+  "layout_rows": [
+    {
+      "layout": "hospital_floor_01",
+      "condition": "no_loss",
+      "frames": 25176,
+      "samples": 25176,
+      "positives": 8793,
+      "precision": 0.966014170769785,
+      "recall": 0.9148186057090868,
+      "f1": 0.9397196261682244,
+      "roc_auc": 0.994078673127861,
+      "average_precision": 0.9878026020125021,
+      "brier": 0.03002001335049185,
+      "ece": 0.027554520208688992,
+      "mean_predicted_nlos": 0.3217066809352576,
+      "true_nlos_rate": 0.3492612011439466,
+      "false_los_rate_among_nlos": 0.08518139429091323
+    },
+    {
+      "layout": "hospital_floor_01",
+      "condition": "packet_loss",
+      "frames": 7152,
+      "samples": 7152,
+      "positives": 3093,
+      "precision": 0.9667104686815593,
+      "recall": 0.713546718396379,
+      "f1": 0.8210565476190477,
+      "roc_auc": 0.9672328307799435,
+      "average_precision": 0.9582599450495903,
+      "brier": 0.10465931679532839,
+      "ece": 0.11618011710972759,
+      "mean_predicted_nlos": 0.3162863258432925,
+      "true_nlos_rate": 0.4324664429530201,
+      "false_los_rate_among_nlos": 0.2864532816036211
+    },
+    {
+      "layout": "ground",
+      "condition": "no_loss",
+      "frames": 25176,
+      "samples": 25176,
+      "positives": 9317,
+      "precision": 0.9822003002358997,
+      "recall": 0.9831490823226361,
+      "f1": 0.982674462264657,
+      "roc_auc": 0.9988885836080562,
+      "average_precision": 0.9979237735226221,
+      "brier": 0.01025093487291753,
+      "ece": 0.007500840292489072,
+      "mean_predicted_nlos": 0.3635002035110427,
+      "true_nlos_rate": 0.3700746742929774,
+      "false_los_rate_among_nlos": 0.01685091767736396
+    },
+    {
+      "layout": "ground",
+      "condition": "packet_loss",
+      "frames": 7152,
+      "samples": 7152,
+      "positives": 3204,
+      "precision": 0.975574188844331,
+      "recall": 0.8352059925093633,
+      "f1": 0.8999495543971751,
+      "roc_auc": 0.9833162732248317,
+      "average_precision": 0.9809593968454877,
+      "brier": 0.06622104308549541,
+      "ece": 0.07165419866727014,
+      "mean_predicted_nlos": 0.3763323785139379,
+      "true_nlos_rate": 0.44798657718120805,
+      "false_los_rate_among_nlos": 0.1647940074906367
+    },
+    {
+      "layout": "first",
+      "condition": "no_loss",
+      "frames": 25170,
+      "samples": 25170,
+      "positives": 9350,
+      "precision": 0.9804716679116423,
+      "recall": 0.9826737967914438,
+      "f1": 0.9815714972490786,
+      "roc_auc": 0.9986609247077753,
+      "average_precision": 0.9974683715812109,
+      "brier": 0.010779118991028125,
+      "ece": 0.007604370742911845,
+      "mean_predicted_nlos": 0.3657915569379076,
+      "true_nlos_rate": 0.3714739769566945,
+      "false_los_rate_among_nlos": 0.01732620320855615
+    },
+    {
+      "layout": "first",
+      "condition": "packet_loss",
+      "frames": 7152,
+      "samples": 7152,
+      "positives": 3242,
+      "precision": 0.9796718972895863,
+      "recall": 0.8473164713140037,
+      "f1": 0.9086999669202779,
+      "roc_auc": 0.9844045780208927,
+      "average_precision": 0.9837120137946868,
+      "brier": 0.060662353651364936,
+      "ece": 0.0679275054989328,
+      "mean_predicted_nlos": 0.3853722707874207,
+      "true_nlos_rate": 0.4532997762863535,
+      "false_los_rate_among_nlos": 0.1526835286859963
+    },
+    {
+      "layout": "second",
+      "condition": "no_loss",
+      "frames": 25170,
+      "samples": 25170,
+      "positives": 9090,
+      "precision": 0.9743799719232569,
+      "recall": 0.9162816281628163,
+      "f1": 0.9444381449143894,
+      "roc_auc": 0.9949335760690496,
+      "average_precision": 0.9910149560057354,
+      "brier": 0.030218799867835922,
+      "ece": 0.026871896227268356,
+      "mean_predicted_nlos": 0.33427232308143245,
+      "true_nlos_rate": 0.36114421930870083,
+      "false_los_rate_among_nlos": 0.08371837183718372
+    },
+    {
+      "layout": "second",
+      "condition": "packet_loss",
+      "frames": 7152,
+      "samples": 7152,
+      "positives": 3111,
+      "precision": 0.9670550421856167,
+      "recall": 0.7737062037929926,
+      "f1": 0.8596428571428572,
+      "roc_auc": 0.9763742755368848,
+      "average_precision": 0.9704380667651349,
+      "brier": 0.086117144200453,
+      "ece": 0.09260401846741409,
+      "mean_predicted_nlos": 0.34237920300909597,
+      "true_nlos_rate": 0.4349832214765101,
+      "false_los_rate_among_nlos": 0.2262937962070074
+    }
+  ],
+  "distribution_shift": {
+    "no_loss_available_counts": {
+      "3": 21996,
+      "4": 35872,
+      "6": 18888,
+      "8": 23936
+    },
+    "packet_loss_available_counts": {
+      "3": 10872,
+      "4": 5888,
+      "5": 5540,
+      "6": 3816,
+      "7": 2492
+    }
+  }
+}

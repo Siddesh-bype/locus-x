@@ -1,0 +1,16 @@
+{
+  "metrics": {
+    "samples": 129300,
+    "positives": 49200,
+    "precision": 0.9753110631714279,
+    "recall": 0.9097154471544715,
+    "f1": 0.9413719489751922,
+    "roc_auc": 0.9931286795976574,
+    "average_precision": 0.989469019956386,
+    "brier": 0.03339274797102874,
+    "ece": 0.03225163265999654,
+    "mean_predicted_nlos": 0.3482588081752702,
+    "true_nlos_rate": 0.3805104408352668
+  },
+  "note": "Same phase2 validation rows; v1 calibration was fitted on v1 validation during training."
+}

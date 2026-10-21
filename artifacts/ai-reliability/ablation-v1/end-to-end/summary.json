@@ -1,0 +1,12 @@
+{
+  "scope": "validation seeds 11,22; all 18 fault variants; anchor counts 3,4,6,8; 50 frames",
+  "policy": {
+    "floor": 0.05,
+    "threshold": 0.05,
+    "ambiguous": "predicted_los < 3"
+  },
+  "comparison": "AI-assisted LOCUS-X versus statistical LOCUS-X on the same tracked frames",
+  "solvable": "at least three valid measurements in the frame",
+  "coasting": "fewer than three valid measurements in the frame",
+  "elapsed_seconds": 3840.010523599998
+}
