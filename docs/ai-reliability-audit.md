@@ -1,12 +1,14 @@
 # AI reliability: Phase 0 audit
 
-Audit date: 21 October 2026. This phase was read-only with respect to production source. The only new files are this report and `artifacts/ai-reliability/audit-phase0/latency.json`.
+Audit date: 21 October 2026. This phase was read-only with respect to production source. The only new files at audit time were this report and `artifacts/ai-reliability/audit-phase0/latency.json`.
+
+Baseline freeze: commit `72086c3e81e80777d9ddc9a95d178fd8c53c0440` on branch `main`, created after the audit. Because `.gitignore` excludes `artifacts/`, the audited AI artifacts were force-added so the frozen snapshot contains the evidence used by this audit. The commit hash and the latency supplement were added in the following documentation commit.
 
 ## Verdict
 
 The 24-feature v1 adapter respects the stated inference boundary. The existing evidence is not yet sufficient for the requested final claim: the saved latency is adapter-only, the policy validation omitted the mixed faults that later regressed, the "One NLOS" group is contaminated by coasting frames, several handoff metrics and classifier curves are absent, and no run-level confidence intervals exist.
 
-No Git metadata is present in this checkout. Commit history, diffs and the origin of the inference fix cannot be checked. This is a reproducibility limitation, not evidence that the changes are correct.
+At audit time no Git metadata was present in this checkout. The repository has since been initialized, so provenance can be frozen going forward. Historical commit history, earlier diffs and the original origin of the inference fix still cannot be recovered. This remains a reproducibility limitation, not evidence that the changes are correct.
 
 ## a) Feature truth-boundary audit
 
@@ -70,18 +72,29 @@ A repeat on this machine, using the existing v1 model and the same synthetic NLO
 | Preliminary solve + adapter | 2.550 ms | 2.332 ms | 4.151 ms |
 | Preliminary solve + adapter + AI-weighted solve | 19.007 ms | 20.501 ms | 24.031 ms |
 
-These values are machine-dependent and include Python/SciPy dispatch overhead. They show why the 0.386 ms figure must not be presented as end-to-end latency.
+A supplemental run on the same frame, saved in `artifacts/ai-reliability/audit-phase0/latency-locus-x.json`, measured the LOCUS-X comparison path (300 iterations per row):
+
+| LOCUS-X path | Mean | Median | P95 |
+|---|---:|---:|---:|
+| Preliminary solve only | 1.020 ms | 0.946 ms | 1.316 ms |
+| LOCUS-X robust solve only | 4.463 ms | 4.145 ms | 6.271 ms |
+| Tracker update only | 0.030 ms | 0.028 ms | 0.033 ms |
+| LOCUS-X robust solve + tracker | 13.417 ms | 15.340 ms | 18.314 ms |
+
+The combined row includes both operations in one timed loop; it is higher than the sum of the separately timed rows because of run-to-run CPU scheduling and allocation variance on this machine. The AI-assisted path's 19.007 ms row is therefore roughly comparable to the 13.417 ms LOCUS-X robust-solve-plus-tracker row on this host, not to the adapter-only 0.669 ms.
+
+All these values are machine-dependent and include Python/SciPy dispatch overhead. They show why the 0.386 ms figure must not be presented as end-to-end latency.
 
 ## d) Origin of the probability inversion
 
-This cannot be established from repository history because there is no `.git` directory (`git rev-parse` reports "not a git repository"). The available evidence is:
+This cannot be established from repository history because the repository had no `.git` metadata when audited. The later baseline commit starts a new history and cannot recover the earlier state. The available evidence is:
 
 - `artifacts/ai-reliability/competition-ai-v1/results.json` (written 01:15) has 8-anchor NLOS AI RMSE 2.1189 m, worse than LOCUS-X at 1.9678 m.
 - `artifacts/ai-reliability/competition-ai-v2/results.json` (written 01:22) has 8-anchor NLOS AI RMSE 1.4963 m, better than LOCUS-X.
 - Both use seeds 101 and 202, which are already-inspected reference seeds, not validation seeds 11/22.
 - There is no v1 adapter unit test for the probability-to-weight direction. The existing tests do not import `ReliabilityModel`.
 
-The artifact sequence is consistent with the inversion being found by rerunning the already-inspected 101/202 benchmark, not by validation-only selection or a unit test. That would be a split-discipline violation even though 101/202 are not the current final test seeds. The exact causal claim remains unverified because Git history is absent. Phase 5 must add a direction test so this cannot recur.
+The artifact sequence is consistent with the inversion being found by rerunning the already-inspected 101/202 benchmark, not by validation-only selection or a unit test. That would be a split-discipline violation even though 101/202 are not the current final test seeds. The exact causal claim remains unverified because the pre-baseline Git history is unavailable. Phase 5 must add a direction test so this cannot recur.
 
 ## e) Why validation showed no regression
 
@@ -111,6 +124,7 @@ Present:
 
 - `final-evaluation/results.json`: flat baseline/proposed/AI rows, 216 primary and 216 unseen-layout rows; RMSE, median, P95, valid rate, update rate, conditioned RMSE, mean latency and proposed/AI coverage.
 - `final-evaluation/metrics.csv`, `layout-generalization.csv`, `majority-bias.csv`: the same tabular data.
+- `audit-phase0/latency.json` and `audit-phase0/latency-locus-x.json`: adapter/AI and LOCUS-X solve/tracker timing supplements.
 - `policy-tuning.json`: candidates, selected floor/threshold, validation rows.
 - `dataset-v1/*`: NPZ splits, manifests, per-run catalog and SHA-256 hashes.
 - `models/ai-reliability-v1/metrics.json`: aggregate test/validation classification metrics, confusion matrices, calibration bins, logistic/MLP comparison and feature ablations.

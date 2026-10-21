@@ -1,0 +1,35 @@
+{
+  "version": "1.0.0",
+  "status": "preregistered_unrun",
+  "registered_at": "2026-10-21",
+  "baseline_commit": "72086c3e81e80777d9ddc9a95d178fd8c53c0440",
+  "purpose": "Fresh-seed Phase 1 confirmatory evidence for the frozen AI reliability v1 model. Seeds were selected and recorded before any Phase 1 evaluation run.",
+  "freshness_check": {
+    "method": "git grep over the frozen baseline for each candidate integer as a whole word, excluding binary NPZ payloads",
+    "result": "no matches",
+    "note": "The strings were absent from tracked source, configs, docs and JSON artifacts at baseline. Binary datasets were excluded because they contain feature arrays, not seed lookup text."
+  },
+  "fresh_seeds": [7001, 7013, 7019, 7027, 7039, 7043, 7057, 7069],
+  "protocol": {
+    "route": "held_out",
+    "dt": 0.5,
+    "steps": 120,
+    "anchor_counts": [3, 4, 6, 8],
+    "layouts": [
+      {"environment_id": "hospital_floor_01", "floor_id": null, "role": "original_reference"},
+      {"environment_id": "hospital_v3", "floor_id": "ground", "role": "in_distribution_v3"},
+      {"environment_id": "hospital_v3", "floor_id": "first", "role": "in_distribution_v3"},
+      {"environment_id": "hospital_v3", "floor_id": "second", "role": "unseen_layout"}
+    ],
+    "variants": "all base_variants() and mixed_variants() from backend.locus_x.ai_evaluation",
+    "classifier_anchor_count": 8,
+    "bootstrap_resamples": 2000,
+    "confidence_level": 0.95
+  },
+  "previously_reported_seeds": {
+    "seeds": [303, 404],
+    "label": "previously reported; not unseen evidence",
+    "reason": "Used in the existing final-evaluation artifacts before this pre-registration."
+  },
+  "excluded_used_seeds": [1, 2, 3, 4, 11, 17, 22, 29, 101, 202, 303, 404]
+}

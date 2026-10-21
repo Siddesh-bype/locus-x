@@ -56,7 +56,7 @@ Feature groups:
 - Map: wall count and mean wall count on the anchor-to-position segment.
 - Temporal: previous residual, residual delta, position delta and time delta.
 
-The adapter converts `P(NLOS)` to `p_los = 1 - p_nlos`. The earlier inverted conversion caused the AI branch to downweight LOS anchors; that inversion was corrected and is covered by the final results.
+The adapter converts `P(NLOS)` to `p_los = 1 - p_nlos`. An earlier inverted conversion downweighted LOS anchors. The artifacts show the correction happened between `competition-ai-v1` and `competition-ai-v2`, after the already-inspected seeds 101/202 had been rerun; because the repository had no Git history at that point, the exact origin is not recoverable. The current direction is covered by the existing results and a new truth-isolation test, and Phase 5 still needs a dedicated probability-direction test.
 
 Test-set classification metrics:
 
@@ -71,7 +71,9 @@ Test-set classification metrics:
 | ECE | 0.0127 |
 | Confusion | TP 11,150; FP 888; FN 1,318; TN 50,420 |
 
-Model size is 14,307 bytes. The saved adapter benchmark measured 0.386 ms mean, 0.350 ms median and 0.434 ms p95 over 200 iterations. Latency is environment-dependent and is not a real-time guarantee.
+Model size is 14,307 bytes. The saved **adapter-only** benchmark measured 0.386 ms mean, 0.350 ms median and 0.434 ms p95 over 200 iterations. That figure times `model.predict()` after a preliminary solve and excludes the AI-weighted robust solve and tracking, so it is not end-to-end latency.
+
+A same-machine Phase 0 rerun measured 0.669 ms adapter-only and 19.007 ms for preliminary solve + adapter + AI-weighted solve (`artifacts/ai-reliability/audit-phase0/latency.json`). The comparable LOCUS-X path measured 13.417 ms mean / 15.340 ms median / 18.314 ms p95 for robust solve + tracker (`artifacts/ai-reliability/audit-phase0/latency-locus-x.json`, 300 iterations on the same frame). These values are machine-dependent and are not a real-time guarantee.
 
 ## Weight policy
 
