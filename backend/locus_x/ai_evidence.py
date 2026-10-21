@@ -31,6 +31,16 @@ DEFAULT_MODEL_DIR = ROOT / "models" / "ai-reliability-v1"
 DEFAULT_SEEDS = ROOT / "configs" / "ai" / "final-test-seeds-v1.json"
 DEFAULT_OUTPUT = ROOT / "artifacts" / "ai-reliability" / "evidence-v1-fresh"
 METHODS = ("baseline", "proposed", "ai")
+METHOD_FIELDS = (
+    "error",
+    "matched",
+    "prediction",
+    "valid",
+    "updated",
+    "coverage",
+    "area",
+    "latency",
+)
 METHOD_LABELS = {
     "baseline": "geometric baseline",
     "proposed": "LOCUS-X",
@@ -87,6 +97,79 @@ def _write_csv(path: Path, rows: list[dict], fields: list[str] | None = None) ->
         writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
+
+
+def _checkpoint_path(directory: Path, layout: str, variant: str, count: int, seed: int) -> Path:
+    return directory / f"{layout}__{variant}__{count}__{seed}.npz"
+
+
+def _save_checkpoint(path: Path, run: dict) -> None:
+    payload = {
+        "meta__layout": np.asarray(run["layout"]),
+        "meta__environment_id": np.asarray(run["environment_id"]),
+        "meta__floor_id": np.asarray(run["floor_id"] if run["floor_id"] is not None else ""),
+        "meta__role": np.asarray(run["role"]),
+        "meta__scenario": np.asarray(run["scenario"]),
+        "meta__variant": np.asarray(run["variant"]),
+        "meta__count": np.asarray(run["count"]),
+        "meta__seed": np.asarray(run["seed"]),
+        "meta__duration": np.asarray(run["duration_seconds"]),
+    }
+    for method in METHODS:
+        for field in METHOD_FIELDS:
+            payload[f"{method}__{field}"] = run["methods"][method][field]
+        payload[f"{method}__frame_error"] = run["frames"]["error"][method]
+        payload[f"{method}__frame_prediction"] = run["frames"]["prediction"][method]
+    payload["frame__available"] = run["frames"]["available"]
+    payload["frame__nlos"] = run["frames"]["nlos"]
+    if run["classifier"] is not None:
+        payload["classifier__scores"] = run["classifier"]["scores"]
+        payload["classifier__targets"] = run["classifier"]["targets"]
+    np.savez_compressed(path, **payload)
+
+
+def _load_checkpoint(path: Path) -> dict:
+    data = np.load(path, allow_pickle=False)
+    classifier = None
+    if "classifier__scores" in data.files:
+        classifier = {
+            "scores": np.asarray(data["classifier__scores"], dtype=float),
+            "targets": np.asarray(data["classifier__targets"], dtype=float),
+        }
+    floor_id = str(data["meta__floor_id"])
+    return {
+        "layout": str(data["meta__layout"]),
+        "environment_id": str(data["meta__environment_id"]),
+        "floor_id": floor_id or None,
+        "role": str(data["meta__role"]),
+        "scenario": str(data["meta__scenario"]),
+        "variant": str(data["meta__variant"]),
+        "count": int(data["meta__count"]),
+        "seed": int(data["meta__seed"]),
+        "duration_seconds": float(data["meta__duration"]),
+        "methods": {
+            method: {
+                field: np.asarray(data[f"{method}__{field}"], dtype=float)
+                if field not in ("valid", "updated", "coverage")
+                else np.asarray(data[f"{method}__{field}"], dtype=bool)
+                for field in METHOD_FIELDS
+            }
+            for method in METHODS
+        },
+        "classifier": classifier,
+        "frames": {
+            "available": np.asarray(data["frame__available"], dtype=int),
+            "nlos": np.asarray(data["frame__nlos"], dtype=int),
+            "error": {
+                method: np.asarray(data[f"{method}__frame_error"], dtype=float)
+                for method in METHODS
+            },
+            "prediction": {
+                method: np.asarray(data[f"{method}__frame_prediction"], dtype=bool)
+                for method in METHODS
+            },
+        },
+    }
 
 
 def _concatenate(arrays: list[np.ndarray]) -> np.ndarray:
@@ -199,12 +282,14 @@ def _run_session(
     steps: int,
     dt: float,
     collect_classifier: bool,
-    groups: dict,
 ):
     session = SimulationSession(environment, settings)
     session.ai_model = model
     session.restart()
     methods = {method: _new_method() for method in METHODS}
+    frame_available, frame_nlos = [], []
+    frame_errors = {method: [] for method in METHODS}
+    frame_prediction = {method: [] for method in METHODS}
     scores, targets = [], []
     for _ in range(steps):
         frame = session.advance(dt)
@@ -218,7 +303,8 @@ def _run_session(
         }
         n_available = len(frame.measurements)
         n_nlos = sum(label.kind == "nlos" for label in frame.simulator_labels)
-        _group_update(groups, (n_available, n_nlos), frame, errors, n_available, n_nlos)
+        frame_available.append(n_available)
+        frame_nlos.append(n_nlos)
         for method in METHODS:
             estimate = {
                 "baseline": frame.baseline,
@@ -231,13 +317,17 @@ def _run_session(
                 "ai": frame.ai_tracking,
             }[method]
             error = errors[method]
+            prediction_only = (
+                tracking is not None and tracking.position is not None and not tracking.updated
+            )
+            frame_errors[method].append(float(error) if error is not None else np.nan)
+            frame_prediction[method].append(bool(prediction_only))
             if error is not None:
                 methods[method]["error"].append(float(error))
                 if matched:
                     methods[method]["matched"].append(float(error))
-            if tracking is not None and tracking.position is not None and not tracking.updated:
-                if error is not None:
-                    methods[method]["prediction"].append(float(error))
+            if prediction_only and error is not None:
+                methods[method]["prediction"].append(float(error))
             methods[method]["valid"].append(bool(available[method]))
             methods[method]["updated"].append(
                 bool(available[method]) if method == "baseline" else bool(tracking.updated)
@@ -275,6 +365,18 @@ def _run_session(
         "methods": {
             method: {key: np.asarray(value) for key, value in data.items()}
             for method, data in methods.items()
+        },
+        "frames": {
+            "available": np.asarray(frame_available, dtype=int),
+            "nlos": np.asarray(frame_nlos, dtype=int),
+            "error": {
+                method: np.asarray(values, dtype=float)
+                for method, values in frame_errors.items()
+            },
+            "prediction": {
+                method: np.asarray(values, dtype=bool)
+                for method, values in frame_prediction.items()
+            },
         },
         "classifier": {
             "scores": np.asarray(scores, dtype=float),
@@ -423,30 +525,31 @@ def _row(
     return rows
 
 
-def _group_update(groups: dict, key, frame, errors: dict, available: int, nlos: int) -> None:
-    group = groups.setdefault(
-        key,
-        {
-            "frames": 0,
-            "solvable": available >= 3,
-            "available_anchors": available,
-            "nlos_anchors": nlos,
-            "methods": {method: {"errors": [], "prediction": []} for method in METHODS},
-        },
-    )
-    group["frames"] += 1
-    for method in METHODS:
-        if errors[method] is not None:
-            group["methods"][method]["errors"].append(float(errors[method]))
-        if method == "proposed":
-            tracking = frame.tracking
-        elif method == "ai":
-            tracking = frame.ai_tracking
-        else:
-            tracking = None
-        if tracking is not None and tracking.position is not None and not tracking.updated:
-            if errors[method] is not None:
-                group["methods"][method]["prediction"].append(float(errors[method]))
+def _build_groups(runs: list[dict]) -> dict:
+    groups = {}
+    for run in runs:
+        for index, (available, nlos) in enumerate(
+            zip(run["frames"]["available"], run["frames"]["nlos"], strict=True)
+        ):
+            key = (int(available), int(nlos))
+            group = groups.setdefault(
+                key,
+                {
+                    "frames": 0,
+                    "solvable": int(available) >= 3,
+                    "available_anchors": int(available),
+                    "nlos_anchors": int(nlos),
+                    "methods": {method: {"errors": [], "prediction": []} for method in METHODS},
+                },
+            )
+            group["frames"] += 1
+            for method in METHODS:
+                error = run["frames"]["error"][method][index]
+                if np.isfinite(error):
+                    group["methods"][method]["errors"].append(float(error))
+                    if run["frames"]["prediction"][method][index]:
+                        group["methods"][method]["prediction"].append(float(error))
+    return groups
 
 
 def _group_rows(groups: dict, scope: str) -> list[dict]:
@@ -764,6 +867,8 @@ def evaluate(
 ) -> dict:
     started = perf_counter()
     output.mkdir(parents=True, exist_ok=True)
+    checkpoints = output / "checkpoints"
+    checkpoints.mkdir(parents=True, exist_ok=True)
     seeds = tuple(seed_config["fresh_seeds"])
     protocol = seed_config["protocol"]
     steps = steps or int(protocol["steps"])
@@ -774,7 +879,6 @@ def evaluate(
     environments = load_environments()
     variants = base_variants() + mixed_variants()
     runs = []
-    groups = {}
     for layout in protocol["layouts"]:
         layout_key = layout["floor_id"] or layout["environment_id"]
         environment = resolve_floor(
@@ -789,6 +893,12 @@ def evaluate(
                     if anchor.id not in ANCHOR_SELECTION[count]
                 ]
                 for seed in seeds:
+                    checkpoint = _checkpoint_path(
+                        checkpoints, layout_key, variant["id"], count, seed
+                    )
+                    if checkpoint.exists():
+                        runs.append(_load_checkpoint(checkpoint))
+                        continue
                     settings = _settings(variant, seed, protocol["route"], disabled)
                     run_started = perf_counter()
                     result = _run_session(
@@ -798,7 +908,6 @@ def evaluate(
                         steps,
                         dt,
                         collect_classifier=count == classifier_count,
-                        groups=groups,
                     )
                     run = {
                         "layout": layout_key,
@@ -812,6 +921,7 @@ def evaluate(
                         **result,
                         "duration_seconds": perf_counter() - run_started,
                     }
+                    _save_checkpoint(checkpoint, run)
                     runs.append(run)
                 print(
                     f"{layout_key} {variant['id']} anchors={count} "
@@ -819,6 +929,7 @@ def evaluate(
                     flush=True,
                 )
 
+    groups = _build_groups(runs)
     rows = []
     rows += _row("pooled", runs, resamples)
     for layout in protocol["layouts"]:
