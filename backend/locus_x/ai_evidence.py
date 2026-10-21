@@ -466,6 +466,7 @@ def _row(
     bootstrap_resamples: int,
     layout: str = "",
     scenario: str = "",
+    variant: str = "",
     anchors: str = "",
 ) -> list[dict]:
     rows = []
@@ -481,6 +482,7 @@ def _row(
                 "scope": scope,
                 "layout": layout,
                 "scenario": scenario,
+                "variant": variant,
                 "anchors": anchors,
                 "method": method,
                 "method_label": METHOD_LABELS[method],
@@ -759,7 +761,12 @@ def _classifier_aggregates(runs: list[dict], scope: str) -> list[dict]:
     for run in runs:
         if run["classifier"] is None:
             continue
-        key = (run["layout"],) if scope == "layout" else (run["scenario"],)
+        if scope == "layout":
+            key = (run["layout"],)
+        elif scope == "variant":
+            key = (run["variant"],)
+        else:
+            key = (run["scenario"],)
         grouped[key].append(run["classifier"])
     rows = []
     for key, items in sorted(grouped.items()):
@@ -770,10 +777,22 @@ def _classifier_aggregates(runs: list[dict], scope: str) -> list[dict]:
             "scope": scope,
             "layout": key[0] if scope == "layout" else "",
             "scenario": key[0] if scope == "scenario" else "",
-            **{field: metrics[field] for field in (
-                "n", "positive_n", "negative_n", "roc_auc", "average_precision",
-                "precision", "recall", "f1", "brier", "ece",
-            )},
+            "variant": key[0] if scope == "variant" else "",
+            **{
+                field: metrics[field]
+                for field in (
+                    "n",
+                    "positive_n",
+                    "negative_n",
+                    "roc_auc",
+                    "average_precision",
+                    "precision",
+                    "recall",
+                    "f1",
+                    "brier",
+                    "ece",
+                )
+            },
         }
         rows.append(row)
     return rows
@@ -785,6 +804,7 @@ def _pr_curves(runs: list[dict]) -> list[dict]:
         if run["classifier"] is not None:
             grouped[("layout", run["layout"])].append(run["classifier"])
             grouped[("scenario", run["scenario"])].append(run["classifier"])
+            grouped[("variant", run["variant"])].append(run["classifier"])
     curves = []
     for (scope, name), items in sorted(grouped.items()):
         scores = _concatenate([item["scores"] for item in items])
@@ -805,6 +825,7 @@ def _reliability_curves(runs: list[dict]) -> list[dict]:
         if run["classifier"] is not None:
             grouped[("layout", run["layout"])].append(run["classifier"])
             grouped[("scenario", run["scenario"])].append(run["classifier"])
+            grouped[("variant", run["variant"])].append(run["classifier"])
     curves = []
     for (scope, name), items in sorted(grouped.items()):
         scores = _concatenate([item["scores"] for item in items])
@@ -940,6 +961,16 @@ def evaluate(
     for scenario in scenarios:
         selected = [run for run in runs if run["scenario"] == scenario]
         rows += _row("scenario", selected, resamples, scenario=scenario)
+    variant_ids = sorted({run["variant"] for run in runs})
+    for variant in variant_ids:
+        selected = [run for run in runs if run["variant"] == variant]
+        rows += _row(
+            "variant",
+            selected,
+            resamples,
+            scenario=selected[0]["scenario"],
+            variant=variant,
+        )
     for layout in protocol["layouts"]:
         layout_key = layout["floor_id"] or layout["environment_id"]
         for scenario in scenarios:
@@ -955,8 +986,20 @@ def evaluate(
                 layout=layout_key,
                 scenario=scenario,
             )
-    for layout in protocol["layouts"]:
-        layout_key = layout["floor_id"] or layout["environment_id"]
+        for variant in variant_ids:
+            selected = [
+                run
+                for run in runs
+                if run["layout"] == layout_key and run["variant"] == variant
+            ]
+            rows += _row(
+                "layout_variant",
+                selected,
+                resamples,
+                layout=layout_key,
+                scenario=selected[0]["scenario"],
+                variant=variant,
+            )
         for count in counts:
             selected = [
                 run for run in runs if run["layout"] == layout_key and run["count"] == count
@@ -980,6 +1023,21 @@ def evaluate(
                 selected,
                 resamples,
                 scenario=scenario,
+                anchors=str(count),
+            )
+    for variant in variant_ids:
+        for count in counts:
+            selected = [
+                run
+                for run in runs
+                if run["variant"] == variant and run["count"] == count
+            ]
+            rows += _row(
+                "variant_anchor",
+                selected,
+                resamples,
+                scenario=selected[0]["scenario"],
+                variant=variant,
                 anchors=str(count),
             )
 
@@ -1020,6 +1078,7 @@ def evaluate(
     classifier_rows = _classifier_rows(classifier_runs, resamples)
     classifier_rows += _classifier_aggregates(classifier_runs, "layout")
     classifier_rows += _classifier_aggregates(classifier_runs, "scenario")
+    classifier_rows += _classifier_aggregates(classifier_runs, "variant")
 
     samples_path = output / "classifier-samples.npz"
     scores = _concatenate([run["classifier"]["scores"] for run in classifier_runs])
@@ -1053,7 +1112,11 @@ def evaluate(
     )
     _write_csv(
         output / "sparse_anchors.csv",
-        [row for row in rows if row["scope"] in ("layout_anchor", "scenario_anchor")],
+        [
+            row
+            for row in rows
+            if row["scope"] in ("layout_anchor", "scenario_anchor", "variant_anchor")
+        ],
     )
     _write_csv(output / "groups.csv", group_rows)
     _write_json(output / "groups.json", {"by_available_nlos": group_rows, "named": named})
@@ -1076,6 +1139,8 @@ def evaluate(
         "seed_config": str(DEFAULT_SEEDS.relative_to(ROOT)),
         "seed_config_sha256": _sha256(DEFAULT_SEEDS),
         "seed_config_status": seed_config.get("status"),
+        "execution_status": "completed_fresh_seed_protocol",
+        "checkpoint_directory": str((output / "checkpoints").relative_to(ROOT)),
         "seeds": list(seeds),
         "previously_reported_seeds": seed_config.get("previously_reported_seeds"),
         "steps": steps,
