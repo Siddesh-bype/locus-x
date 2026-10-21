@@ -95,6 +95,8 @@ The policy was selected on validation seeds 11 and 22 only. Candidate policies w
 
 ## End-to-end results
 
+> **Previously reported, not confirmatory.** The tables in this section use seeds `303/404`, which were already inspected during model development. They are retained for provenance but are not unseen evidence. The fresh-seed Phase 1 run supersedes them for confirmation: see [`ai-reliability-phase1.md`](ai-reliability-phase1.md) and `artifacts/ai-reliability/evidence-v1-fresh/`. In that run the pooled improvement was **0.21%**, NLOS improved **0.61%**, NLOS + packet loss was unchanged, and the V3 `first` floor regressed **0.33%**.
+
 Primary protocol: original reference floor, `held_out` route, test seeds 303 and 404. Values are tracked RMSE in metres. The AI branch is compared against LOCUS-X, not against the untracked geometric baseline.
 
 | Condition | Anchors | LOCUS-X | LOCUS-X + AI | RMSE change (positive = improvement) |
