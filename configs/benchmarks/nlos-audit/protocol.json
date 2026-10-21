@@ -1,0 +1,22 @@
+{
+  "purpose": "Frozen split plan written before candidate experiments",
+  "reference": {"route": "held_out", "seeds": [101, 202], "steps": 160, "dt": 0.5},
+  "tuning": {"route": "asset_round", "seeds": [11, 22], "steps": 160, "dt": 0.5},
+  "calibration": {"route": "asset_round", "seeds": [33, 44], "steps": 160, "dt": 0.5},
+  "heldout": {
+    "route": "held_out", "seeds": [303, 404], "steps": 160, "dt": 0.5,
+    "overrides": {
+      "noise": {"noise_std": 0.6},
+      "high_noise": {"noise_std": 1.5},
+      "nlos": {"noise_std": 0.2, "nlos_bias": 3.25},
+      "packet_loss": {"noise_std": 0.3, "dropout": 0.5},
+      "anchor_failure": {"noise_std": 0.3},
+      "chaos": {"noise_std": 0.8, "nlos_bias": 5.0, "dropout": 0.3}
+    }
+  },
+  "scenarios": ["clean", "noise", "high_noise", "nlos", "packet_loss", "anchor_failure", "chaos"],
+  "anchor_counts": [3, 4, 6, 8],
+  "selection": "Use tuning only; compare equal-weight scenario/count RMSE, matched frames, availability and tails. Freeze inference before calibration. Calibrate only output uncertainty on independent calibration seeds, then freeze all constants before reference regression and final heldout. No heldout-driven retuning.",
+  "candidates": ["legacy", "huber_only", "asymmetric_huber", "common_nonnegative_bias"],
+  "limitations": "All splits share one synthetic floor. Reference results are already known. Heldout changes route, seeds and fault strengths; it is not a heldout-building test. Frames within each run are correlated."
+}

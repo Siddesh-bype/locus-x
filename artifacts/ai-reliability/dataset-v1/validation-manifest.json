@@ -1,0 +1,3344 @@
+{
+  "split": "validation",
+  "dataset_version": "1.0.0",
+  "label_rule": "y=1 (NLOS) iff an available observation has simulator kind='nlos' (positive wall-induced bias with walls enabled); y=0 iff kind='los'. Disabled, outage, and packet-loss observations are excluded from supervision.",
+  "feature_names": [
+    "observed_range_norm",
+    "predicted_range_norm",
+    "residual_m",
+    "residual_norm",
+    "abs_residual_norm",
+    "instant_reliability",
+    "anchor_x_norm",
+    "anchor_y_norm",
+    "relative_dx_norm",
+    "relative_dy_norm",
+    "bearing_sin",
+    "bearing_cos",
+    "available_fraction",
+    "condition_log",
+    "wall_count_scaled",
+    "frame_wall_mean_scaled",
+    "consensus_median_norm",
+    "consensus_mad_norm",
+    "observed_to_predicted_delta",
+    "residual_sign",
+    "previous_residual_norm",
+    "residual_delta_norm",
+    "position_delta_norm",
+    "time_delta_s"
+  ],
+  "config_sha256": "8f4103cb436fcf28e3edfa71958f9d541baab525ec2c5b1b3ac9e21a4cf62c1d",
+  "file": "artifacts\\ai-reliability\\dataset-v1\\validation.npz",
+  "file_sha256": "1b3a548bd09f76a507fb65894acc7d8ca2cc0df0c0fe890a1793e2d4f38369b7",
+  "samples": 31596,
+  "los_samples": 25270,
+  "nlos_samples": 6326,
+  "runs": 168,
+  "run_catalog": [
+    {
+      "run_id": 0,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 1,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 2,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 3,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 4,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 300,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 5,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 400,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 6,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 7,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 8,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 9,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 10,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 300,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 11,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 400,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 12,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 13,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 14,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 15,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 16,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 300,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 17,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 400,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 18,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 124
+    },
+    {
+      "run_id": 19,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 97
+    },
+    {
+      "run_id": 20,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 168
+    },
+    {
+      "run_id": 21,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 105
+    },
+    {
+      "run_id": 22,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 300,
+      "nlos_samples": 260
+    },
+    {
+      "run_id": 23,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 400,
+      "nlos_samples": 273
+    },
+    {
+      "run_id": 24,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 27,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 25,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 30,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 26,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 57,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 27,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 81,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 28,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 137,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 29,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 218,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 30,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 90,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 31,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 90,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 32,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 33,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 120,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 34,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 260,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 35,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 320,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 36,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 36,
+      "nlos_samples": 29
+    },
+    {
+      "run_id": 37,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 36,
+      "nlos_samples": 28
+    },
+    {
+      "run_id": 38,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 108,
+      "nlos_samples": 91
+    },
+    {
+      "run_id": 39,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 80,
+      "nlos_samples": 53
+    },
+    {
+      "run_id": 40,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 163,
+      "nlos_samples": 143
+    },
+    {
+      "run_id": 41,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 11,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 212,
+      "nlos_samples": 160
+    },
+    {
+      "run_id": 42,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 43,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 44,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 45,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 46,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 300,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 47,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 400,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 48,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 49,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 50,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 51,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 52,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 300,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 53,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 400,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 54,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 55,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 56,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 57,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 58,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 300,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 59,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 400,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 60,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 124
+    },
+    {
+      "run_id": 61,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 97
+    },
+    {
+      "run_id": 62,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 168
+    },
+    {
+      "run_id": 63,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 105
+    },
+    {
+      "run_id": 64,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 300,
+      "nlos_samples": 260
+    },
+    {
+      "run_id": 65,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 400,
+      "nlos_samples": 273
+    },
+    {
+      "run_id": 66,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 30,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 67,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 39,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 68,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 74,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 69,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 68,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 70,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 153,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 71,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 223,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 72,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 90,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 73,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 90,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 74,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 75,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 120,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 76,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 260,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 77,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 320,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 78,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 39,
+      "nlos_samples": 31
+    },
+    {
+      "run_id": 79,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 42,
+      "nlos_samples": 30
+    },
+    {
+      "run_id": 80,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 115,
+      "nlos_samples": 97
+    },
+    {
+      "run_id": 81,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 76,
+      "nlos_samples": 46
+    },
+    {
+      "run_id": 82,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 170,
+      "nlos_samples": 149
+    },
+    {
+      "run_id": 83,
+      "environment_id": "hospital_floor_01",
+      "floor_id": "hospital_floor_01",
+      "route": "held_out",
+      "seed": 22,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 224,
+      "nlos_samples": 167
+    },
+    {
+      "run_id": 84,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 85,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 86,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 87,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 88,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 300,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 89,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 400,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 90,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 91,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 92,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 93,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 94,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 300,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 95,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 400,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 96,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 97,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 98,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 99,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 100,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 300,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 101,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 400,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 102,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 147
+    },
+    {
+      "run_id": 103,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 89
+    },
+    {
+      "run_id": 104,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 193
+    },
+    {
+      "run_id": 105,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 93
+    },
+    {
+      "run_id": 106,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 300,
+      "nlos_samples": 286
+    },
+    {
+      "run_id": 107,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 400,
+      "nlos_samples": 286
+    },
+    {
+      "run_id": 108,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 27,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 109,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 30,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 110,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 57,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 111,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 81,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 112,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 137,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 113,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 218,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 114,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 90,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 115,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 90,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 116,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 117,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 120,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 118,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 260,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 119,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 320,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 120,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 36,
+      "nlos_samples": 36
+    },
+    {
+      "run_id": 121,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 36,
+      "nlos_samples": 19
+    },
+    {
+      "run_id": 122,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 108,
+      "nlos_samples": 104
+    },
+    {
+      "run_id": 123,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 80,
+      "nlos_samples": 40
+    },
+    {
+      "run_id": 124,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 163,
+      "nlos_samples": 157
+    },
+    {
+      "run_id": 125,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 11,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 212,
+      "nlos_samples": 160
+    },
+    {
+      "run_id": 126,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 127,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 128,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 129,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 130,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 300,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 131,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "clean",
+      "scenario": "clean",
+      "frames": 50,
+      "samples": 400,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 132,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 133,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 134,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 135,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 136,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 300,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 137,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "noise",
+      "scenario": "noise",
+      "frames": 50,
+      "samples": 400,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 138,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 139,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 140,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 141,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 142,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 300,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 143,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "high_noise",
+      "scenario": "high_noise",
+      "frames": 50,
+      "samples": 400,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 144,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 147
+    },
+    {
+      "run_id": 145,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 150,
+      "nlos_samples": 89
+    },
+    {
+      "run_id": 146,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 193
+    },
+    {
+      "run_id": 147,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 93
+    },
+    {
+      "run_id": 148,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 300,
+      "nlos_samples": 286
+    },
+    {
+      "run_id": 149,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "nlos",
+      "scenario": "nlos",
+      "frames": 50,
+      "samples": 400,
+      "nlos_samples": 286
+    },
+    {
+      "run_id": 150,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 30,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 151,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 39,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 152,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 74,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 153,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 68,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 154,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 153,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 155,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "packet_loss",
+      "scenario": "packet_loss",
+      "frames": 50,
+      "samples": 223,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 156,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 90,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 157,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 90,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 158,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 200,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 159,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 120,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 160,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 260,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 161,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "anchor_failure",
+      "scenario": "anchor_failure",
+      "frames": 50,
+      "samples": 320,
+      "nlos_samples": 0
+    },
+    {
+      "run_id": 162,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A1",
+        "A3",
+        "A6"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 39,
+      "nlos_samples": 39
+    },
+    {
+      "run_id": 163,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 3,
+      "subset": [
+        "A2",
+        "A4",
+        "A7"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 42,
+      "nlos_samples": 24
+    },
+    {
+      "run_id": 164,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A1",
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 115,
+      "nlos_samples": 111
+    },
+    {
+      "run_id": 165,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 4,
+      "subset": [
+        "A2",
+        "A4",
+        "A6",
+        "A8"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 76,
+      "nlos_samples": 37
+    },
+    {
+      "run_id": 166,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 6,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 170,
+      "nlos_samples": 162
+    },
+    {
+      "run_id": 167,
+      "environment_id": "hospital_v3",
+      "floor_id": "ground",
+      "route": "held_out",
+      "seed": 22,
+      "count": 8,
+      "subset": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "variant": "chaos",
+      "scenario": "chaos",
+      "frames": 50,
+      "samples": 224,
+      "nlos_samples": 171
+    }
+  ]
+}

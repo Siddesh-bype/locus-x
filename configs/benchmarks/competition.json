@@ -1,0 +1,8 @@
+{
+  "scenarios": ["clean", "noise", "high_noise", "nlos", "packet_loss", "anchor_failure", "chaos"],
+  "anchor_counts": [3, 4, 6, 8],
+  "seeds": [101, 202],
+  "steps": 160,
+  "dt": 0.5,
+  "route": "held_out"
+}

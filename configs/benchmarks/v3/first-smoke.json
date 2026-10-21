@@ -1,0 +1,10 @@
+{
+  "environment_id": "hospital_v3",
+  "floor_id": "first",
+  "scenarios": ["clean", "nlos", "chaos"],
+  "anchor_counts": [8],
+  "seeds": [17, 29],
+  "steps": 60,
+  "dt": 0.5,
+  "route": "held_out"
+}

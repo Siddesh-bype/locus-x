@@ -1,0 +1,70 @@
+{
+  "dataset_version": "1.0.0",
+  "description": "Leakage-safe synthetic LOS/NLOS reliability dataset. Runs are split by complete simulation run; the second V3 floor is held out for layout generalization.",
+  "dt": 0.5,
+  "steps": 50,
+  "speed": 1.2,
+  "anchor_subsets": {
+    "3": [["A1", "A3", "A6"], ["A2", "A4", "A7"]],
+    "4": [["A1", "A3", "A5", "A7"], ["A2", "A4", "A6", "A8"]],
+    "6": [["A1", "A2", "A3", "A5", "A6", "A7"]],
+    "8": [["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]]
+  },
+  "splits": {
+    "train": {
+      "seeds": [1, 2, 3, 4],
+      "routes": ["asset_round", "held_out"],
+      "environments": [
+        {"environment_id": "hospital_floor_01", "floor_id": null},
+        {"environment_id": "hospital_v3", "floor_id": "ground"},
+        {"environment_id": "hospital_v3", "floor_id": "first"}
+      ],
+      "variants": [
+        {"id": "clean", "scenario": "clean", "overrides": {}},
+        {"id": "noise", "scenario": "noise", "overrides": {}},
+        {"id": "high_noise", "scenario": "high_noise", "overrides": {}},
+        {"id": "nlos", "scenario": "nlos", "overrides": {}},
+        {"id": "packet_loss", "scenario": "packet_loss", "overrides": {}},
+        {"id": "anchor_failure", "scenario": "anchor_failure", "overrides": {}},
+        {"id": "chaos", "scenario": "chaos", "overrides": {}},
+        {"id": "nlos_strong", "scenario": "nlos", "overrides": {"noise_std": 0.2, "nlos_bias": 5.0}},
+        {"id": "noise_extreme", "scenario": "high_noise", "overrides": {"noise_std": 1.8}},
+        {"id": "chaos_severe", "scenario": "chaos", "overrides": {"noise_std": 0.9, "nlos_bias": 5.0, "dropout": 0.35}}
+      ]
+    },
+    "validation": {
+      "seeds": [11, 22],
+      "routes": ["held_out"],
+      "environments": [
+        {"environment_id": "hospital_floor_01", "floor_id": null},
+        {"environment_id": "hospital_v3", "floor_id": "ground"}
+      ],
+      "variants": [
+        {"id": "clean", "scenario": "clean", "overrides": {}},
+        {"id": "noise", "scenario": "noise", "overrides": {}},
+        {"id": "high_noise", "scenario": "high_noise", "overrides": {}},
+        {"id": "nlos", "scenario": "nlos", "overrides": {}},
+        {"id": "packet_loss", "scenario": "packet_loss", "overrides": {}},
+        {"id": "anchor_failure", "scenario": "anchor_failure", "overrides": {}},
+        {"id": "chaos", "scenario": "chaos", "overrides": {}}
+      ]
+    },
+    "test": {
+      "seeds": [303, 404],
+      "routes": ["asset_round", "held_out"],
+      "environments": [
+        {"environment_id": "hospital_floor_01", "floor_id": null},
+        {"environment_id": "hospital_v3", "floor_id": "second"}
+      ],
+      "variants": [
+        {"id": "clean", "scenario": "clean", "overrides": {}},
+        {"id": "noise", "scenario": "noise", "overrides": {}},
+        {"id": "high_noise", "scenario": "high_noise", "overrides": {}},
+        {"id": "nlos", "scenario": "nlos", "overrides": {}},
+        {"id": "packet_loss", "scenario": "packet_loss", "overrides": {}},
+        {"id": "anchor_failure", "scenario": "anchor_failure", "overrides": {}},
+        {"id": "chaos", "scenario": "chaos", "overrides": {}}
+      ]
+    }
+  }
+}

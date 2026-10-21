@@ -1,0 +1,43 @@
+{
+  "id": "hospital_floor_01",
+  "name": "North wing · Hospital floor 01",
+  "width": 30,
+  "height": 20,
+  "description": "Synthetic institutional floor. Asset cart moves through a central corridor and treatment rooms.",
+  "anchors": [
+    {"id":"A1","position":[1,1]}, {"id":"A2","position":[15,1]},
+    {"id":"A3","position":[29,1]}, {"id":"A4","position":[29,10]},
+    {"id":"A5","position":[29,19]}, {"id":"A6","position":[15,19]},
+    {"id":"A7","position":[1,19]}, {"id":"A8","position":[1,10]}
+  ],
+  "walls": [
+    {"id":"ext-s","a":[0,0],"b":[30,0],"height":2.8},
+    {"id":"ext-e","a":[30,0],"b":[30,20],"height":2.8},
+    {"id":"ext-n","a":[30,20],"b":[0,20],"height":2.8},
+    {"id":"ext-w","a":[0,20],"b":[0,0],"height":2.8},
+    {"id":"south-1","a":[0,7],"b":[3,7],"height":2.8},
+    {"id":"south-2","a":[5,7],"b":[13,7],"height":2.8},
+    {"id":"south-3","a":[15,7],"b":[23,7],"height":2.8},
+    {"id":"south-4","a":[25,7],"b":[30,7],"height":2.8},
+    {"id":"s-divider-1","a":[10,0],"b":[10,7],"height":2.8},
+    {"id":"s-divider-2","a":[20,0],"b":[20,7],"height":2.8},
+    {"id":"north-1","a":[0,13],"b":[3,13],"height":2.8},
+    {"id":"north-2","a":[5,13],"b":[13,13],"height":2.8},
+    {"id":"north-3","a":[15,13],"b":[23,13],"height":2.8},
+    {"id":"north-4","a":[25,13],"b":[30,13],"height":2.8},
+    {"id":"n-divider-1","a":[10,13],"b":[10,20],"height":2.8},
+    {"id":"n-divider-2","a":[20,13],"b":[20,20],"height":2.8}
+  ],
+  "rooms": [
+    {"name":"TREATMENT 01","center":[5,3.5],"size":[9.6,6.6],"kind":"treatment"},
+    {"name":"IMAGING","center":[15,3.5],"size":[9.6,6.6],"kind":"imaging"},
+    {"name":"SUPPLIES","center":[25,3.5],"size":[9.6,6.6],"kind":"storage"},
+    {"name":"PATIENT WARD","center":[5,16.5],"size":[9.6,6.6],"kind":"ward"},
+    {"name":"NURSES’ STATION","center":[15,16.5],"size":[9.6,6.6],"kind":"station"},
+    {"name":"TREATMENT 02","center":[25,16.5],"size":[9.6,6.6],"kind":"treatment"}
+  ],
+  "routes": {
+    "asset_round": [{"position":[4,10],"dwell":2},{"position":[24,10],"dwell":1},{"position":[24,16],"dwell":3},{"position":[24,10],"dwell":0},{"position":[14,10],"dwell":0},{"position":[14,4],"dwell":2},{"position":[14,10],"dwell":0},{"position":[4,10],"dwell":0},{"position":[4,16],"dwell":2},{"position":[4,10],"dwell":0}],
+    "held_out": [{"position":[24,4],"dwell":1},{"position":[24,10],"dwell":0},{"position":[4,10],"dwell":1},{"position":[4,4],"dwell":2},{"position":[4,10],"dwell":0},{"position":[14,10],"dwell":1},{"position":[14,16],"dwell":3},{"position":[14,10],"dwell":0},{"position":[24,10],"dwell":0}]
+  }
+}
