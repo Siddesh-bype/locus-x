@@ -1,6 +1,6 @@
 {
   "dataset_version": "2.0.0",
-  "description": "Phase 3 v2 feature dataset. Training follows the Phase 2 v1 training split; validation expands scenarios and uses preregistered extra seeds.",
+  "description": "Phase 3 v2 feature dataset. Training follows the Phase 2 v1 training split (counts 3/4/6/8); validation adds preregistered extra seeds and counts 5/7. Default v2 candidates are map-free.",
   "dt": 0.5,
   "max_cart_speed_mps": 3.0,
   "anchor_subsets": {
@@ -50,6 +50,26 @@
         "A6",
         "A7",
         "A8"
+      ]
+    ],
+    "5": [
+      [
+        "A1",
+        "A2",
+        "A3",
+        "A6",
+        "A7"
+      ]
+    ],
+    "7": [
+      [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7"
       ]
     ]
   },
@@ -144,6 +164,12 @@
             "dropout": 0.35
           }
         }
+      ],
+      "anchor_counts": [
+        3,
+        4,
+        6,
+        8
       ]
     },
     "validation": {
@@ -184,7 +210,15 @@
           "name": "second"
         }
       ],
-      "variants": "base_variants+mixed_variants"
+      "variants": "base_variants+mixed_variants",
+      "anchor_counts": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
     }
   }
 }
