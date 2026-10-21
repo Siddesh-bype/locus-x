@@ -1,0 +1,2158 @@
+[
+  {
+    "scope": "layout",
+    "name": "first",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 64557,
+        "mean_predicted_nlos": 0.0027467412958007854,
+        "observed_nlos_rate": 0.066948588069458
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 1272,
+        "mean_predicted_nlos": 0.1462582179988046,
+        "observed_nlos_rate": 0.7444968553459119
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 801,
+        "mean_predicted_nlos": 0.2479110231082264,
+        "observed_nlos_rate": 0.8239700374531835
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 623,
+        "mean_predicted_nlos": 0.34987277222128976,
+        "observed_nlos_rate": 0.8250401284109149
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 649,
+        "mean_predicted_nlos": 0.45019773246455025,
+        "observed_nlos_rate": 0.8705701078582434
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 733,
+        "mean_predicted_nlos": 0.5517500570923034,
+        "observed_nlos_rate": 0.9085948158253752
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 772,
+        "mean_predicted_nlos": 0.6522188610466476,
+        "observed_nlos_rate": 0.9339378238341969
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 1008,
+        "mean_predicted_nlos": 0.752075200851339,
+        "observed_nlos_rate": 0.9345238095238095
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 1710,
+        "mean_predicted_nlos": 0.8558573959158475,
+        "observed_nlos_rate": 0.9654970760233919
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 30573,
+        "mean_predicted_nlos": 0.9903279429348266,
+        "observed_nlos_rate": 0.9971543518791091
+      }
+    ],
+    "ece": 0.06811293766677141
+  },
+  {
+    "scope": "layout",
+    "name": "ground",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 56550,
+        "mean_predicted_nlos": 0.005091555209970877,
+        "observed_nlos_rate": 0.03326259946949602
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 2278,
+        "mean_predicted_nlos": 0.1458136849952328,
+        "observed_nlos_rate": 0.3481123792800702
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 1559,
+        "mean_predicted_nlos": 0.24640571045673937,
+        "observed_nlos_rate": 0.41629249518922384
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 1290,
+        "mean_predicted_nlos": 0.3508573160506098,
+        "observed_nlos_rate": 0.43410852713178294
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 1072,
+        "mean_predicted_nlos": 0.4500541382864611,
+        "observed_nlos_rate": 0.4701492537313433
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 1070,
+        "mean_predicted_nlos": 0.5495608692851626,
+        "observed_nlos_rate": 0.5121495327102804
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 1265,
+        "mean_predicted_nlos": 0.6522592270270257,
+        "observed_nlos_rate": 0.5715415019762846
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 1545,
+        "mean_predicted_nlos": 0.7515650119502643,
+        "observed_nlos_rate": 0.5812297734627832
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 2540,
+        "mean_predicted_nlos": 0.8540619763612914,
+        "observed_nlos_rate": 0.6641732283464566
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 33529,
+        "mean_predicted_nlos": 0.989171320612218,
+        "observed_nlos_rate": 0.8960303021265174
+      }
+    ],
+    "ece": 0.0628858120553349
+  },
+  {
+    "scope": "layout",
+    "name": "hospital_floor_01",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 67180,
+        "mean_predicted_nlos": 0.0037040986420419433,
+        "observed_nlos_rate": 0.05190532896695445
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 2084,
+        "mean_predicted_nlos": 0.1469286498163868,
+        "observed_nlos_rate": 0.5772552783109405
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 1480,
+        "mean_predicted_nlos": 0.2472061690583734,
+        "observed_nlos_rate": 0.6331081081081081
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 1315,
+        "mean_predicted_nlos": 0.3494945962693489,
+        "observed_nlos_rate": 0.7125475285171102
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 1213,
+        "mean_predicted_nlos": 0.45028533133174775,
+        "observed_nlos_rate": 0.763396537510305
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 1222,
+        "mean_predicted_nlos": 0.550602728339255,
+        "observed_nlos_rate": 0.8076923076923077
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 1476,
+        "mean_predicted_nlos": 0.6513722158392357,
+        "observed_nlos_rate": 0.8665311653116531
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 1849,
+        "mean_predicted_nlos": 0.7536150512246262,
+        "observed_nlos_rate": 0.8766901027582477
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 2830,
+        "mean_predicted_nlos": 0.8552602348735089,
+        "observed_nlos_rate": 0.9208480565371024
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 22049,
+        "mean_predicted_nlos": 0.9833496677680815,
+        "observed_nlos_rate": 0.972969295659667
+      }
+    ],
+    "ece": 0.06657487897921148
+  },
+  {
+    "scope": "layout",
+    "name": "second",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 60804,
+        "mean_predicted_nlos": 0.004157290407254896,
+        "observed_nlos_rate": 0.03738240905203605
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 1700,
+        "mean_predicted_nlos": 0.1451850415044316,
+        "observed_nlos_rate": 0.43823529411764706
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 1200,
+        "mean_predicted_nlos": 0.2487519179399941,
+        "observed_nlos_rate": 0.5125
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 972,
+        "mean_predicted_nlos": 0.3502636228104272,
+        "observed_nlos_rate": 0.5606995884773662
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 1080,
+        "mean_predicted_nlos": 0.45228681748192207,
+        "observed_nlos_rate": 0.6157407407407407
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 1071,
+        "mean_predicted_nlos": 0.5501723187676147,
+        "observed_nlos_rate": 0.6685340802987861
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 1294,
+        "mean_predicted_nlos": 0.6502893684524831,
+        "observed_nlos_rate": 0.7156105100463679
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 1514,
+        "mean_predicted_nlos": 0.7525864422728116,
+        "observed_nlos_rate": 0.7899603698811096
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 2499,
+        "mean_predicted_nlos": 0.8560004585367638,
+        "observed_nlos_rate": 0.8119247699079631
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 30564,
+        "mean_predicted_nlos": 0.9879999830872016,
+        "observed_nlos_rate": 0.9681651616280591
+      }
+    ],
+    "ece": 0.040898839285297424
+  },
+  {
+    "scope": "scenario",
+    "name": "chaos",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 98429,
+        "mean_predicted_nlos": 0.004311537108867935,
+        "observed_nlos_rate": 0.04781111257860996
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 3312,
+        "mean_predicted_nlos": 0.14604931910123747,
+        "observed_nlos_rate": 0.4821859903381642
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 2283,
+        "mean_predicted_nlos": 0.2471938400446514,
+        "observed_nlos_rate": 0.545335085413929
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 1920,
+        "mean_predicted_nlos": 0.3497914761892144,
+        "observed_nlos_rate": 0.5921875
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 1875,
+        "mean_predicted_nlos": 0.45056396208866856,
+        "observed_nlos_rate": 0.6554666666666666
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 1879,
+        "mean_predicted_nlos": 0.5509324773958035,
+        "observed_nlos_rate": 0.6998403406067057
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 2280,
+        "mean_predicted_nlos": 0.6510479167078808,
+        "observed_nlos_rate": 0.7508771929824561
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 2801,
+        "mean_predicted_nlos": 0.7528017518968332,
+        "observed_nlos_rate": 0.7836486968939664
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 4691,
+        "mean_predicted_nlos": 0.8553475742952119,
+        "observed_nlos_rate": 0.8335109784694095
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 65466,
+        "mean_predicted_nlos": 0.9892920949715983,
+        "observed_nlos_rate": 0.9604527541013655
+      }
+    ],
+    "ece": 0.05141993147506294
+  },
+  {
+    "scope": "scenario",
+    "name": "clean",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 30704,
+        "mean_predicted_nlos": 0.00038052626993473554,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 16,
+        "mean_predicted_nlos": 0.11683794773618028,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 0,
+        "mean_predicted_nlos": null,
+        "observed_nlos_rate": null
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 0,
+        "mean_predicted_nlos": null,
+        "observed_nlos_rate": null
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 0,
+        "mean_predicted_nlos": null,
+        "observed_nlos_rate": null
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 0,
+        "mean_predicted_nlos": null,
+        "observed_nlos_rate": null
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 0,
+        "mean_predicted_nlos": null,
+        "observed_nlos_rate": null
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 0,
+        "mean_predicted_nlos": null,
+        "observed_nlos_rate": null
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 0,
+        "mean_predicted_nlos": null,
+        "observed_nlos_rate": null
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 0,
+        "mean_predicted_nlos": null,
+        "observed_nlos_rate": null
+      }
+    ],
+    "ece": 0.0004411811769484051
+  },
+  {
+    "scope": "scenario",
+    "name": "high_noise",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 28067,
+        "mean_predicted_nlos": 0.0030095169149050604,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 481,
+        "mean_predicted_nlos": 0.14136091034773812,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 314,
+        "mean_predicted_nlos": 0.24797319275871316,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 247,
+        "mean_predicted_nlos": 0.34844925555122414,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 186,
+        "mean_predicted_nlos": 0.45202918399834274,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 169,
+        "mean_predicted_nlos": 0.5482625061058682,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 168,
+        "mean_predicted_nlos": 0.6518510076317805,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 183,
+        "mean_predicted_nlos": 0.7495851827783477,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 221,
+        "mean_predicted_nlos": 0.8522305633187144,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 684,
+        "mean_predicted_nlos": 0.9699443723893431,
+        "observed_nlos_rate": 0.0
+      }
+    ],
+    "ece": 0.05180979858298169
+  },
+  {
+    "scope": "scenario",
+    "name": "nlos",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 16125,
+        "mean_predicted_nlos": 0.006530940772850824,
+        "observed_nlos_rate": 0.11398449612403101
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 1046,
+        "mean_predicted_nlos": 0.14722067315601015,
+        "observed_nlos_rate": 0.6500956022944551
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 726,
+        "mean_predicted_nlos": 0.24854841201582809,
+        "observed_nlos_rate": 0.7203856749311295
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 637,
+        "mean_predicted_nlos": 0.35162173354056436,
+        "observed_nlos_rate": 0.7676609105180534
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 641,
+        "mean_predicted_nlos": 0.4498554253282167,
+        "observed_nlos_rate": 0.8018720748829953
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 757,
+        "mean_predicted_nlos": 0.5535959752930465,
+        "observed_nlos_rate": 0.8745046235138706
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 997,
+        "mean_predicted_nlos": 0.6511617756723217,
+        "observed_nlos_rate": 0.9007021063189569
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 1221,
+        "mean_predicted_nlos": 0.7529856912919876,
+        "observed_nlos_rate": 0.9492219492219492
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 2233,
+        "mean_predicted_nlos": 0.8565753419995702,
+        "observed_nlos_rate": 0.967756381549485
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 37057,
+        "mean_predicted_nlos": 0.9892396468832836,
+        "observed_nlos_rate": 0.9923091453706452
+      }
+    ],
+    "ece": 0.06811925343333067
+  },
+  {
+    "scope": "scenario",
+    "name": "noise",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 28901,
+        "mean_predicted_nlos": 0.0020986593299561697,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 366,
+        "mean_predicted_nlos": 0.14472522455263312,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 190,
+        "mean_predicted_nlos": 0.24678518677684133,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 152,
+        "mean_predicted_nlos": 0.35304808952240735,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 118,
+        "mean_predicted_nlos": 0.4544606586487146,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 131,
+        "mean_predicted_nlos": 0.5478964189720619,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 104,
+        "mean_predicted_nlos": 0.6509698212624015,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 131,
+        "mean_predicted_nlos": 0.7510184796150422,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 181,
+        "mean_predicted_nlos": 0.8518384535219422,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 446,
+        "mean_predicted_nlos": 0.9690325338518399,
+        "observed_nlos_rate": 0.0
+      }
+    ],
+    "ece": 0.03554790434923417
+  },
+  {
+    "scope": "scenario",
+    "name": "packet_loss",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 46865,
+        "mean_predicted_nlos": 0.005982571395779532,
+        "observed_nlos_rate": 0.11563000106689426
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 2113,
+        "mean_predicted_nlos": 0.1470309031125007,
+        "observed_nlos_rate": 0.6677709417889257
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 1527,
+        "mean_predicted_nlos": 0.24724833784339587,
+        "observed_nlos_rate": 0.7157825802226588
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 1244,
+        "mean_predicted_nlos": 0.34992391960441305,
+        "observed_nlos_rate": 0.747588424437299
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 1194,
+        "mean_predicted_nlos": 0.4509494907056822,
+        "observed_nlos_rate": 0.7680067001675042
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 1160,
+        "mean_predicted_nlos": 0.548128393684211,
+        "observed_nlos_rate": 0.8103448275862069
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 1258,
+        "mean_predicted_nlos": 0.6523937560737064,
+        "observed_nlos_rate": 0.8259141494435612
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 1580,
+        "mean_predicted_nlos": 0.7522525973595725,
+        "observed_nlos_rate": 0.8246835443037974
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 2253,
+        "mean_predicted_nlos": 0.8542704186703931,
+        "observed_nlos_rate": 0.844207723035952
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 13062,
+        "mean_predicted_nlos": 0.980205892747852,
+        "observed_nlos_rate": 0.9128770479252795
+      }
+    ],
+    "ece": 0.1296319263753466
+  },
+  {
+    "scope": "variant",
+    "name": "all_four",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 3995,
+        "mean_predicted_nlos": 0.00956624582271761,
+        "observed_nlos_rate": 0.17922403003754694
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 349,
+        "mean_predicted_nlos": 0.1455090342694862,
+        "observed_nlos_rate": 0.6561604584527221
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 251,
+        "mean_predicted_nlos": 0.24747957250159558,
+        "observed_nlos_rate": 0.6972111553784861
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 222,
+        "mean_predicted_nlos": 0.3487151187548448,
+        "observed_nlos_rate": 0.7027027027027027
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 256,
+        "mean_predicted_nlos": 0.45118064139941827,
+        "observed_nlos_rate": 0.78515625
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 234,
+        "mean_predicted_nlos": 0.551315308557328,
+        "observed_nlos_rate": 0.7991452991452992
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 324,
+        "mean_predicted_nlos": 0.6504801840072157,
+        "observed_nlos_rate": 0.8395061728395061
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 423,
+        "mean_predicted_nlos": 0.7538754789448031,
+        "observed_nlos_rate": 0.8770685579196218
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 773,
+        "mean_predicted_nlos": 0.8556462195159888,
+        "observed_nlos_rate": 0.9159120310478654
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 12193,
+        "mean_predicted_nlos": 0.9906421315308002,
+        "observed_nlos_rate": 0.9729352907405888
+      }
+    ],
+    "ece": 0.08237634670732116
+  },
+  {
+    "scope": "variant",
+    "name": "anchor_outage",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 24922,
+        "mean_predicted_nlos": 0.0016603884593046688,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 237,
+        "mean_predicted_nlos": 0.1430840815447512,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 133,
+        "mean_predicted_nlos": 0.2479311088630445,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 102,
+        "mean_predicted_nlos": 0.3491512081929694,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 73,
+        "mean_predicted_nlos": 0.45247352758010184,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 72,
+        "mean_predicted_nlos": 0.5457535248289722,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 77,
+        "mean_predicted_nlos": 0.6502094582260725,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 75,
+        "mean_predicted_nlos": 0.7527699584592292,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 96,
+        "mean_predicted_nlos": 0.848989553854155,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 197,
+        "mean_predicted_nlos": 0.9653533656864897,
+        "observed_nlos_rate": 0.0
+      }
+    ],
+    "ece": 0.022875834971616583
+  },
+  {
+    "scope": "variant",
+    "name": "chaos",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 3995,
+        "mean_predicted_nlos": 0.00956624582271761,
+        "observed_nlos_rate": 0.17922403003754694
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 349,
+        "mean_predicted_nlos": 0.1455090342694862,
+        "observed_nlos_rate": 0.6561604584527221
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 251,
+        "mean_predicted_nlos": 0.24747957250159558,
+        "observed_nlos_rate": 0.6972111553784861
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 222,
+        "mean_predicted_nlos": 0.3487151187548448,
+        "observed_nlos_rate": 0.7027027027027027
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 256,
+        "mean_predicted_nlos": 0.45118064139941827,
+        "observed_nlos_rate": 0.78515625
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 234,
+        "mean_predicted_nlos": 0.551315308557328,
+        "observed_nlos_rate": 0.7991452991452992
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 324,
+        "mean_predicted_nlos": 0.6504801840072157,
+        "observed_nlos_rate": 0.8395061728395061
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 423,
+        "mean_predicted_nlos": 0.7538754789448031,
+        "observed_nlos_rate": 0.8770685579196218
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 773,
+        "mean_predicted_nlos": 0.8556462195159888,
+        "observed_nlos_rate": 0.9159120310478654
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 12193,
+        "mean_predicted_nlos": 0.9906421315308002,
+        "observed_nlos_rate": 0.9729352907405888
+      }
+    ],
+    "ece": 0.08237634670732116
+  },
+  {
+    "scope": "variant",
+    "name": "clean",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 30704,
+        "mean_predicted_nlos": 0.00038052626993473554,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 16,
+        "mean_predicted_nlos": 0.11683794773618028,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 0,
+        "mean_predicted_nlos": null,
+        "observed_nlos_rate": null
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 0,
+        "mean_predicted_nlos": null,
+        "observed_nlos_rate": null
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 0,
+        "mean_predicted_nlos": null,
+        "observed_nlos_rate": null
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 0,
+        "mean_predicted_nlos": null,
+        "observed_nlos_rate": null
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 0,
+        "mean_predicted_nlos": null,
+        "observed_nlos_rate": null
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 0,
+        "mean_predicted_nlos": null,
+        "observed_nlos_rate": null
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 0,
+        "mean_predicted_nlos": null,
+        "observed_nlos_rate": null
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 0,
+        "mean_predicted_nlos": null,
+        "observed_nlos_rate": null
+      }
+    ],
+    "ece": 0.0004411811769484051
+  },
+  {
+    "scope": "variant",
+    "name": "high_noise",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 28067,
+        "mean_predicted_nlos": 0.0030095169149050604,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 481,
+        "mean_predicted_nlos": 0.14136091034773812,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 314,
+        "mean_predicted_nlos": 0.24797319275871316,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 247,
+        "mean_predicted_nlos": 0.34844925555122414,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 186,
+        "mean_predicted_nlos": 0.45202918399834274,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 169,
+        "mean_predicted_nlos": 0.5482625061058682,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 168,
+        "mean_predicted_nlos": 0.6518510076317805,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 183,
+        "mean_predicted_nlos": 0.7495851827783477,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 221,
+        "mean_predicted_nlos": 0.8522305633187144,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 684,
+        "mean_predicted_nlos": 0.9699443723893431,
+        "observed_nlos_rate": 0.0
+      }
+    ],
+    "ece": 0.05180979858298169
+  },
+  {
+    "scope": "variant",
+    "name": "nlos",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 7896,
+        "mean_predicted_nlos": 0.006014243211973708,
+        "observed_nlos_rate": 0.0977710233029382
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 456,
+        "mean_predicted_nlos": 0.1480343883288918,
+        "observed_nlos_rate": 0.618421052631579
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 303,
+        "mean_predicted_nlos": 0.24661720980172472,
+        "observed_nlos_rate": 0.6765676567656765
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 289,
+        "mean_predicted_nlos": 0.3508555681226176,
+        "observed_nlos_rate": 0.7162629757785467
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 290,
+        "mean_predicted_nlos": 0.449692850434038,
+        "observed_nlos_rate": 0.7551724137931034
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 327,
+        "mean_predicted_nlos": 0.5523621362161157,
+        "observed_nlos_rate": 0.8409785932721713
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 484,
+        "mean_predicted_nlos": 0.650982234070924,
+        "observed_nlos_rate": 0.8946280991735537
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 547,
+        "mean_predicted_nlos": 0.7522635385607036,
+        "observed_nlos_rate": 0.9360146252285192
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 1001,
+        "mean_predicted_nlos": 0.8575894281368003,
+        "observed_nlos_rate": 0.962037962037962
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 19127,
+        "mean_predicted_nlos": 0.9899597421118141,
+        "observed_nlos_rate": 0.9923145291995609
+      }
+    ],
+    "ece": 0.05618104406815571
+  },
+  {
+    "scope": "variant",
+    "name": "nlos_outage",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 5534,
+        "mean_predicted_nlos": 0.007486781502836907,
+        "observed_nlos_rate": 0.1281170943259848
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 447,
+        "mean_predicted_nlos": 0.1472831781748655,
+        "observed_nlos_rate": 0.7002237136465325
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 312,
+        "mean_predicted_nlos": 0.24604353466393647,
+        "observed_nlos_rate": 0.7275641025641025
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 303,
+        "mean_predicted_nlos": 0.35139854400521214,
+        "observed_nlos_rate": 0.7656765676567657
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 281,
+        "mean_predicted_nlos": 0.4494621535905314,
+        "observed_nlos_rate": 0.7935943060498221
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 304,
+        "mean_predicted_nlos": 0.5521232417486184,
+        "observed_nlos_rate": 0.8552631578947368
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 406,
+        "mean_predicted_nlos": 0.6497959883340638,
+        "observed_nlos_rate": 0.8866995073891626
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 447,
+        "mean_predicted_nlos": 0.7506705661375321,
+        "observed_nlos_rate": 0.9351230425055929
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 822,
+        "mean_predicted_nlos": 0.8574596952714741,
+        "observed_nlos_rate": 0.9562043795620438
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 17128,
+        "mean_predicted_nlos": 0.9911774921444724,
+        "observed_nlos_rate": 0.9915927136851939
+      }
+    ],
+    "ece": 0.06335675911826924
+  },
+  {
+    "scope": "variant",
+    "name": "nlos_packet",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 6889,
+        "mean_predicted_nlos": 0.01300286595774596,
+        "observed_nlos_rate": 0.3869937581651909
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 781,
+        "mean_predicted_nlos": 0.14834883361068668,
+        "observed_nlos_rate": 0.9052496798975672
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 584,
+        "mean_predicted_nlos": 0.24790066935404767,
+        "observed_nlos_rate": 0.922945205479452
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 492,
+        "mean_predicted_nlos": 0.34859310920873393,
+        "observed_nlos_rate": 0.9227642276422764
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 471,
+        "mean_predicted_nlos": 0.45180417726915567,
+        "observed_nlos_rate": 0.9384288747346072
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 496,
+        "mean_predicted_nlos": 0.547593989698923,
+        "observed_nlos_rate": 0.9516129032258065
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 553,
+        "mean_predicted_nlos": 0.6526244631792798,
+        "observed_nlos_rate": 0.945750452079566
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 663,
+        "mean_predicted_nlos": 0.753080470758441,
+        "observed_nlos_rate": 0.9622926093514329
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 1011,
+        "mean_predicted_nlos": 0.8530529813078802,
+        "observed_nlos_rate": 0.9683481701285855
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 6124,
+        "mean_predicted_nlos": 0.9808224624632804,
+        "observed_nlos_rate": 0.9828543435662965
+      }
+    ],
+    "ece": 0.26039014757921053
+  },
+  {
+    "scope": "variant",
+    "name": "nlos_packet_outage",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 4459,
+        "mean_predicted_nlos": 0.012717611137761067,
+        "observed_nlos_rate": 0.3579277864992151
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 497,
+        "mean_predicted_nlos": 0.1474112778501344,
+        "observed_nlos_rate": 0.8893360160965795
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 398,
+        "mean_predicted_nlos": 0.2483513136781042,
+        "observed_nlos_rate": 0.9020100502512562
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 352,
+        "mean_predicted_nlos": 0.34780476782711633,
+        "observed_nlos_rate": 0.9176136363636364
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 342,
+        "mean_predicted_nlos": 0.45023826415773166,
+        "observed_nlos_rate": 0.9415204678362573
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 387,
+        "mean_predicted_nlos": 0.5485654625170958,
+        "observed_nlos_rate": 0.9509043927648578
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 431,
+        "mean_predicted_nlos": 0.6540835294553263,
+        "observed_nlos_rate": 0.9373549883990719
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 533,
+        "mean_predicted_nlos": 0.7531807720089252,
+        "observed_nlos_rate": 0.9681050656660413
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 800,
+        "mean_predicted_nlos": 0.8541844726277045,
+        "observed_nlos_rate": 0.9725
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 6121,
+        "mean_predicted_nlos": 0.9826848394529935,
+        "observed_nlos_rate": 0.9859500081685999
+      }
+    ],
+    "ece": 0.21255338773185592
+  },
+  {
+    "scope": "variant",
+    "name": "noise",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 28901,
+        "mean_predicted_nlos": 0.0020986593299561697,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 366,
+        "mean_predicted_nlos": 0.14472522455263312,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 190,
+        "mean_predicted_nlos": 0.24678518677684133,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 152,
+        "mean_predicted_nlos": 0.35304808952240735,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 118,
+        "mean_predicted_nlos": 0.4544606586487146,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 131,
+        "mean_predicted_nlos": 0.5478964189720619,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 104,
+        "mean_predicted_nlos": 0.6509698212624015,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 131,
+        "mean_predicted_nlos": 0.7510184796150422,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 181,
+        "mean_predicted_nlos": 0.8518384535219422,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 446,
+        "mean_predicted_nlos": 0.9690325338518399,
+        "observed_nlos_rate": 0.0
+      }
+    ],
+    "ece": 0.03554790434923417
+  },
+  {
+    "scope": "variant",
+    "name": "noise_nlos",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 8229,
+        "mean_predicted_nlos": 0.007026729318322412,
+        "observed_nlos_rate": 0.12954186413902052
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 590,
+        "mean_predicted_nlos": 0.14659176786985073,
+        "observed_nlos_rate": 0.6745762711864407
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 423,
+        "mean_predicted_nlos": 0.24993175544578858,
+        "observed_nlos_rate": 0.75177304964539
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 348,
+        "mean_predicted_nlos": 0.3522580030974225,
+        "observed_nlos_rate": 0.8103448275862069
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 351,
+        "mean_predicted_nlos": 0.44998974646585727,
+        "observed_nlos_rate": 0.8404558404558404
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 430,
+        "mean_predicted_nlos": 0.5545342668701542,
+        "observed_nlos_rate": 0.9
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 513,
+        "mean_predicted_nlos": 0.6513311677484941,
+        "observed_nlos_rate": 0.9064327485380117
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 674,
+        "mean_predicted_nlos": 0.7535717707341423,
+        "observed_nlos_rate": 0.9599406528189911
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 1232,
+        "mean_predicted_nlos": 0.8557513970130707,
+        "observed_nlos_rate": 0.9724025974025974
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 17930,
+        "mean_predicted_nlos": 0.9884714783703942,
+        "observed_nlos_rate": 0.9923034021193531
+      }
+    ],
+    "ece": 0.08005746279850587
+  },
+  {
+    "scope": "variant",
+    "name": "noise_nlos_outage",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 5837,
+        "mean_predicted_nlos": 0.008514309332220998,
+        "observed_nlos_rate": 0.16600993661127292
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 536,
+        "mean_predicted_nlos": 0.14744857610252976,
+        "observed_nlos_rate": 0.7164179104477612
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 392,
+        "mean_predicted_nlos": 0.2475188968138183,
+        "observed_nlos_rate": 0.7882653061224489
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 326,
+        "mean_predicted_nlos": 0.3509143419948323,
+        "observed_nlos_rate": 0.8282208588957055
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 331,
+        "mean_predicted_nlos": 0.45039413450035787,
+        "observed_nlos_rate": 0.851963746223565
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 347,
+        "mean_predicted_nlos": 0.554739778936043,
+        "observed_nlos_rate": 0.9020172910662824
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 448,
+        "mean_predicted_nlos": 0.6507041912159173,
+        "observed_nlos_rate": 0.9017857142857143
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 542,
+        "mean_predicted_nlos": 0.7543137384540147,
+        "observed_nlos_rate": 0.9575645756457565
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 959,
+        "mean_predicted_nlos": 0.855440972498818,
+        "observed_nlos_rate": 0.9697601668404588
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 16266,
+        "mean_predicted_nlos": 0.9896510223145295,
+        "observed_nlos_rate": 0.9917619574572728
+      }
+    ],
+    "ece": 0.08512484410728917
+  },
+  {
+    "scope": "variant",
+    "name": "noise_nlos_packet",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 6948,
+        "mean_predicted_nlos": 0.012957856714264838,
+        "observed_nlos_rate": 0.39622913068508925
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 794,
+        "mean_predicted_nlos": 0.14722950675837534,
+        "observed_nlos_rate": 0.8866498740554156
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 593,
+        "mean_predicted_nlos": 0.24694865905530058,
+        "observed_nlos_rate": 0.9342327150084317
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 518,
+        "mean_predicted_nlos": 0.35184320778100847,
+        "observed_nlos_rate": 0.918918918918919
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 507,
+        "mean_predicted_nlos": 0.45100969978668204,
+        "observed_nlos_rate": 0.9368836291913215
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 491,
+        "mean_predicted_nlos": 0.548210100845997,
+        "observed_nlos_rate": 0.9531568228105907
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 545,
+        "mean_predicted_nlos": 0.6529396650973583,
+        "observed_nlos_rate": 0.9467889908256881
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 698,
+        "mean_predicted_nlos": 0.7523052798632277,
+        "observed_nlos_rate": 0.9527220630372493
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 950,
+        "mean_predicted_nlos": 0.8553581898279893,
+        "observed_nlos_rate": 0.9715789473684211
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 6020,
+        "mean_predicted_nlos": 0.9809556517882796,
+        "observed_nlos_rate": 0.9808970099667774
+      }
+    ],
+    "ece": 0.266128305471203
+  },
+  {
+    "scope": "variant",
+    "name": "noise_outage",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 24164,
+        "mean_predicted_nlos": 0.0025067531189200635,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 363,
+        "mean_predicted_nlos": 0.1453068341962763,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 194,
+        "mean_predicted_nlos": 0.24676781621787972,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 155,
+        "mean_predicted_nlos": 0.35373187810807183,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 116,
+        "mean_predicted_nlos": 0.4534728732756632,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 126,
+        "mean_predicted_nlos": 0.5478043516459528,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 104,
+        "mean_predicted_nlos": 0.6506369930059057,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 130,
+        "mean_predicted_nlos": 0.7516348316877349,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 183,
+        "mean_predicted_nlos": 0.8511972196984858,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 449,
+        "mean_predicted_nlos": 0.9688160575080738,
+        "observed_nlos_rate": 0.0
+      }
+    ],
+    "ece": 0.04209488295324766
+  },
+  {
+    "scope": "variant",
+    "name": "noise_packet",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 16219,
+        "mean_predicted_nlos": 0.0035161350537614034,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 297,
+        "mean_predicted_nlos": 0.14486466417476193,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 210,
+        "mean_predicted_nlos": 0.24518650142170068,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 126,
+        "mean_predicted_nlos": 0.34369523644592953,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 142,
+        "mean_predicted_nlos": 0.44971229279671154,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 103,
+        "mean_predicted_nlos": 0.5532297423111128,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 91,
+        "mean_predicted_nlos": 0.6526780599747286,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 132,
+        "mean_predicted_nlos": 0.7525627394959791,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 164,
+        "mean_predicted_nlos": 0.8547568001124934,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 580,
+        "mean_predicted_nlos": 0.9735727447466496,
+        "observed_nlos_rate": 0.0
+      }
+    ],
+    "ece": 0.06528309710282648
+  },
+  {
+    "scope": "variant",
+    "name": "noise_packet_outage",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 12462,
+        "mean_predicted_nlos": 0.004340960405915243,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 292,
+        "mean_predicted_nlos": 0.14481578746203025,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 214,
+        "mean_predicted_nlos": 0.24517429677851418,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 127,
+        "mean_predicted_nlos": 0.3436034080747205,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 146,
+        "mean_predicted_nlos": 0.450009779366055,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 104,
+        "mean_predicted_nlos": 0.5537538928904878,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 95,
+        "mean_predicted_nlos": 0.6529454614684991,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 139,
+        "mean_predicted_nlos": 0.7519398911952893,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 160,
+        "mean_predicted_nlos": 0.8551745414677498,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 581,
+        "mean_predicted_nlos": 0.973470002634929,
+        "observed_nlos_rate": 0.0
+      }
+    ],
+    "ece": 0.08273348361612859
+  },
+  {
+    "scope": "variant",
+    "name": "packet_loss",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 16809,
+        "mean_predicted_nlos": 0.002602003807045485,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 241,
+        "mean_predicted_nlos": 0.14477520996146614,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 140,
+        "mean_predicted_nlos": 0.24888929189822367,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 108,
+        "mean_predicted_nlos": 0.35404782254114137,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 74,
+        "mean_predicted_nlos": 0.44747109513285716,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 70,
+        "mean_predicted_nlos": 0.5438356401369964,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 69,
+        "mean_predicted_nlos": 0.6458579140118897,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 87,
+        "mean_predicted_nlos": 0.7450503995089192,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 128,
+        "mean_predicted_nlos": 0.8551897938053911,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 338,
+        "mean_predicted_nlos": 0.9670632994935292,
+        "observed_nlos_rate": 0.0
+      }
+    ],
+    "ece": 0.04254905883541608
+  },
+  {
+    "scope": "variant",
+    "name": "packet_outage",
+    "bins": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 13061,
+        "mean_predicted_nlos": 0.0033732370696123626,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.1,
+        "high": 0.2,
+        "count": 242,
+        "mean_predicted_nlos": 0.1449384228855055,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.2,
+        "high": 0.30000000000000004,
+        "count": 138,
+        "mean_predicted_nlos": 0.2475136585538554,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.30000000000000004,
+        "high": 0.4,
+        "count": 111,
+        "mean_predicted_nlos": 0.35487848458718513,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.4,
+        "high": 0.5,
+        "count": 74,
+        "mean_predicted_nlos": 0.44739570133082457,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.5,
+        "high": 0.6000000000000001,
+        "count": 71,
+        "mean_predicted_nlos": 0.5442753646435984,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.6000000000000001,
+        "high": 0.7000000000000001,
+        "count": 71,
+        "mean_predicted_nlos": 0.6461020611007976,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.7000000000000001,
+        "high": 0.8,
+        "count": 89,
+        "mean_predicted_nlos": 0.7448987776339716,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.8,
+        "high": 0.9,
+        "count": 125,
+        "mean_predicted_nlos": 0.8556724831662149,
+        "observed_nlos_rate": 0.0
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 338,
+        "mean_predicted_nlos": 0.967078872183073,
+        "observed_nlos_rate": 0.0
+      }
+    ],
+    "ece": 0.053801196501642536
+  }
+]
