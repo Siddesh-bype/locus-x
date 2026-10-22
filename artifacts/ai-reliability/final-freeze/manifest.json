@@ -1,9 +1,16 @@
 {
   "status": "frozen_unrun",
   "phase": "5",
+  "attempt": 2,
   "created_at": "2026-10-22T00:00:00Z",
-  "freeze_commit": "f19659fe2b5053b2f7562001282058ecf4749686",
+  "freeze_commit": "5aef613",
   "preregistration_commit": "9cb0d2c",
+  "invalidated_attempt": {
+    "status": "invalid_preserved_not_analyzed",
+    "freeze_commit": "b87bef3",
+    "result_path": "artifacts/ai-reliability/final-test-invalid-mask",
+    "reason": "The final evaluator passed the selected anchor subset as disabled anchors, leaving the complement available. Counts 3-5 were actually 5-3 available and counts 6-8 had fewer than three anchors. The frozen classifier rows also used p(LOS) as p(NLOS). Both defects were fixed before the valid run; the invalid result directory and the original manifest are preserved."
+  },
   "final_test_output": "artifacts/ai-reliability/final-test",
   "policy": {
     "path": "models/ai-reliability-v2/policy-v2.json",
@@ -129,11 +136,11 @@
     }
   },
   "code": {
-    "backend/locus_x/ai_final.py": "49c5594556f0a2e5244d8ce01dd3fe76c96aec354752b124c19d9f56cb47ada4",
+    "backend/locus_x/ai_final.py": "ce38ea449b9810029d82863e5060c3fdc2f53527be7e6979ffc1859c7effb92e",
     "backend/locus_x/policy_v2.py": "bbc8ec2c42986740e773878a563c2c471f578fa69956413e8936769bf3fda0f5",
     "backend/locus_x/reliability.py": "c7c14fcaed32883794c4908af8bdcb0fc9a9edea66b0a6440c2c085cb4a59155",
     "backend/locus_x/reliability_v2.py": "18669348b86709317800bff9c58ccec3e1a87164dddb122d7eab54e5732ba823",
-    "backend/tests/test_phase4_engineering.py": "755c04ca94f5bdeea84109ea3c6732ce17a9963c20f03a4327957ddab20fe11e"
+    "backend/tests/test_phase4_engineering.py": "fb4039642e22dee91ee061464136f2e5d6fbc4feb3b1c0ce6c282636dc7d45dc"
   },
   "protocol": {
     "route": "held_out",
@@ -173,7 +180,7 @@
     "bootstrap_resamples": 2000
   },
   "pre_freeze_checks": {
-    "pytest": "106 passed",
+    "pytest": "107 passed",
     "ruff": "All checks passed",
     "typecheck": "pass",
     "lint": "pass",
