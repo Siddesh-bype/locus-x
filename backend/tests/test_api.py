@@ -74,6 +74,22 @@ def test_unknown_environment_and_extra_truth_rejected():
     assert client.get("/api/v1/benchmarks/missing").status_code == 404
 
 
+def test_ai_metadata_exposes_version_and_fallback():
+    frame = client.post("/api/v1/sessions", json={"settings": {"scenario": "clean"}}).json()
+    metadata = frame["ai_metadata"]
+    assert metadata["model_version"] == "ai-reliability-v1"
+    assert metadata["status"] in ("active", "fallback")
+    path = f"/api/v1/sessions/{frame['session_id']}"
+    frame = client.patch(
+        f"{path}/controls", json={"expected_revision": frame["revision"], "dropout": 1}
+    ).json()
+    frame = client.post(
+        f"{path}/advance", json={"expected_revision": frame["revision"], "dt": 1}
+    ).json()
+    assert frame["ai_metadata"]["status"] == "fallback"
+    assert frame["ai_metadata"]["model_version"] == "ai-reliability-v1"
+
+
 def test_scenario_only_initialization_uses_preset():
     frame = client.post("/api/v1/sessions", json={"settings": {"scenario": "clean"}}).json()
     assert frame["settings"]["noise_std"] == frame["settings"]["nlos_bias"] == 0

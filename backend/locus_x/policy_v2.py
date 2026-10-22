@@ -216,8 +216,15 @@ def load_validation_probabilities() -> tuple[dict, dict, np.ndarray]:
         frame_index,
         np.asarray(samples["anchor_index"][:count], dtype=np.int64),
     ] = (1.0 - probabilities).astype(np.float32)
-    if not np.all(np.isfinite(matrix[np.asarray(frames["available"], dtype=bool)])):
-        raise RuntimeError("missing validation probabilities for available anchor")
+    available_mask = np.asarray(frames["available"], dtype=bool)
+    missing = available_mask & ~np.isfinite(matrix)
+    if np.any(missing):
+        # Packet-loss observations are excluded from supervised training and their
+        # cached feature rows are NaN. They remain explicit fallbacks; the policy
+        # is never allowed to invent a probability for them.
+        finite = available_mask & ~missing
+        if not np.any(finite):
+            raise RuntimeError("no finite validation probabilities for available anchors")
     PROBABILITY_CACHE.parent.mkdir(parents=True, exist_ok=True)
     np.save(PROBABILITY_CACHE, matrix)
     return frames, manifest, matrix
@@ -711,14 +718,43 @@ def compare_g5_v1() -> dict:
     return {"labels": labels, "rows": len(rows)}
 
 
+def evaluate_candidates(workers: int = 1, force: bool = False) -> list[dict]:
+    load_validation_probabilities()
+    candidates = candidate_grid()
+    if workers <= 1:
+        return [evaluate_candidate(candidate, force=force) for candidate in candidates]
+    from multiprocessing import Pool
+
+    with Pool(processes=min(workers, len(candidates))) as pool:
+        return pool.map(
+            _evaluate_candidate_worker,
+            [(candidate, force) for candidate in candidates],
+        )
+
+
+def _evaluate_candidate_worker(payload):
+    candidate, force = payload
+    return evaluate_candidate(candidate, force=force)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--compare", action="store_true")
+    parser.add_argument("--run-candidates", action="store_true")
     parser.add_argument("--select", action="store_true")
     parser.add_argument("--force", action="store_true")
+    parser.add_argument("--workers", type=int, default=1)
     args = parser.parse_args()
     if args.compare:
         print(json.dumps(compare_g5_v1(), indent=2, default=_jsonable))
+    if args.run_candidates:
+        print(
+            json.dumps(
+                evaluate_candidates(workers=args.workers, force=args.force),
+                indent=2,
+                default=_jsonable,
+            )
+        )
     if args.select:
         print(json.dumps(select_policy(force=args.force), indent=2, default=_jsonable))
 

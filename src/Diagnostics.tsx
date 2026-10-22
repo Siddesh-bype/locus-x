@@ -16,13 +16,14 @@ export default function Diagnostics({ frame, floor, history, technical }: { fram
     ['95% coverage', 'N/A', percent(proposed.coverage), percent(ai.coverage)],
   ];
   const aiStatus = frame.ai_metadata?.status ?? 'unavailable';
+  const aiVersion = frame.ai_metadata?.model_version ?? 'unavailable';
   return <aside className="diagnostics-panel" aria-label="Actual localization results">
     <div className="panel-heading"><Activity size={16} /><h2>Live comparison</h2><span className="live-label">3 METHODS</span></div>
     <section className="current-errors">
       <div><span><i className="legend-mark baseline" />Baseline</span><strong>{fmt(frame.evaluation.baseline_error)}<small>m</small></strong></div>
       <div><span><i className="legend-mark proposed" />LOCUS-X</span><strong>{fmt(frame.evaluation.proposed_error)}<small>m</small></strong></div>
       <div><span><i className="legend-mark ai" />LOCUS-X + AI</span><strong>{fmt(frame.evaluation.ai_error)}<small>m</small></strong></div>
-      <p>Current error against simulator truth. AI status: {aiStatus}{frame.ai_metadata?.ambiguous ? ', ambiguous consensus' : ''}.</p>
+      <p>Current error against simulator truth. AI status: {aiStatus} ({aiVersion}){frame.ai_metadata?.ambiguous ? ', ambiguous consensus' : ''}.</p>
     </section>
     <section className="comparison-section">
       <div className="section-title"><h3>Comparison window</h3><span className="mono">{history.length} frames</span></div>
