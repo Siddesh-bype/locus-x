@@ -1,0 +1,22 @@
+{
+  "reference": "artifacts/ai-reliability/reference-existing/metrics.csv",
+  "rerun": "artifacts/ai-reliability/phase4-final/reference-ai-off/metrics.csv",
+  "rows": 56,
+  "fields": [
+    "frames",
+    "valid_frames",
+    "rmse",
+    "median",
+    "p95",
+    "valid_rate",
+    "update_rate",
+    "nlos_rmse",
+    "dropout_rmse",
+    "coverage_95"
+  ],
+  "mismatches": 0,
+  "excluded": [
+    "latency_ms",
+    "ai rows"
+  ]
+}
