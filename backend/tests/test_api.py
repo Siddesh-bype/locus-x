@@ -149,13 +149,10 @@ def test_layout_optimize_job_lifecycle():
     assert response.status_code == 202
     job_id = response.json()["id"]
     # Single-flight guard: a second job while running is refused.
-    assert (
-        client.post(
-            "/api/v1/layouts/optimize",
-            json={"environment_id": "hospital_floor_01", "budgets": [4]},
-        ).status_code
-        in (202, 409)
-    )
+    assert client.post(
+        "/api/v1/layouts/optimize",
+        json={"environment_id": "hospital_floor_01", "budgets": [4]},
+    ).status_code in (202, 409)
     deadline = time.monotonic() + 60
     while time.monotonic() < deadline:
         job = client.get(f"/api/v1/layouts/optimize/{job_id}").json()

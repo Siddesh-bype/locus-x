@@ -41,9 +41,7 @@ def layout_rows(
     pooled, per_scenario, _ = replay_split(environment, split, estimator, regions_of(environment))
     rows = []
     for scenario, metrics in per_scenario.items():
-        rows.append(
-            _row(layout, estimator, scenario, split, metrics)
-        )
+        rows.append(_row(layout, estimator, scenario, split, metrics))
     rows.append(_row(layout, estimator, "pooled", split, pooled))
     return rows
 

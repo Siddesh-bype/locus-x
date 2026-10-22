@@ -69,7 +69,7 @@ for name, kwargs in runs:
         },
     }
     # Install example configs for the dashboard (never overwriting).
-    for (budget_kind, raw) in payload["environment_configs"].items():
+    for budget_kind, raw in payload["environment_configs"].items():
         budget, kind = budget_kind.split("/")
         stem = f"{payload['environment_id']}-{payload['floor_id']}-{kind}-k{budget}"
         target = layouts_dir / f"{stem}.json"
@@ -81,8 +81,7 @@ for name, kwargs in runs:
         target.write_text(json.dumps(raw, indent=2, allow_nan=False), encoding="utf-8")
         print(f"  wrote {target.name}", flush=True)
     print(
-        f"  runtime {summary[name]['runtime_seconds']}s, "
-        f"selected {summary[name]['selected']}",
+        f"  runtime {summary[name]['runtime_seconds']}s, selected {summary[name]['selected']}",
         flush=True,
     )
     print(

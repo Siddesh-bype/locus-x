@@ -51,10 +51,7 @@ def make_layout(
         budget=len(sites),
         anchors=anchors,
         site_ids=site_ids,
-        selection={
-            anchor.id: site
-            for anchor, site in zip(anchors, site_ids, strict=True)
-        },
+        selection={anchor.id: site for anchor, site in zip(anchors, site_ids, strict=True)},
         layout_hash=digest,
         provenance=provenance or {},
     )
