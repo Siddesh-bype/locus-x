@@ -12,6 +12,9 @@ from .schemas import Anchor, Environment, Point, Room, StrictModel, Waypoint
 SchemaVersion = Literal["3.0", "3.1"]
 BUILDING_SCHEMA_VERSIONS: frozenset[str] = frozenset(get_args(SchemaVersion))
 
+DEFAULT_MOUNT_HEIGHT = 2.6
+"""Metres above the floor datum for anchors absent from ``anchor_mount_heights``."""
+
 
 def is_building_config(raw: dict) -> bool:
     """Single loader discriminator, derived from the literal so it cannot go stale."""
@@ -107,10 +110,7 @@ class Floor(Environment):
                 0 <= anchor.position[0] <= self.width and 0 <= anchor.position[1] <= self.height
             ):
                 raise ValueError("Candidate anchors must lie within the floor dimensions")
-        installed = {anchor.id: anchor for anchor in self.anchors}
-        by_position: dict[Point, list[str]] = {}
-        for anchor in self.anchors:
-            by_position.setdefault(anchor.position, []).append(anchor.id)
+        installed = {anchor.id for anchor in self.anchors}
         for anchor_id, mount_height in self.anchor_mount_heights.items():
             if anchor_id not in installed:
                 raise ValueError(
@@ -120,14 +120,6 @@ class Floor(Environment):
             if not mount_height > 0:
                 raise ValueError(
                     f"Mount height for anchor {anchor_id!r} on floor {self.id} must be positive"
-                )
-            co_located = [
-                other for other in by_position[installed[anchor_id].position] if other != anchor_id
-            ]
-            if co_located:
-                raise ValueError(
-                    f"anchor_mount_heights cannot target co-located anchor {anchor_id!r} on floor "
-                    f"{self.id}: it shares its position with {', '.join(sorted(co_located))}"
                 )
         for wall in self.walls:
             if dist(wall.a, wall.b) < 1e-6:
@@ -197,18 +189,18 @@ class ConnectionStop(StrictModel):
 class RouteLeg(StrictModel):
     """One floor-local leg; the vertical traverse is a RouteTransition, never a leg."""
 
-    floor_id: str
+    floor_id: str = Field(min_length=1)
     waypoints: list[Waypoint] = Field(min_length=2)
 
 
 class RouteTransition(StrictModel):
     """A vertical traverse between two floors through one declared connection."""
 
-    id: str
+    id: str = Field(min_length=1)
     kind: Literal["stairs", "elevator"]
-    connection_id: str
-    from_floor_id: str
-    to_floor_id: str
+    connection_id: str = Field(min_length=1)
+    from_floor_id: str = Field(min_length=1)
+    to_floor_id: str = Field(min_length=1)
     travel_seconds: float = Field(gt=0)
     dwell_before: float = Field(ge=0)
     dwell_after: float = Field(ge=0)
@@ -217,8 +209,8 @@ class RouteTransition(StrictModel):
 class MultiFloorRoute(StrictModel):
     """Structural route contract only; segment geometry is validated by the route layer."""
 
-    id: str
-    name: str
+    id: str = Field(min_length=1)
+    name: str = Field(min_length=1)
     loop: bool = False
     legs: list[RouteLeg] = Field(min_length=2)
     transitions: list[RouteTransition]
@@ -295,10 +287,11 @@ class Building(StrictModel):
                 gaps.append(self.floors[i + 1].elevation - floor.elevation)
             if gaps:
                 limit = min(gaps) - 0.2
-                for anchor_id, mount_height in floor.anchor_mount_heights.items():
+                for anchor in floor.anchors:
+                    mount_height = floor.anchor_mount_heights.get(anchor.id, DEFAULT_MOUNT_HEIGHT)
                     if mount_height > limit + 1e-9:
                         raise ValueError(
-                            f"Mount height for anchor {anchor_id!r} on floor {floor.id} must not "
+                            f"Mount height for anchor {anchor.id!r} on floor {floor.id} must not "
                             f"exceed {limit:g} m (0.2 m slab clearance below the adjacent floor)"
                         )
         if len({c.id for c in self.connections}) != len(self.connections):

@@ -7,11 +7,8 @@ estimates a position.
 
 from dataclasses import dataclass
 
-from ..building import Building, Floor
+from ..building import DEFAULT_MOUNT_HEIGHT, Building, Floor
 from ..schemas import Anchor
-
-DEFAULT_MOUNT_HEIGHT = 2.6
-"""Metres above the floor datum for anchors absent from ``anchor_mount_heights``."""
 
 
 @dataclass(frozen=True, slots=True)

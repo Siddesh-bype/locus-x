@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from backend.locus_x.building import Building, is_building_config
+from backend.locus_x.building import Building, config_model, is_building_config
 from backend.locus_x.environment import load_environments
 from backend.locus_x.multifloor import (
     Anchor3D,
@@ -193,6 +193,16 @@ def test_committed_fixture_is_exactly_the_authoring_script_output():
     assert CONFIG_V3.read_text(encoding="utf-8") == json.dumps(module.build(), indent=2) + "\n"
 
 
+@pytest.mark.parametrize("version", ["2.0", "4.0", "", None, 3.0, 3, ["3.0"], {"v": "3.1"}])
+def test_non_building_schema_versions_resolve_to_environment(version):
+    assert config_model({"id": "legacy", "schema_version": version}) is Environment
+
+
+def test_missing_version_resolves_to_environment_and_30_to_building():
+    assert config_model({"id": "legacy"}) is Environment
+    assert config_model({"id": "hospital_v3", "schema_version": "3.0"}) is Building
+
+
 # ------------------------------------------------------------- mount heights ---
 
 
@@ -228,11 +238,50 @@ def test_unknown_mount_height_anchor_is_rejected(raw_v3):
         Building.model_validate(raw_v3)
 
 
-def test_colocated_mount_height_anchor_is_rejected(raw_v3):
+def test_colocated_anchors_may_use_distinct_mount_heights(raw_v3):
     raw_v3["floors"][0]["anchors"][1]["position"] = [1, 1]
-    raw_v3["floors"][0]["anchor_mount_heights"] = {"A2": 2.6}
-    with pytest.raises(ValidationError, match="co-located anchor 'A2'"):
+    raw_v3["floors"][0]["anchor_mount_heights"] = {"A1": 2.6, "A2": 3.4}
+    building = Building.model_validate(raw_v3)
+    assert resolve_anchor(building, "ground", "A1").z == pytest.approx(2.6)
+    assert resolve_anchor(building, "ground", "A2").z == pytest.approx(3.4)
+
+
+def test_default_mount_height_is_checked_against_the_slab_bound(raw_v3):
+    # Low walls and 2 m storeys make the 2.6 m default exceed the 1.8 m limit.
+    for floor in raw_v3["floors"]:
+        for wall in floor["walls"]:
+            wall["height"] = 1.0
+    for floor, elevation in zip(raw_v3["floors"], [0, 2.0, 4.0], strict=True):
+        floor["elevation"] = elevation
+    with pytest.raises(
+        ValidationError, match="Mount height for anchor 'A1' on floor ground must not exceed 1.8"
+    ):
         Building.model_validate(raw_v3)
+    for floor in raw_v3["floors"]:
+        floor["anchor_mount_heights"] = {f"A{i}": 1.5 for i in range(1, 9)}
+    building = Building.model_validate(raw_v3)
+    assert resolve_anchor(building, "ground", "A1").z == pytest.approx(1.5)
+
+
+def test_mount_bound_uses_the_smallest_adjacent_gap(raw_v3):
+    # Storeys 5.5 m and 3.5 m, so the middle floor's limit comes from the gap above
+    # (3.5 - 0.2 = 3.3) and the topmost floor's from the gap below (also 3.3).
+    for floor, elevation in zip(raw_v3["floors"], [0, 5.5, 9.0], strict=True):
+        floor["elevation"] = elevation
+    raw_v3["floors"][0]["anchor_mount_heights"] = {"A1": 5.3}
+    ground = resolve_anchor(Building.model_validate(raw_v3), "ground", "A1")
+    assert ground.z == pytest.approx(5.3)
+    raw_v3["floors"][0]["anchor_mount_heights"] = {}
+    raw_v3["floors"][1]["anchor_mount_heights"] = {"A1": 3.4}
+    with pytest.raises(ValidationError, match="must not exceed 3.3 m"):
+        Building.model_validate(raw_v3)
+    raw_v3["floors"][1]["anchor_mount_heights"] = {"A1": 3.3}
+    raw_v3["floors"][2]["anchor_mount_heights"] = {"A1": 3.4}
+    with pytest.raises(ValidationError, match="must not exceed 3.3 m"):
+        Building.model_validate(raw_v3)
+    raw_v3["floors"][2]["anchor_mount_heights"] = {"A1": 3.3}
+    top = resolve_anchor(Building.model_validate(raw_v3), "second", "A1")
+    assert top.z == pytest.approx(12.3)
 
 
 # --------------------------------------------------------- route structure -----
