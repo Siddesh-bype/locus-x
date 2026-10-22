@@ -38,8 +38,9 @@ changed no schema, algorithm, configuration or frontend file; it adds this docum
 | 9 | The scene maps floor-local `(x, y)` to a display elevation | `src/lib.ts:4`; contract `docs/v3-contract.md:20` | `toScene([x, y], elevation) => [x, elevation, -y]` | Display already supports elevation, but no live state, covariance or overlay contains a vertical coordinate |
 
 Anchor coordinates are identical on all three configured floors (`(1,1)`, `(21,1)`, `(41,1)`, `(41,14)`,
-`(41,27)`, `(21,27)`, `(1,27)`, `(1,14)`). This is why a 2D reasoning path cannot distinguish storeys: the
-horizontal projection of the building repeats exactly on every floor.
+`(41,27)`, `(21,27)`, `(1,27)`, `(1,14)`). The horizontal projection of the building therefore repeats
+exactly on every floor: horizontal geometry carries no storey cue, and a path that reasons only in `(x, y)`
+cannot separate floors.
 
 ## 2. Coordinate convention in force
 
@@ -134,13 +135,13 @@ anchors from the three floors. `cond(H)` is the 2-norm condition number of `H`.
 | `second` | 8.4 | 9.6 | 260 | **0.83** | 9.88 | 0.12 |
 
 The three medians reproduce the reference values recorded for this phase (0.62 / 0.94 / 0.83 m). Grid
-resolution moves the second decimal only:
-a 0.5 m grid gives 0.62 / 0.92 / 0.82, a 1 m grid gives 0.62 / 0.93 / 0.83, and a 2 m grid gives the values
-above. The ordering is therefore a property of the vertical geometry, not of the sampling.
+resolution moves the second decimal only: a 0.5 m grid gives 0.62 / 0.92 / 0.82, a 1 m grid gives
+0.62 / 0.93 / 0.83, and a 2 m grid gives the values above. The ordering is therefore a property of the
+vertical geometry, not of the sampling.
 
 The ordering follows from the vertical information available on each floor, which grows with
 `sum_i ((z_i - z_target) / r_i)^2`. On the ground floor the target is 1.4 / 5.6 / 9.8 m from the three anchor
-planes; on the first floor it is 2.8 m below the ground anchors, 1.4 m below the first-floor anchors and
+planes; on the first floor it is 2.8 m above the ground anchors, 1.4 m below the first-floor anchors and
 5.6 m below the second-floor anchors, and the two nearest planes contribute little vertical leverage. The
 first floor is consequently the worst-conditioned, exactly as the table shows.
 
@@ -238,7 +239,7 @@ Versioned result directories are kept after a rollback; old results are never re
 
 | Configuration | Schema | Loader / consumer | Geometry | Localization path today | After the planned 3.1 work |
 | --- | --- | --- | --- | --- | --- |
-| `configs/environments/hospital_floor_01.json` | V1 `Environment`, no `schema_version` | `load_environments()`; default API environment; reference benchmark | One 30 × 20 m floor, eight 2D anchors | 2D on the known floor; `floor_elevation` 0.0 | Unchanged. Byte-identical file and pinned hash `fa1d5b05...c4b39` |
+| `configs/environments/hospital_floor_01.json` | V1 `Environment`, no `schema_version` | `load_environments()`; default API environment; reference benchmark | One 30 × 20 m floor, eight 2D anchors | 2D on the known floor; `floor_elevation` 0.0 | Unchanged; not modified by this audit. Pinned model hash `fa1d5b05...c4b39` |
 | `configs/environments/hospital_v3.json` | `Building`, `schema_version: "3.0"`, version `3.0.0` | `load_environments()` resolves `hospital_v3`; `resolve_floor` selects one floor | Three 42 × 28 m floors at 0 / 4.2 / 8.4 m; 8 installed anchors and 21 candidate sites per floor; aligned cores | 2D on a manually selected floor; V3 smoke benchmarks carry the 3.0 configuration hash | Re-authored at 3.1 with optional mount-height, device-height, slab-bias and transition-route fields. Its `environment_sha256` changes; existing V3 smoke artifacts stay identified by their recorded 3.0 hash |
 | `configs/environments/layouts/*.json` (15 files) | 12 V1 `Environment`, 3 `Building` `3.0` | Optimizer and dashboard, via `optimization.layouts.validate_environment_config` (`layouts.py:208-211`); not read by `load_environments()`, which only globs the top-level configuration directory | Point layouts of the reference floor, plus three `hospital_v3 / ground` building snapshots | No session semantics of their own; they supply anchor geometry only | No edit required: new 3.1 fields are optional and defaulted. They remain 3.0 documents |
 
