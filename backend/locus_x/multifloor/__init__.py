@@ -16,6 +16,7 @@ from .route import (
     DEFAULT_ROUTE_SPEED,
     Phase,
     RouteState,
+    TransitionWindow,
     route_state,
     transition_windows,
 )
@@ -26,6 +27,7 @@ __all__ = [
     "Anchor3D",
     "Phase",
     "RouteState",
+    "TransitionWindow",
     "anchor_index",
     "floor_anchors",
     "resolve_anchor",

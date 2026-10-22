@@ -411,16 +411,28 @@ class Building(StrictModel):
                     )
                 # A shaft is not a movement region, so a leg may only reach it at its door
                 # midpoint; matching the entry keeps every floor leg inside walkable space.
+                cores = {}
+                for floor_id in (transition.from_floor_id, transition.to_floor_id):
+                    stop = next(stop for stop in connection.stops if stop.floor_id == floor_id)
+                    cores[floor_id] = next(
+                        core for core in floors[floor_id].access_cores if core.id == stop.access_id
+                    )
+                source_core = cores[transition.from_floor_id]
+                target_core = cores[transition.to_floor_id]
+                # The traverse reports one horizontal point (the from-floor entry), so both
+                # floors' entries must agree or the trajectory would step sideways mid-air.
+                if dist(source_core.entry, target_core.entry) > 1e-6:
+                    raise ValueError(
+                        f"Route {route.id} transition {transition.id} uses connection "
+                        f"{connection.id!r} between floors {transition.from_floor_id!r} and "
+                        f"{transition.to_floor_id!r}, but their access-core entries differ: "
+                        f"{source_core.entry} vs {target_core.entry}"
+                    )
                 for leg_index, leg, endpoint, side in (
                     (i, source, source.waypoints[-1], "end"),
                     (following, target, target.waypoints[0], "start"),
                 ):
-                    stop = next(stop for stop in connection.stops if stop.floor_id == leg.floor_id)
-                    core = next(
-                        core
-                        for core in floors[leg.floor_id].access_cores
-                        if core.id == stop.access_id
-                    )
+                    core = cores[leg.floor_id]
                     if dist(endpoint.position, core.entry) > 1e-6:
                         raise ValueError(
                             f"Route {route.id} leg {leg_index} on floor {leg.floor_id} must "

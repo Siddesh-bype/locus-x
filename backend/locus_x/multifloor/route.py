@@ -20,12 +20,13 @@ from math import dist
 from typing import Literal
 
 from ..building import Building, MultiFloorRoute, RouteLeg, RouteTransition
-from ..schemas import Point
+from ..schemas import Point, Settings
 
 Phase = Literal["dwell", "move", "transition"]
 
-DEFAULT_ROUTE_SPEED = 1.2
-"""Metres per second. The authored route timings and their outage overlap assume it."""
+# The route timings are authored for the simulator's default speed; read it from Settings so
+# the two cannot drift. A different speed rescales every leg and shifts every traverse window.
+DEFAULT_ROUTE_SPEED: float = float(Settings.model_fields["speed"].default)
 
 JOIN_TOLERANCE = 1e-6
 """Horizontal join tolerance, the same bound ``Building`` uses for core entries."""
@@ -45,6 +46,15 @@ class RouteState:
     connection_id: str | None
     transition_id: str | None
     progress: float
+
+
+@dataclass(frozen=True, slots=True)
+class TransitionWindow:
+    """One vertical traverse of a route period, with the transition it belongs to."""
+
+    transition_id: str
+    start: float
+    end: float
 
 
 @dataclass(frozen=True, slots=True)
@@ -188,26 +198,33 @@ def _transition_stages(
     return clock, stages
 
 
-def _assert_continuous(stages: list[_Stage], route: MultiFloorRoute) -> None:
+def _check_continuity(stages: list[_Stage], route: MultiFloorRoute) -> None:
     """The contract is continuity, so a broken timeline is a defect, not a runtime input.
 
-    ``z`` is exact: both sides of every join are the same ``elevation + height`` value.
-    Horizontal joins use the load-time bound on core-entry agreement.
+    Raised, never asserted: ``python -O`` strips asserts, and a silently jumping route is
+    exactly the failure this layer exists to prevent. ``z`` is exact because both sides of
+    every join are the same ``elevation + height`` value; horizontal joins use the load-time
+    bound on core-entry agreement.
     """
     for previous, following in zip(stages, stages[1:], strict=False):
-        assert previous.end_z == following.start_z, (
-            f"Route {route.id} has a vertical discontinuity at {previous.end:.6f} s"
-        )
-        assert dist(previous.end_point, following.start_point) <= JOIN_TOLERANCE, (
-            f"Route {route.id} has a horizontal discontinuity at {previous.end:.6f} s"
-        )
+        if previous.end != following.start:
+            raise ValueError(
+                f"Route {route.id} has a time gap at {previous.end!r} s: "
+                f"next stage starts at {following.start!r} s"
+            )
+        if previous.end_z != following.start_z:
+            raise ValueError(
+                f"Route {route.id} has a vertical discontinuity at {previous.end:.6f} s"
+            )
+        if dist(previous.end_point, following.start_point) > JOIN_TOLERANCE:
+            raise ValueError(
+                f"Route {route.id} has a horizontal discontinuity at {previous.end:.6f} s"
+            )
     if route.loop and stages:
-        assert stages[-1].end_z == stages[0].start_z, (
-            f"Loop route {route.id} changes elevation across its period boundary"
-        )
-        assert dist(stages[-1].end_point, stages[0].start_point) <= JOIN_TOLERANCE, (
-            f"Loop route {route.id} does not return to its first waypoint"
-        )
+        if stages[-1].end_z != stages[0].start_z:
+            raise ValueError(f"Loop route {route.id} changes elevation across its period boundary")
+        if dist(stages[-1].end_point, stages[0].start_point) > JOIN_TOLERANCE:
+            raise ValueError(f"Loop route {route.id} does not return to its first waypoint")
 
 
 def _timeline(
@@ -249,7 +266,7 @@ def _timeline(
         stages.extend(transition_stages)
     if not stages:
         raise ValueError(f"Route {route.id} has no duration at speed {speed!r}")
-    _assert_continuous(stages, route)
+    _check_continuity(stages, route)
     return stages[-1].end, stages
 
 
@@ -306,13 +323,19 @@ def transition_windows(
     route: MultiFloorRoute,
     speed: float = DEFAULT_ROUTE_SPEED,
     device_height: float | None = None,
-) -> list[tuple[float, float]]:
-    """``[start, end)`` of every vertical traverse inside one period, in route order.
+) -> list[TransitionWindow]:
+    """Every vertical traverse inside one period, in route order, as ``[start, end)``.
 
-    Derived from the same timeline as :func:`route_state`, so it cannot drift from
-    the reported states. Callers use it to reason about fixed time windows (for
-    example the simulator's timed outage) without sampling.
+    Each window carries its ``transition_id``, so callers never have to zip the result with
+    ``route.transitions`` to recover identity (Task 5's transition events need exactly that).
+    Derived from the same timeline as :func:`route_state`, so it cannot drift from the
+    reported states, and callers can reason about fixed time windows (the simulator's timed
+    outage, for example) without sampling.
     """
     height = building.target_device_height if device_height is None else device_height
     _, stages = _timeline(building, route, speed, height)
-    return [(stage.start, stage.end) for stage in stages if stage.phase == "transition"]
+    return [
+        TransitionWindow(transition_id=stage.transition_id, start=stage.start, end=stage.end)
+        for stage in stages
+        if stage.phase == "transition"
+    ]

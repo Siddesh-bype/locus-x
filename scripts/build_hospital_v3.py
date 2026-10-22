@@ -349,6 +349,12 @@ def transition_routes():
     52.00 s, which is what moves it from 5.78 % 40 (outside) into the outage window.
     `descent_stairs` is `ascent_stairs` reversed; reversing keeps each waypoint's dwell.
 
+    All of the above is a property of the default speed: `Settings.speed` defaults to
+    1.2 m/s and `multifloor.route.DEFAULT_ROUTE_SPEED` reads that default from the schema.
+    A session that sets a different `speed` rescales every leg duration and therefore shifts
+    every traverse window inside the period, so changing the default means re-timing these
+    routes (a route test pins the current pairing).
+
     `cross_floor_survey` is looped with one transition per leg, as the schema requires
     (a loop needs exactly len(legs) transitions). The requested ground -> first ->
     second -> first -> ground cycle is therefore four closed legs, read cyclically
