@@ -9,6 +9,7 @@ import numpy as np
 import pytest
 
 from backend.locus_x import reliability_v2
+from backend.locus_x.ai_final import disabled_anchors
 from backend.locus_x.ai_phase3 import evaluate_frames, load_frames
 from backend.locus_x.environment import load_environments, resolve_floor, route_position
 from backend.locus_x.estimators import solve
@@ -42,6 +43,12 @@ def _measurements() -> tuple[object, list[Measurement]]:
         0,
     )
     return environment, observations
+
+
+def test_final_evaluator_disables_anchors_not_in_the_selected_subset():
+    environment, _ = _measurements()
+    selected = ["A1", "A3", "A6"]
+    assert disabled_anchors(environment, selected) == ["A2", "A4", "A5", "A7", "A8"]
 
 
 def test_load_rejects_corrupt_checkpoint_checksum(tmp_path):

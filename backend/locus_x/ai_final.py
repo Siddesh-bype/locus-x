@@ -159,6 +159,11 @@ def _environment(environment_id: str, floor_id: str | None):
     return resolve_floor(load_environments()[environment_id], floor_id)
 
 
+def disabled_anchors(environment, subset: list[str]) -> list[str]:
+    selected = set(subset)
+    return [anchor.id for anchor in environment.anchors if anchor.id not in selected]
+
+
 def _position_error(position, truth) -> float:
     if position is None:
         return float("nan")
@@ -190,7 +195,10 @@ def evaluate_run(spec: dict) -> dict:
     v1_model, v2_model, policy, candidate = _models()
     environment = _environment(spec["environment_id"], spec["floor_id"])
     settings = _settings(
-        spec["variant"], spec["seed"], ROUTE, spec["subset"]
+        spec["variant"],
+        spec["seed"],
+        ROUTE,
+        disabled_anchors(environment, spec["subset"]),
     )
     stat_tracker = MotionTracker()
     v1_tracker = MotionTracker()
@@ -344,8 +352,8 @@ def evaluate_run(spec: dict) -> dict:
             classifier["seed"].append(spec["seed"])
             classifier["step"].append(step)
             classifier["y"].append(int(label.kind == "nlos"))
-            classifier["p_v1"].append(float(p_v1))
-            classifier["p_v2"].append(float(p_v2))
+            classifier["p_v1"].append(float(1.0 - p_v1))
+            classifier["p_v2"].append(float(1.0 - p_v2))
             classifier["condition"].append("packet_loss" if has_dropout else "no_loss")
     return {
         "run_index": spec["run_index"],
