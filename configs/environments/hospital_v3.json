@@ -1,6 +1,6 @@
 {
-  "schema_version": "3.0",
-  "version": "3.0.0",
+  "schema_version": "3.1",
+  "version": "3.1.0",
   "id": "hospital_v3",
   "name": "Meridian Hospital",
   "description": "Fictional three-floor hospital for synthetic localization experiments.",
@@ -75,6 +75,7 @@
           ]
         }
       ],
+      "anchor_mount_heights": {},
       "walls": [
         {
           "id": "ext-south-w",
@@ -1415,6 +1416,7 @@
           ]
         }
       ],
+      "anchor_mount_heights": {},
       "walls": [
         {
           "id": "ext-south",
@@ -2727,6 +2729,7 @@
           ]
         }
       ],
+      "anchor_mount_heights": {},
       "walls": [
         {
           "id": "ext-south",
@@ -3879,6 +3882,9 @@
       ]
     }
   ],
+  "target_device_height": 1.2,
+  "slab_bias_per_slab": 1.5,
+  "transition_routes": [],
   "validation": {
     "units": "metres",
     "source": "fictional-procedural",

@@ -191,6 +191,8 @@ def make_floor(spec):
         "width": WIDTH,
         "height": LENGTH,
         "anchors": [{"id": f"A{i + 1}", "position": p} for i, p in enumerate(installed)],
+        # Empty means every anchor uses the default 2.6 m mount height.
+        "anchor_mount_heights": {},
         "walls": walls,
         "rooms": rooms,
         "routes": {
@@ -214,8 +216,8 @@ def make_floor(spec):
 
 def build():
     return {
-        "schema_version": "3.0",
-        "version": "3.0.0",
+        "schema_version": "3.1",
+        "version": "3.1.0",
         "id": "hospital_v3",
         "name": "Meridian Hospital",
         "description": "Fictional three-floor hospital for synthetic localization experiments.",
@@ -234,6 +236,12 @@ def build():
                 ("bed-elevator", "elevator", "lift-west"),
             ]
         ],
+        # Metres above the selected floor datum; used by the 3D projection.
+        "target_device_height": 1.2,
+        # Synthetic model assumption: metres of added range per intervening floor slab.
+        "slab_bias_per_slab": 1.5,
+        # Route models are declared in the schema; the route task authors the routes.
+        "transition_routes": [],
         "validation": {
             "units": "metres",
             "source": "fictional-procedural",

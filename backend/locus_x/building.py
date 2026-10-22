@@ -1,12 +1,22 @@
 """V3 composes the existing floor contract; the V1 Environment remains unchanged."""
 
 from math import dist
-from typing import Literal
+from typing import Literal, get_args
 
 from pydantic import Field, model_validator
 
 from .geometry import intersects, rectangle_bounds, segment_in_regions
-from .schemas import Anchor, Environment, Point, Room, StrictModel
+from .schemas import Anchor, Environment, Point, Room, StrictModel, Waypoint
+
+# 3.1 only adds optional fields, so 3.0 documents keep validating byte-for-byte.
+SchemaVersion = Literal["3.0", "3.1"]
+BUILDING_SCHEMA_VERSIONS: frozenset[str] = frozenset(get_args(SchemaVersion))
+
+
+def is_building_config(raw: dict) -> bool:
+    """Single loader discriminator, derived from the literal so it cannot go stale."""
+    version = raw.get("schema_version")
+    return isinstance(version, str) and version in BUILDING_SCHEMA_VERSIONS
 
 
 class BuildingRoom(Room):
@@ -48,6 +58,8 @@ class Floor(Environment):
     candidate_anchors: list[Anchor] = Field(default_factory=list)
     anchor_layout_id: str = Field(min_length=1)
     route_names: dict[str, str]
+    # Anchor ID -> metres above the floor datum; unlisted anchors use DEFAULT_MOUNT_HEIGHT.
+    anchor_mount_heights: dict[str, float] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def validate_floor(self):
@@ -95,6 +107,28 @@ class Floor(Environment):
                 0 <= anchor.position[0] <= self.width and 0 <= anchor.position[1] <= self.height
             ):
                 raise ValueError("Candidate anchors must lie within the floor dimensions")
+        installed = {anchor.id: anchor for anchor in self.anchors}
+        by_position: dict[Point, list[str]] = {}
+        for anchor in self.anchors:
+            by_position.setdefault(anchor.position, []).append(anchor.id)
+        for anchor_id, mount_height in self.anchor_mount_heights.items():
+            if anchor_id not in installed:
+                raise ValueError(
+                    f"anchor_mount_heights on floor {self.id} references unknown anchor "
+                    f"{anchor_id!r}; installed anchors are {sorted(installed)}"
+                )
+            if not mount_height > 0:
+                raise ValueError(
+                    f"Mount height for anchor {anchor_id!r} on floor {self.id} must be positive"
+                )
+            co_located = [
+                other for other in by_position[installed[anchor_id].position] if other != anchor_id
+            ]
+            if co_located:
+                raise ValueError(
+                    f"anchor_mount_heights cannot target co-located anchor {anchor_id!r} on floor "
+                    f"{self.id}: it shares its position with {', '.join(sorted(co_located))}"
+                )
         for wall in self.walls:
             if dist(wall.a, wall.b) < 1e-6:
                 raise ValueError("Wall segments must have nonzero length")
@@ -160,6 +194,49 @@ class ConnectionStop(StrictModel):
     access_id: str
 
 
+class RouteLeg(StrictModel):
+    """One floor-local leg; the vertical traverse is a RouteTransition, never a leg."""
+
+    floor_id: str
+    waypoints: list[Waypoint] = Field(min_length=2)
+
+
+class RouteTransition(StrictModel):
+    """A vertical traverse between two floors through one declared connection."""
+
+    id: str
+    kind: Literal["stairs", "elevator"]
+    connection_id: str
+    from_floor_id: str
+    to_floor_id: str
+    travel_seconds: float = Field(gt=0)
+    dwell_before: float = Field(ge=0)
+    dwell_after: float = Field(ge=0)
+
+
+class MultiFloorRoute(StrictModel):
+    """Structural route contract only; segment geometry is validated by the route layer."""
+
+    id: str
+    name: str
+    loop: bool = False
+    legs: list[RouteLeg] = Field(min_length=2)
+    transitions: list[RouteTransition]
+
+    @model_validator(mode="after")
+    def validate_structure(self):
+        expected = len(self.legs) if self.loop else len(self.legs) - 1
+        if len(self.transitions) != expected:
+            kind = "loop" if self.loop else "one-way"
+            raise ValueError(
+                f"Route {self.id} is {kind} with {len(self.legs)} legs and needs exactly "
+                f"{expected} transitions, got {len(self.transitions)}"
+            )
+        if len({transition.id for transition in self.transitions}) != len(self.transitions):
+            raise ValueError(f"Transition IDs must be unique within route {self.id}")
+        return self
+
+
 class FloorConnection(StrictModel):
     id: str
     kind: Literal["stairs", "elevator"]
@@ -174,7 +251,9 @@ class ValidationMetadata(StrictModel):
 
 
 class Building(StrictModel):
-    schema_version: Literal["3.0"]
+    """A versioned building. Every 3.1 addition is optional so 3.0 documents keep loading."""
+
+    schema_version: SchemaVersion
     version: str = Field(min_length=1)
     id: str = Field(min_length=1)
     name: str
@@ -184,6 +263,12 @@ class Building(StrictModel):
     default_floor_id: str
     floors: list[Floor] = Field(min_length=1)
     connections: list[FloorConnection]
+    # Device height above the selected floor datum, used by the 3D projection only.
+    target_device_height: float = Field(default=1.2, gt=0, lt=4)
+    # Synthetic attenuation: metres of added range per intervening floor slab.
+    slab_bias_per_slab: float = Field(default=1.5, ge=0)
+    # Populated by the route task; the models and their structural rules live here.
+    transition_routes: list[MultiFloorRoute] = Field(default_factory=list)
     validation: ValidationMetadata
 
     @model_validator(mode="after")
@@ -203,6 +288,19 @@ class Building(StrictModel):
                 < max((wall.height for wall in floor.walls), default=0) + 0.2
             ):
                 raise ValueError("Floor elevations must provide wall and slab clearance")
+            gaps = []
+            if i:
+                gaps.append(floor.elevation - self.floors[i - 1].elevation)
+            if i + 1 < len(self.floors):
+                gaps.append(self.floors[i + 1].elevation - floor.elevation)
+            if gaps:
+                limit = min(gaps) - 0.2
+                for anchor_id, mount_height in floor.anchor_mount_heights.items():
+                    if mount_height > limit + 1e-9:
+                        raise ValueError(
+                            f"Mount height for anchor {anchor_id!r} on floor {floor.id} must not "
+                            f"exceed {limit:g} m (0.2 m slab clearance below the adjacent floor)"
+                        )
         if len({c.id for c in self.connections}) != len(self.connections):
             raise ValueError("Connection IDs must be unique")
         linked = set()
@@ -229,4 +327,39 @@ class Building(StrictModel):
                 first = core
         if linked != {(f.id, c.id) for f in self.floors for c in f.access_cores}:
             raise ValueError("Every access core must belong to a building connection")
+        route_ids = [route.id for route in self.transition_routes]
+        if len(set(route_ids)) != len(route_ids):
+            raise ValueError("Route IDs must be unique")
+        transition_ids = [
+            transition.id for route in self.transition_routes for transition in route.transitions
+        ]
+        if len(set(transition_ids)) != len(transition_ids):
+            raise ValueError("Transition IDs must be unique across the building")
+        connections = {connection.id: connection for connection in self.connections}
+        for route in self.transition_routes:
+            for leg in route.legs:
+                if leg.floor_id not in floors:
+                    raise ValueError(f"Route {route.id} references unknown floor {leg.floor_id!r}")
+            for transition in route.transitions:
+                if transition.from_floor_id not in floors or transition.to_floor_id not in floors:
+                    raise ValueError(
+                        f"Transition {transition.id} references an unknown floor "
+                        f"({transition.from_floor_id!r} -> {transition.to_floor_id!r})"
+                    )
+                connection = connections.get(transition.connection_id)
+                if connection is None:
+                    raise ValueError(
+                        f"Transition {transition.id} references unknown connection "
+                        f"{transition.connection_id!r}"
+                    )
+                if transition.kind != connection.kind:
+                    raise ValueError(
+                        f"Transition {transition.id} kind {transition.kind!r} does not match "
+                        f"connection {connection.id!r} kind {connection.kind!r}"
+                    )
         return self
+
+
+def config_model(raw: dict) -> type[Environment] | type[Building]:
+    """The model for a raw configuration document; the only loader discriminator."""
+    return Building if is_building_config(raw) else Environment
