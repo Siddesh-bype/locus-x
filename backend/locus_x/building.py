@@ -207,7 +207,7 @@ class RouteTransition(StrictModel):
 
 
 class MultiFloorRoute(StrictModel):
-    """Structural route contract only; segment geometry is validated by the route layer."""
+    """Structural route contract only; floor and connector geometry is checked by Building."""
 
     id: str = Field(min_length=1)
     name: str = Field(min_length=1)
@@ -350,6 +350,83 @@ class Building(StrictModel):
                         f"Transition {transition.id} kind {transition.kind!r} does not match "
                         f"connection {connection.id!r} kind {connection.kind!r}"
                     )
+        # Geometry is validated here, not in MultiFloorRoute, so an invalid route cannot load.
+        movement = {}
+        for floor in self.floors:
+            walkable = {region.id: region for region in [*floor.rooms, *floor.corridors]}
+            movement[floor.id] = [walkable[ref] for ref in floor.movement_regions]
+        for route in self.transition_routes:
+            for leg_index, leg in enumerate(route.legs):
+                # A leg is traversed locally, so it is never closed back to its first waypoint.
+                for start, end in zip(leg.waypoints, leg.waypoints[1:], strict=False):
+                    if any(
+                        intersects(start.position, end.position, wall.a, wall.b)
+                        for wall in floors[leg.floor_id].walls
+                    ):
+                        raise ValueError(
+                            f"Route {route.id} leg {leg_index} on floor {leg.floor_id} "
+                            "crosses a solid wall"
+                        )
+                    if not segment_in_regions(start.position, end.position, movement[leg.floor_id]):
+                        raise ValueError(
+                            f"Route {route.id} leg {leg_index} on floor {leg.floor_id} "
+                            "leaves valid movement regions"
+                        )
+            for i, transition in enumerate(route.transitions):
+                following = (i + 1) % len(route.legs)
+                source, target = route.legs[i], route.legs[following]
+                if (
+                    source.floor_id != transition.from_floor_id
+                    or target.floor_id != transition.to_floor_id
+                ):
+                    raise ValueError(
+                        f"Route {route.id} transition {transition.id} goes "
+                        f"{transition.from_floor_id!r} -> {transition.to_floor_id!r} but joins "
+                        f"leg {i} on floor {source.floor_id!r} to leg {following} on floor "
+                        f"{target.floor_id!r}"
+                    )
+                connection = connections[transition.connection_id]
+                stop_floors = [stop.floor_id for stop in connection.stops]
+                missing = [
+                    floor_id
+                    for floor_id in (transition.from_floor_id, transition.to_floor_id)
+                    if floor_id not in stop_floors
+                ]
+                if missing:
+                    raise ValueError(
+                        f"Route {route.id} transition {transition.id} uses connection "
+                        f"{connection.id!r}, which has no stop on floor {missing[0]!r}; "
+                        f"stops are {stop_floors}"
+                    )
+                separation = abs(
+                    stop_floors.index(transition.from_floor_id)
+                    - stop_floors.index(transition.to_floor_id)
+                )
+                if separation != 1:
+                    raise ValueError(
+                        f"Route {route.id} transition {transition.id} must connect floors that "
+                        f"are adjacent in connection {connection.id!r}: "
+                        f"{transition.from_floor_id!r} -> {transition.to_floor_id!r} are not "
+                        f"consecutive in {stop_floors}"
+                    )
+                # A shaft is not a movement region, so a leg may only reach it at its door
+                # midpoint; matching the entry keeps every floor leg inside walkable space.
+                for leg_index, leg, endpoint, side in (
+                    (i, source, source.waypoints[-1], "end"),
+                    (following, target, target.waypoints[0], "start"),
+                ):
+                    stop = next(stop for stop in connection.stops if stop.floor_id == leg.floor_id)
+                    core = next(
+                        core
+                        for core in floors[leg.floor_id].access_cores
+                        if core.id == stop.access_id
+                    )
+                    if dist(endpoint.position, core.entry) > 1e-6:
+                        raise ValueError(
+                            f"Route {route.id} leg {leg_index} on floor {leg.floor_id} must "
+                            f"{side} at the {core.id!r} entry {core.entry} of transition "
+                            f"{transition.id}; got {endpoint.position}"
+                        )
         return self
 
 

@@ -179,7 +179,13 @@ def test_schema_3_1_building_round_trips_through_both_loaders(raw_v3):
     assert rebuilt.version == "3.1.0"
     assert rebuilt.target_device_height == 1.2
     assert rebuilt.slab_bias_per_slab == 1.5
-    assert rebuilt.transition_routes == []
+    assert [route.id for route in rebuilt.transition_routes] == [
+        "ascent_stairs",
+        "ascent_lift",
+        "descent_stairs",
+        "transition_pause",
+        "cross_floor_survey",
+    ]
     assert rebuilt.model_dump() == Building.model_validate(raw_v3).model_dump()
     assert type(load_environments()["hospital_v3"]) is Building
     snapshot = json.loads((LAYOUTS / "hospital_v3-ground-manual-k8.json").read_text("utf-8"))
@@ -288,10 +294,13 @@ def test_mount_bound_uses_the_smallest_adjacent_gap(raw_v3):
 
 
 def _leg(floor_id):
+    # Task 3 adds geometry validation, so every leg must touch its connection entry.
+    # These tests still exercise structure only: a closed stub on the stair entry.
     return {
         "floor_id": floor_id,
         "waypoints": [
-            {"position": [4, 14], "dwell": 0},
+            {"position": [2.5, 22], "dwell": 0},
+            {"position": [4, 19], "dwell": 0},
             {"position": [2.5, 22], "dwell": 0},
         ],
     }

@@ -3884,7 +3884,931 @@
   ],
   "target_device_height": 1.2,
   "slab_bias_per_slab": 1.5,
-  "transition_routes": [],
+  "transition_routes": [
+    {
+      "id": "ascent_stairs",
+      "name": "Stair ascent to the second floor",
+      "loop": false,
+      "legs": [
+        {
+          "floor_id": "ground",
+          "waypoints": [
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 1
+            },
+            {
+              "position": [
+                8.5,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            }
+          ]
+        },
+        {
+          "floor_id": "first",
+          "waypoints": [
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                5,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 1
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            }
+          ]
+        },
+        {
+          "floor_id": "second",
+          "waypoints": [
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                7,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                15,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                15,
+                22
+              ],
+              "dwell": 2
+            },
+            {
+              "position": [
+                15,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            }
+          ]
+        }
+      ],
+      "transitions": [
+        {
+          "id": "ascent-stairs-1",
+          "kind": "stairs",
+          "connection_id": "west-stairs",
+          "from_floor_id": "ground",
+          "to_floor_id": "first",
+          "travel_seconds": 20,
+          "dwell_before": 0,
+          "dwell_after": 0
+        },
+        {
+          "id": "ascent-stairs-2",
+          "kind": "stairs",
+          "connection_id": "west-stairs",
+          "from_floor_id": "first",
+          "to_floor_id": "second",
+          "travel_seconds": 20,
+          "dwell_before": 0,
+          "dwell_after": 0
+        }
+      ]
+    },
+    {
+      "id": "ascent_lift",
+      "name": "Lift ascent to the second floor",
+      "loop": false,
+      "legs": [
+        {
+          "floor_id": "ground",
+          "waypoints": [
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 1
+            },
+            {
+              "position": [
+                8.5,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                6.5,
+                22
+              ],
+              "dwell": 0
+            }
+          ]
+        },
+        {
+          "floor_id": "first",
+          "waypoints": [
+            {
+              "position": [
+                6.5,
+                22
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                5,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 1
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                6.5,
+                22
+              ],
+              "dwell": 0
+            }
+          ]
+        },
+        {
+          "floor_id": "second",
+          "waypoints": [
+            {
+              "position": [
+                6.5,
+                22
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                7,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                15,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                15,
+                22
+              ],
+              "dwell": 2
+            },
+            {
+              "position": [
+                15,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                6.5,
+                22
+              ],
+              "dwell": 0
+            }
+          ]
+        }
+      ],
+      "transitions": [
+        {
+          "id": "ascent-lift-1",
+          "kind": "elevator",
+          "connection_id": "bed-elevator",
+          "from_floor_id": "ground",
+          "to_floor_id": "first",
+          "travel_seconds": 15,
+          "dwell_before": 2,
+          "dwell_after": 2
+        },
+        {
+          "id": "ascent-lift-2",
+          "kind": "elevator",
+          "connection_id": "bed-elevator",
+          "from_floor_id": "first",
+          "to_floor_id": "second",
+          "travel_seconds": 15,
+          "dwell_before": 2,
+          "dwell_after": 2
+        }
+      ]
+    },
+    {
+      "id": "descent_stairs",
+      "name": "Stair descent to the ground floor",
+      "loop": false,
+      "legs": [
+        {
+          "floor_id": "second",
+          "waypoints": [
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                15,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                15,
+                22
+              ],
+              "dwell": 2
+            },
+            {
+              "position": [
+                15,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                7,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            }
+          ]
+        },
+        {
+          "floor_id": "first",
+          "waypoints": [
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 1
+            },
+            {
+              "position": [
+                5,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            }
+          ]
+        },
+        {
+          "floor_id": "ground",
+          "waypoints": [
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                8.5,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 1
+            }
+          ]
+        }
+      ],
+      "transitions": [
+        {
+          "id": "descent-stairs-1",
+          "kind": "stairs",
+          "connection_id": "west-stairs",
+          "from_floor_id": "second",
+          "to_floor_id": "first",
+          "travel_seconds": 20,
+          "dwell_before": 6.22,
+          "dwell_after": 0
+        },
+        {
+          "id": "descent-stairs-2",
+          "kind": "stairs",
+          "connection_id": "west-stairs",
+          "from_floor_id": "first",
+          "to_floor_id": "ground",
+          "travel_seconds": 20,
+          "dwell_before": 0,
+          "dwell_after": 0
+        }
+      ]
+    },
+    {
+      "id": "transition_pause",
+      "name": "Stair ascent with a pause on the first floor",
+      "loop": false,
+      "legs": [
+        {
+          "floor_id": "ground",
+          "waypoints": [
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 1
+            },
+            {
+              "position": [
+                8.5,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            }
+          ]
+        },
+        {
+          "floor_id": "first",
+          "waypoints": [
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                5,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 1
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            }
+          ]
+        }
+      ],
+      "transitions": [
+        {
+          "id": "transition-pause-1",
+          "kind": "stairs",
+          "connection_id": "west-stairs",
+          "from_floor_id": "ground",
+          "to_floor_id": "first",
+          "travel_seconds": 20,
+          "dwell_before": 0,
+          "dwell_after": 6
+        }
+      ]
+    },
+    {
+      "id": "cross_floor_survey",
+      "name": "Looping survey of all three floors",
+      "loop": true,
+      "legs": [
+        {
+          "floor_id": "first",
+          "waypoints": [
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                5,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 1
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            }
+          ]
+        },
+        {
+          "floor_id": "second",
+          "waypoints": [
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                7,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                15,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                15,
+                22
+              ],
+              "dwell": 2
+            },
+            {
+              "position": [
+                15,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            }
+          ]
+        },
+        {
+          "floor_id": "first",
+          "waypoints": [
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                5,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 1
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            }
+          ]
+        },
+        {
+          "floor_id": "ground",
+          "waypoints": [
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 1
+            },
+            {
+              "position": [
+                8.5,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                14
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                19
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                2.5,
+                22
+              ],
+              "dwell": 0
+            }
+          ]
+        }
+      ],
+      "transitions": [
+        {
+          "id": "cross-floor-1",
+          "kind": "stairs",
+          "connection_id": "west-stairs",
+          "from_floor_id": "first",
+          "to_floor_id": "second",
+          "travel_seconds": 20,
+          "dwell_before": 0,
+          "dwell_after": 0
+        },
+        {
+          "id": "cross-floor-2",
+          "kind": "stairs",
+          "connection_id": "west-stairs",
+          "from_floor_id": "second",
+          "to_floor_id": "first",
+          "travel_seconds": 20,
+          "dwell_before": 0,
+          "dwell_after": 0
+        },
+        {
+          "id": "cross-floor-3",
+          "kind": "stairs",
+          "connection_id": "west-stairs",
+          "from_floor_id": "first",
+          "to_floor_id": "ground",
+          "travel_seconds": 20,
+          "dwell_before": 0,
+          "dwell_after": 0
+        },
+        {
+          "id": "cross-floor-4",
+          "kind": "stairs",
+          "connection_id": "west-stairs",
+          "from_floor_id": "ground",
+          "to_floor_id": "first",
+          "travel_seconds": 20,
+          "dwell_before": 0,
+          "dwell_after": 0
+        }
+      ]
+    }
+  ],
   "validation": {
     "units": "metres",
     "source": "fictional-procedural",
