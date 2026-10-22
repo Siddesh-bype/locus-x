@@ -1,0 +1,160 @@
+{
+  "model_version": "ai-reliability-v2",
+  "feature_version": "2.0.0",
+  "feature_names": [
+    "observed_range_norm",
+    "predicted_range_norm",
+    "residual_m",
+    "residual_norm",
+    "abs_residual_norm",
+    "instant_reliability",
+    "anchor_x_norm",
+    "anchor_y_norm",
+    "relative_dx_norm",
+    "relative_dy_norm",
+    "bearing_sin",
+    "bearing_cos",
+    "available_fraction",
+    "condition_log",
+    "wall_count_scaled",
+    "frame_wall_mean_scaled",
+    "consensus_median_norm",
+    "consensus_mad_norm",
+    "observed_to_predicted_delta",
+    "residual_sign",
+    "previous_residual_norm",
+    "residual_delta_norm",
+    "position_delta_norm",
+    "time_delta_s",
+    "range_window_mean_norm",
+    "range_window_variance_norm",
+    "range_last_diff_norm",
+    "range_rate_norm",
+    "implied_speed_ratio",
+    "pair_violation_count_norm",
+    "pair_violation_magnitude_norm",
+    "tracker_range_residual_norm",
+    "tracker_prediction_available",
+    "tracker_state_age_norm",
+    "reception_rate",
+    "reception_miss_streak_norm",
+    "reception_last_frame",
+    "available_anchor_count_norm",
+    "has_previous_observation",
+    "frames_since_last_observation_norm",
+    "previous_residual_missing"
+  ],
+  "variant": {
+    "name": "g3",
+    "family": "mapfree",
+    "group": "G3",
+    "n_features": 24,
+    "features": [
+      "observed_range_norm",
+      "predicted_range_norm",
+      "residual_m",
+      "residual_norm",
+      "abs_residual_norm",
+      "instant_reliability",
+      "anchor_x_norm",
+      "anchor_y_norm",
+      "relative_dx_norm",
+      "relative_dy_norm",
+      "bearing_sin",
+      "bearing_cos",
+      "available_fraction",
+      "condition_log",
+      "consensus_median_norm",
+      "consensus_mad_norm",
+      "observed_to_predicted_delta",
+      "residual_sign",
+      "previous_residual_norm",
+      "residual_delta_norm",
+      "position_delta_norm",
+      "time_delta_s",
+      "pair_violation_count_norm",
+      "pair_violation_magnitude_norm"
+    ]
+  },
+  "checkpoints": [
+    {
+      "file": "seed_20261021.npz",
+      "sha256": "20f0254373da1fc33548cd199d11de4350285a11281a8cdfe9ce04b4e49f2a5f",
+      "seed": 20261021,
+      "selected_features": 24
+    },
+    {
+      "file": "seed_20261022.npz",
+      "sha256": "ec7650d46da907219ba482bdd334fc88d9b727b76b84baa1b3f74950911a94f7",
+      "seed": 20261022,
+      "selected_features": 24
+    },
+    {
+      "file": "seed_20261023.npz",
+      "sha256": "0f1a1dc0f4ac0dac17fc3c7308d1eae649d4d480601f0bd251e3d9a4ea4b7e7c",
+      "seed": 20261023,
+      "selected_features": 24
+    },
+    {
+      "file": "seed_20261024.npz",
+      "sha256": "ad9708fc609bfb664185b4dfbf206f2970b09ca612f7cf66d4b431d3e8de41de",
+      "seed": 20261024,
+      "selected_features": 24
+    },
+    {
+      "file": "seed_20261025.npz",
+      "sha256": "54aa85283ee864b693da6643ab7821c321040fbfcb8019914e0f6e3692ffa727",
+      "seed": 20261025,
+      "selected_features": 24
+    }
+  ],
+  "weight_policy": {
+    "floor": 0.05,
+    "threshold": 0.05,
+    "ambiguous_rule": "predicted_los < 3",
+    "unchanged_from_v1": true
+  },
+  "training": {
+    "seeds": [
+      20261021,
+      20261022,
+      20261023,
+      20261024,
+      20261025
+    ],
+    "epochs": 35,
+    "batch_size": 512,
+    "learning_rate": 0.0015,
+    "l2": 0.0001,
+    "calibration": "Platt on run-grouped training calibration split",
+    "rows": [
+      {
+        "seed": 20261021,
+        "best_epoch": 25,
+        "best_validation_log_loss": 0.06731531579413307
+      },
+      {
+        "seed": 20261022,
+        "best_epoch": 29,
+        "best_validation_log_loss": 0.0661298646873678
+      },
+      {
+        "seed": 20261023,
+        "best_epoch": 30,
+        "best_validation_log_loss": 0.0644375722456043
+      },
+      {
+        "seed": 20261024,
+        "best_epoch": 16,
+        "best_validation_log_loss": 0.07343720743782109
+      },
+      {
+        "seed": 20261025,
+        "best_epoch": 32,
+        "best_validation_log_loss": 0.06258716993791473
+      }
+    ]
+  },
+  "label_rule": "y=1 iff an available observation has simulator kind='nlos'; y=0 iff kind='los'. Disabled, outage and packet-loss observations are excluded from supervision.",
+  "dataset_config": "configs/ai/reliability-dataset-v2.json"
+}
