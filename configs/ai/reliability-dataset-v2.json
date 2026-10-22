@@ -1,6 +1,6 @@
 {
   "dataset_version": "2.0.0",
-  "description": "Phase 3 v2 feature dataset. Training follows the Phase 2 v1 training split (counts 3/4/6/8); validation adds preregistered extra seeds and counts 5/7. Default v2 candidates are map-free.",
+  "description": "Phase 3 v2 feature dataset. Training follows the Phase 2 v1 training split (four layouts, counts 3/4/6/8); validation adds preregistered extra seeds, counts 5/7, and the anchor-failure control. Default v2 candidates are map-free.",
   "dt": 0.5,
   "max_cart_speed_mps": 3.0,
   "anchor_subsets": {
@@ -102,6 +102,11 @@
           "environment_id": "hospital_v3",
           "floor_id": "first",
           "name": "first"
+        },
+        {
+          "environment_id": "hospital_v3",
+          "floor_id": "second",
+          "name": "second"
         }
       ],
       "variants": [
@@ -210,7 +215,7 @@
           "name": "second"
         }
       ],
-      "variants": "base_variants+mixed_variants",
+      "variants": "base_variants+mixed_variants+anchor_failure",
       "anchor_counts": [
         3,
         4,

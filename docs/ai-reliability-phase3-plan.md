@@ -38,7 +38,7 @@ Broad or majority NLOS may be unidentifiable from these observations when all re
 The default candidate family is map-free. G0 full is retained only as the exact v1 reproduction control; the main ladder starts from G0 without map features.
 
 1. Freeze the v2 schema and implement the causal v2 adapter without changing v1.
-2. Generate expanded validation data with the preregistered extra seeds and anchor counts 3-8; train on the existing training protocol and use run-grouped CV for decisions.
+2. Generate expanded validation data with the preregistered extra seeds and anchor counts 3-8; train on the existing training protocol and use a run-grouped calibration split for decisions, with the preregistered validation seeds as the decision set.
 3. Reproduce G0 full and compare it with the saved v1.
 4. Run the ladder in this order: G2 (range history), G3 (cross-anchor consistency), G4 (tracker consistency), G5 (reception and available-anchor count), then G1 (missingness) last. At each stage use one group at a time on the map-free G0 baseline, plus the combined map-free candidate.
 5. Add and report the map-inclusive comparison variant only as a labelled comparison, not as a main candidate.
@@ -62,6 +62,8 @@ This rule is fixed before experiments and must not be relaxed after seeing resul
 - Validation uses all four layouts, anchor counts 3, 4, 5, 6, 7 and 8, 120 steps at `dt=0.5`, and at minimum: `nlos`, `nlos_packet`, `nlos_packet_outage`, `packet_loss`, `packet_outage`, `noise_nlos_packet`, `all_four`, plus the existing clean/noise/high-noise/anchor-failure/chaos controls. Anchor count 5 and 7 subsets are preregistered in the v2 dataset config; they are validation-only and are not used for training.
 - Splits are by whole run and identical across every variant. Preprocessing and calibration are fitted on training partitions only. Every learned variant uses five training seeds and the same hyperparameter budget.
 - Artifacts go under `artifacts/ai-reliability/phase3-v2/`; the selected model goes under `models/ai-reliability-v2/` only after the rule is satisfied. Experimental models stay under artifacts.
+
+Protocol corrections made before any model metric was inspected: the v2 training split now includes all four Phase 2 training layouts, so G0 reproduces the saved `362,705`-row Phase 2 training matrix exactly; the validation split explicitly includes the anchor-failure control; and the classifier uses the Phase 2 fixed whole-run 80/20 calibration split rather than K-fold CV, with validation seeds reserved for the decision. The selection rule is unchanged.
 
 ## Feature schema v2
 
