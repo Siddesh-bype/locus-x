@@ -14,3 +14,4 @@ artifacts/
 *.log
 *.tsbuildinfo
 .DS_Store
+.playwright-mcp
