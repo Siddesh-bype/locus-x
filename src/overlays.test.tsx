@@ -35,8 +35,8 @@ function frame(overrides: Partial<Frame> = {}): Frame {
   };
 }
 
-function render(current: Frame, mode: 'floor' | 'building' | 'exploded' = 'building', history: Sample[] = []) {
-  return renderToStaticMarkup(<MultifloorOverlays environment={building} frame={current} history={history} layers={DEFAULT_LAYERS} mode={mode} />);
+function render(current: Frame, mode: 'floor' | 'building' | 'exploded' = 'building', history: Sample[] = [], layers = DEFAULT_LAYERS) {
+  return renderToStaticMarkup(<MultifloorOverlays environment={building} frame={current} history={history} layers={layers} mode={mode} />);
 }
 
 function polylines(markup: string) {
@@ -60,12 +60,12 @@ describe('multi-floor overlay honesty', () => {
       transition: { phase: 'traversing', transition_id: null, connection_id: null, from_floor_id: null, to_floor_id: null, progress: null },
     });
     const markup = render(current);
-    // Truth still renders; the proposed marker and the uncertainty ellipse do not exist.
+    // Truth still renders; the proposed marker (sphere + green group) and the ellipse do not exist.
     expect(markup).toContain('boxGeometry');
-    expect(markup).not.toContain('sphereGeometry');
+    expect(markup).not.toContain('sphereGeometry'); // proposed marker only, not evidence about the ellipse
     expect(markup).not.toContain('#087f83');
     expect(polylines(markup).some(line => line.points.length === 81)).toBe(false);
-    expect(markerPositions(markup)).toHaveLength(1);
+    expect(markerPositions(markup)).toHaveLength(1); // truth marker only; the estimate marker is absent
   });
 
   it('lifts markers and trails by the exploded spacing of their floor group', () => {
@@ -83,6 +83,10 @@ describe('multi-floor overlay honesty', () => {
     expect(proposedTrail!.points.every(([, y]) => Math.abs(y - (5.35 + 5.5)) < 1e-9)).toBe(true);
     const firstFloorLeg = polylines(markup).find(line => line.color === '#799eaa' && Math.abs(line.points[0][1] - (4.2 + 5.5 + 0.09)) < 1e-9);
     expect(firstFloorLeg).toBeDefined();
+    // The 95 % ellipse is a real overlay: 81 points at the estimate's exploded height + marker offset.
+    const ellipse = polylines(markup).find(line => line.points.length === 81);
+    expect(ellipse).toBeDefined();
+    expect(ellipse!.points.every(([, y]) => Math.abs(y - (5.35 + 5.5 + 0.16)) < 1e-9)).toBe(true);
   });
 
   it('does not close a leg of a route the configuration declares as one-way', () => {
@@ -93,5 +97,47 @@ describe('multi-floor overlay honesty', () => {
     // ascent_stairs is not a loop: five waypoints stay five points, no return segment.
     expect(groundLeg!.points).toHaveLength(5);
     expect(groundLeg!.points[0]).not.toEqual(groundLeg!.points.at(-1));
+  });
+
+  it('leaves truth on its own trail when the tracker claims another storey', () => {
+    // The device is physically on the first floor (truth 5.4 m) but the tracker claims the second.
+    const history: Sample[] = [
+      { t: 0, baseline: null, proposed: 0.2, truth: [4, 14], proposedPosition: [7, 14], truthElevation: 5.4, proposedElevation: 8.35, floor_id: 'second' },
+      { t: 1, baseline: null, proposed: 0.2, truth: [4, 14], proposedPosition: [7, 14], truthElevation: 5.4, proposedElevation: 8.35, floor_id: 'second' },
+    ];
+    const current = frame({
+      floor_id: 'second', floor_elevation: 8.4, elevation_estimate: 8.35,
+      floor_state: { floor_id: 'second', source: 'inferred', confidence: 0.93, ambiguous: false },
+    });
+    const markup = render(current, 'exploded', history);
+    const [truthMarker] = markerPositions(markup);
+    // Old code lifted truth by the claimed storey's group: 5.4 + 2 × 5.5 = 16.4 m, + 0.16 offset = 16.56 m.
+    expect(truthMarker[1]).toBeCloseTo(5.4 + 5.5 + 0.16);
+    const truthTrail = polylines(markup).find(line => line.color === '#344859' && line.points.length === 2);
+    expect(truthTrail).toBeDefined();
+    // 5.4 + 5.5 = 10.9 m; marker and trail must not split across groups.
+    expect(truthMarker[1]).toBeCloseTo(truthTrail!.points[0][1] + 0.16);
+  });
+
+  it('lifts a ray truth endpoint by the nearest plane and its anchor by the anchor storey', () => {
+    // Only global anchor 16 (the second floor's first anchor) reports a range, so the ray is grounded there.
+    const labels = Array.from({ length: 24 }, (_, index) => ({
+      anchor_id: 'anchors', available: index === 16, kind: index === 16 ? 'los' as const : 'disabled' as const,
+      intersected_walls: [], true_range: 1, injected_bias: 0,
+    }));
+    const current = frame({
+      floor_id: 'second', floor_elevation: 8.4, elevation_estimate: 8.35,
+      floor_state: { floor_id: 'second', source: 'inferred', confidence: 0.93, ambiguous: false },
+      measurements: [{ anchor_id: 'anchors', anchor_position: [10, 10], timestamp: 0, observed_range: 4 }],
+      simulator_labels: labels,
+    });
+    const markup = render(current, 'exploded', [], { ...DEFAULT_LAYERS, signals: true, truth: true });
+    const ray = polylines(markup).find(line => line.color === '#466fad');
+    expect(ray).toBeDefined();
+    expect(ray!.points).toHaveLength(2);
+    // Truth 5.4 m sits on the first floor: 5.4 + 5.5 + 0.35 = 11.25 m, not 16.75 m under the claim.
+    expect(ray!.points[0][1]).toBeCloseTo(5.4 + 5.5 + 0.35);
+    // The anchor belongs to the claimed storey: 8.4 + 2 × 5.5 + 1.6 = 21 m.
+    expect(ray!.points[1][1]).toBeCloseTo(8.4 + 2 * 5.5 + 1.6);
   });
 });

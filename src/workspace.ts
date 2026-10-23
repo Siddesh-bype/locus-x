@@ -167,14 +167,19 @@ export function trajectorySegments(samples: Sample[], key: 'truth' | 'basePositi
   return segments.filter(segment => segment.length > 1);
 }
 
-/** Multi-floor trails carry their own elevation; a missing height breaks the line, not a storey. */
+/**
+ * Multi-floor trails carry their own elevation; a missing height breaks the line, not a storey.
+ * `lift` receives each scene point with the sample it came from, so a trail can apply the
+ * exploded group of a storey without losing per-sample identity along the segment.
+ */
 export function elevatedTrajectorySegments(
   samples: Sample[], key: 'truth' | 'proposedPosition', elevationKey: 'truthElevation' | 'proposedElevation',
+  lift: (point: [number, number, number], sample: Sample) => [number, number, number] = point => point,
 ): [number, number, number][][] {
   const segments: [number, number, number][][] = [[]];
   for (const sample of samples) {
     const position = sample[key], elevation = sample[elevationKey];
-    if (position && elevation != null) segments[segments.length - 1].push(toScene(position, elevation));
+    if (position && elevation != null) segments[segments.length - 1].push(lift(toScene(position, elevation), sample));
     else if (segments[segments.length - 1].length) segments.push([]);
   }
   return segments.filter(segment => segment.length > 1);
