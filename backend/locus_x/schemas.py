@@ -75,6 +75,9 @@ class Settings(StrictModel):
     nlos_bias: float = Field(default=2.5, ge=0, le=10)
     dropout: float = Field(default=0, ge=0, le=1)
     disabled_anchors: list[str] = Field(default_factory=list, max_length=32)
+    # "<floor_id>:<anchor_id>" disables one anchor; disabled_anchors keeps its legacy
+    # "this ID on every floor" meaning.
+    disabled_anchor_keys: list[str] = Field(default_factory=list, max_length=32)
     walls_enabled: bool = True
     route: str = "asset_round"
     speed: float = Field(default=1.2, ge=0.2, le=3)
@@ -105,6 +108,7 @@ class Controls(StrictModel):
     nlos_bias: float | None = Field(default=None, ge=0, le=10)
     dropout: float | None = Field(default=None, ge=0, le=1)
     disabled_anchors: list[str] | None = Field(default=None, max_length=32)
+    disabled_anchor_keys: list[str] | None = Field(default=None, max_length=32)
     walls_enabled: bool | None = None
     route: str | None = None
     speed: float | None = Field(default=None, ge=0.2, le=3)
