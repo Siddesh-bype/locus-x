@@ -4,10 +4,10 @@ import * as THREE from 'three';
 import { toScene } from './lib';
 import { Architecture } from './scene/Architecture';
 import CameraRig from './scene/CameraRig';
-import { Anchors, ExperimentOverlays } from './scene/Overlays';
+import { Anchors, ExperimentOverlays, MultifloorOverlays } from './scene/Overlays';
 import { Label, Polyline } from './scene/Primitives';
 import type { EnvironmentDefinition, Frame, Sample } from './types';
-import { floorsOf, isBuilding, sceneFloors, type SceneLayers, type ViewState } from './workspace';
+import { floorsOf, isBuilding, isMultifloor, sceneFloors, type SceneLayers, type ViewMode, type ViewState } from './workspace';
 
 class SceneBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   state = { failed: false };
@@ -34,7 +34,11 @@ export interface SceneProps {
 
 function SceneContent({ environment, frame, history, layers, view, cutaway, selectFloor }: SceneProps) {
   const floors = useMemo(() => floorsOf(environment), [environment]);
-  const visible = useMemo(() => sceneFloors(environment, frame.floor_id, view.mode), [environment, frame.floor_id, view.mode]);
+  const multifloor = isMultifloor(frame);
+  const activeFloorId = frame.floor_id ?? (isBuilding(environment) ? environment.default_floor_id : floors[0]?.id ?? '');
+  // An ambiguous storey has nothing to isolate; the whole building keeps the target in view.
+  const effectiveMode: ViewMode = multifloor && frame.floor_id === null ? 'building' : view.mode;
+  const visible = useMemo(() => sceneFloors(environment, activeFloorId, effectiveMode), [environment, activeFloorId, effectiveMode]);
   const bounds = useMemo(() => ({
     width: environment.width, length: environment.height,
     bottom: Math.min(...visible.map(f => f.elevation)),
@@ -51,14 +55,17 @@ function SceneContent({ environment, frame, history, layers, view, cutaway, sele
     <CameraRig bounds={bounds} view={view} />
     <GroundGrid width={environment.width} length={environment.height} elevation={bounds.bottom} />
     {visible.map(({ floor, elevation, active }) => {
-      const next = floors[floors.findIndex(f => f.id === floor.id) + 1];
-      return <group key={floor.id} position={[0, elevation, 0]} onClick={event => { if (view.mode !== 'floor' && event.delta < 4) { event.stopPropagation(); selectFloor(floor.id); } }}>
-        <Architecture floor={floor} layers={layers} mode={view.mode} active={active} cutaway={cutaway} rise={next ? next.elevation - floor.elevation : 0} blockedWalls={active ? blocked : noBlocked} propagation={frame.settings.walls_enabled} />
-        <Anchors floor={floor} frame={active ? frame : null} layers={layers} />
-        {active && <ExperimentOverlays floor={floor} frame={frame} history={history} layers={layers} />}
+      const index = floors.findIndex(f => f.id === floor.id);
+      const offset = multifloor ? floors.slice(0, index).reduce((count, item) => count + item.anchors.length, 0) : 0;
+      const next = floors[index + 1];
+      return <group key={floor.id} position={[0, elevation, 0]} onClick={event => { if (!multifloor && effectiveMode !== 'floor' && event.delta < 4) { event.stopPropagation(); selectFloor(floor.id); } }}>
+        <Architecture floor={floor} layers={layers} mode={effectiveMode} active={active} cutaway={cutaway} rise={next ? next.elevation - floor.elevation : 0} blockedWalls={active ? blocked : noBlocked} propagation={frame.settings.walls_enabled} />
+        <Anchors floor={floor} frame={multifloor || active ? frame : null} layers={layers} offset={offset} />
+        {active && !multifloor && <ExperimentOverlays floor={floor} frame={frame} history={history} layers={layers} />}
       </group>;
     })}
-    {view.mode === 'exploded' && layers.access && isBuilding(environment) && environment.connections.map(connection => {
+    {multifloor && <MultifloorOverlays environment={environment} frame={frame} history={history} layers={layers} />}
+    {effectiveMode === 'exploded' && layers.access && isBuilding(environment) && environment.connections.map(connection => {
       const points = connection.stops.flatMap(stop => {
         const display = visible.find(f => f.floor.id === stop.floor_id);
         const core = display?.floor.access_cores.find(c => c.id === stop.access_id);

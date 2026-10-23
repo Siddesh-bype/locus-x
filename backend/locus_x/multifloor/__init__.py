@@ -41,6 +41,7 @@ from .route import (
     route_state,
     transition_windows,
 )
+from .session import MultiFloorSession
 from .simulation import (
     MAX_SLABS,
     OUTAGE_INDICES,
@@ -75,6 +76,7 @@ __all__ = [
     "FrameRecord",
     "LocalizerResult",
     "MultiFloorLocalizer",
+    "MultiFloorSession",
     "MultifloorEvaluation",
     "Phase",
     "RouteAssist",

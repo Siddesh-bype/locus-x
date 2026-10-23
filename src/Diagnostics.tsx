@@ -5,6 +5,8 @@ import { windowMetrics } from './workspace';
 
 export default function Diagnostics({ frame, floor, history, technical }: { frame: Frame; floor: Floor; history: Sample[]; technical: boolean }) {
   const tracking = frame.tracking;
+  const multifloor = frame.localization_mode !== '2d_on_known_floor';
+  const ambiguous = frame.floor_state?.ambiguous || frame.floor_id === null;
   const baseline = windowMetrics(history, 'baseline'), proposed = windowMetrics(history, 'proposed');
   const metrics = [
     ['RMSE', fmt(baseline.rmse) + ' m', fmt(proposed.rmse) + ' m'],
@@ -16,11 +18,11 @@ export default function Diagnostics({ frame, floor, history, technical }: { fram
     ['95% coverage', 'N/A', percent(proposed.coverage)],
   ];
   return <aside className="diagnostics-panel" aria-label="Actual localization results">
-    <div className="panel-heading"><Activity size={16} /><h2>Live comparison</h2><span className="live-label">2 METHODS</span></div>
+    <div className="panel-heading"><Activity size={16} /><h2>{multifloor ? 'Multi-floor result' : 'Live comparison'}</h2><span className="live-label">{multifloor ? '3D PIPELINE' : '2 METHODS'}</span></div>
     <section className="current-errors">
-      <div><span><i className="legend-mark baseline" />Baseline</span><strong>{fmt(frame.evaluation.baseline_error)}<small>m</small></strong></div>
+      <div><span><i className="legend-mark baseline" />{multifloor ? '2D baseline' : 'Baseline'}</span><strong>{fmt(frame.evaluation.baseline_error)}<small>m</small></strong></div>
       <div><span><i className="legend-mark proposed" />LOCUS-X</span><strong>{fmt(frame.evaluation.proposed_error)}<small>m</small></strong></div>
-      <p>Current error against simulator truth</p>
+      <p>{multifloor ? 'Horizontal error against simulator truth · no 2D baseline exists' : 'Current error against simulator truth'}</p>
     </section>
     <section className="comparison-section">
       <div className="section-title"><h3>Comparison window</h3><span className="mono">{history.length} frames</span></div>
@@ -30,14 +32,18 @@ export default function Diagnostics({ frame, floor, history, technical }: { fram
       <p className="small-note">{fmt(history[0]?.t, 1)}–{fmt(history.at(-1)?.t, 1)} s · {proposed.valid}/{proposed.count} valid fixes<br />Coverage: {proposed.coverageCount} available ellipses. Baseline coverage is not evaluated. Fault edits retain tracker history.</p>
     </section>
     <section className="telemetry-section">
-      <div className="section-title"><h3>Position · {floor.short_name}</h3><span className={'tracking-state ' + tracking.status}><i />{tracking.status}</span></div>
+      <div className="section-title"><h3>Position · {ambiguous ? 'floor ambiguous' : floor.short_name}</h3><span className={'tracking-state ' + tracking.status}><i />{tracking.status}</span></div>
       <div className="coordinates"><div><span>X</span><strong>{fmt(tracking.position?.[0])}<small>m</small></strong></div><div><span>Y</span><strong>{fmt(tracking.position?.[1])}<small>m</small></strong></div></div>
       <p className="tracking-reason">{tracking.reason}</p>
       <div className="telemetry-row"><span>Nominal ellipse · major</span><b>{fmt(tracking.ellipse?.major)} m</b></div>
-      <div className="telemetry-row"><span>Known floor elevation</span><b>{fmt(frame.floor_elevation, 1)} m</b></div>
+      {multifloor ? <>
+        <div className="telemetry-row"><span>Device elevation · estimate</span><b>{fmt(frame.elevation_estimate)} m</b></div>
+        <div className="telemetry-row"><span>Truth elevation</span><b>{fmt(frame.evaluation.ground_truth_elevation)} m</b></div>
+        <div className="telemetry-row"><span>Storey source</span><b>{frame.floor_state ? frame.floor_state.source.replace('_', ' ') : '—'}</b></div>
+      </> : <div className="telemetry-row"><span>Known floor elevation</span><b>{fmt(frame.floor_elevation, 1)} m</b></div>}
       {technical && <><div className="telemetry-row"><span>Velocity · vx / vy</span><b>{fmt(tracking.velocity?.[0], 1)} / {fmt(tracking.velocity?.[1], 1)} m/s</b></div><div className="telemetry-row"><span>Geometry condition</span><b>{fmt(frame.robust.condition_number, 1)}</b></div><div className="telemetry-row"><span>Without an update</span><b>{fmt(tracking.outage_seconds, 1)} s</b></div></>}
     </section>
-    <details className="anchor-diagnostics" open>
+    {!multifloor && <details className="anchor-diagnostics" open>
       <summary><span><Radio size={14} />Range observations</span><ChevronDown size={14} /></summary>
       <table className="anchor-table"><thead><tr><th>Site</th><th>Range · m</th><th>{technical ? 'Residual · m' : 'Sim. label'}</th><th>Weight</th></tr></thead><tbody>
         {frame.anchors.map(anchor => {
@@ -48,7 +54,7 @@ export default function Diagnostics({ frame, floor, history, technical }: { fram
         })}
       </tbody></table>
       <p className="small-note">Weights measure residual consistency. LOS/NLOS labels come from the simulator.</p>
-    </details>
-    <div className="inspector-foot"><ArrowUpRight size={13} /><span>2D estimation on a known floor.<br />Elevation is configuration, not an estimate.</span></div>
+    </details>}
+    <div className="inspector-foot"><ArrowUpRight size={13} /><span>{multifloor ? '3D ranges on a derived storey.' : '2D estimation on a known floor.'}<br />{multifloor ? 'Floor identity is inferred or route-assisted; elevation is estimated.' : 'Elevation is configuration, not an estimate.'}</span></div>
   </aside>;
 }

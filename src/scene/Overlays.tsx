@@ -1,16 +1,16 @@
 import { useMemo } from 'react';
 import * as THREE from 'three';
 import { toScene } from '../lib';
-import type { Floor, Frame, Point, Sample } from '../types';
-import { ellipsePoints, trajectorySegments, type SceneLayers } from '../workspace';
+import type { EnvironmentDefinition, Floor, Frame, Point, Sample } from '../types';
+import { elevatedTrajectorySegments, ellipsePoints, floorsOf, isBuilding, trajectorySegments, type SceneLayers } from '../workspace';
 import { Label, Polyline, Solids } from './Primitives';
 import { solid } from './architectureGeometry';
 
 const COLORS = { truth: '#344859', baseline: '#cd842e', proposed: '#087f83', fault: '#b75543', anchor: '#466fad' };
 
-function Marker({ point, kind }: { point: Point; kind: 'truth' | 'baseline' | 'proposed' }) {
+function Marker({ point, kind, elevation = 0.16 }: { point: Point; kind: 'truth' | 'baseline' | 'proposed'; elevation?: number }) {
   const color = COLORS[kind];
-  return <group position={toScene(point, 0.16)}>
+  return <group position={toScene(point, elevation)}>
     <mesh rotation={[-Math.PI / 2, 0, 0]}><ringGeometry args={[0.48, 0.58, 28]} /><meshBasicMaterial color={color} side={THREE.DoubleSide} /></mesh>
     {kind === 'truth' ? <>
       <mesh position={[0, 0.35, 0]} castShadow><boxGeometry args={[0.48, 0.6, 0.78]} /><meshStandardMaterial color="#344859" /></mesh>
@@ -23,12 +23,17 @@ function Marker({ point, kind }: { point: Point; kind: 'truth' | 'baseline' | 'p
   </group>;
 }
 
-export function Anchors({ floor, frame, layers }: { floor: Floor; frame: Frame | null; layers: SceneLayers }) {
-  const states = useMemo(() => floor.anchors.map(anchor => {
-    const status = frame?.simulator_labels.find(label => label.anchor_id === anchor.id);
-    const color = !frame ? '#879ca7' : status?.kind === 'disabled' ? '#a8b1b4' : !status?.available ? '#b27440' : COLORS.anchor;
-    return { anchor, color };
-  }), [floor, frame]);
+export function Anchors({ floor, frame, layers, offset = 0 }: { floor: Floor; frame: Frame | null; layers: SceneLayers; offset?: number }) {
+  const states = useMemo(() => {
+    // Multi-floor frames list every anchor in building order; the matching labels are at
+    // the same indices, so an offset avoids confusing an ID repeated on another storey.
+    const labels = frame ? frame.simulator_labels.slice(offset, offset + floor.anchors.length) : [];
+    return floor.anchors.map(anchor => {
+      const status = labels.find(label => label.anchor_id === anchor.id);
+      const color = !frame ? '#879ca7' : status?.kind === 'disabled' ? '#a8b1b4' : !status?.available ? '#b27440' : COLORS.anchor;
+      return { anchor, color };
+    });
+  }, [floor, frame, offset]);
   const devices = useMemo(() => states.flatMap(({ anchor, color }) => [
     solid(anchor.position, [0.05, 1.35, 0.05], '#839aa5'),
     solid(anchor.position, [0.38, 0.5, 0.28], '#f8faf9', 1.35),
@@ -67,5 +72,49 @@ export function ExperimentOverlays({ floor, frame, history, layers }: { floor: F
     {layers.truth && <Marker point={frame.evaluation.ground_truth} kind="truth" />}
     {layers.baseline && frame.baseline.position && <Marker point={frame.baseline.position} kind="baseline" />}
     {layers.proposed && frame.tracking.position && <Marker point={frame.tracking.position} kind="proposed" />}
+  </>;
+}
+
+/**
+ * Root-level multi-floor overlays: the target is drawn at its estimated elevation, not
+ * on a selected floor. Truth uses the simulator's own elevation, so the comparison is
+ * vertical as well as horizontal; the 2D baseline does not exist here and is not drawn.
+ */
+export function MultifloorOverlays({ environment, frame, history, layers }: { environment: EnvironmentDefinition; frame: Frame; history: Sample[]; layers: SceneLayers }) {
+  const floors = useMemo(() => floorsOf(environment), [environment]);
+  const building = isBuilding(environment) ? environment : null;
+  const route = building?.transition_routes?.find(item => item.id === frame.settings.route);
+  const planned = useMemo(() => floors.flatMap(floor => {
+    const leg = route?.legs.find(item => item.floor_id === floor.id);
+    if (!leg) return [];
+    return [[...leg.waypoints, leg.waypoints[0]].map(waypoint => toScene(waypoint.position, floor.elevation + 0.09))];
+  }), [floors, route]);
+  const trails = useMemo(() => ({
+    truth: elevatedTrajectorySegments(history, 'truth', 'truthElevation'),
+    proposed: elevatedTrajectorySegments(history, 'proposedPosition', 'proposedElevation'),
+  }), [history]);
+  const estimate = frame.elevation_estimate;
+  const truthElevation = frame.evaluation.ground_truth_elevation;
+  const ellipse = useMemo(() => ellipsePoints(frame, (estimate ?? 0) + 0.16), [frame, estimate]);
+  // Measurements are the available labels in building order, so align them through the
+  // label list rather than assuming every anchor produced a range.
+  const signals = useMemo(() => {
+    const floorAnchors = floors.flatMap(floor => floor.anchors.map(anchor => ({ anchor, elevation: floor.elevation })));
+    const available = frame.simulator_labels.flatMap((label, index) => label.available ? [index] : []);
+    return frame.measurements.flatMap((measurement, index) => {
+      const target = floorAnchors[available[index]];
+      const label = frame.simulator_labels[available[index]];
+      return target && label ? [{ measurement, anchor: target, nlos: label.kind === 'nlos' }] : [];
+    });
+  }, [floors, frame]);
+  if (estimate == null && truthElevation == null) return null;
+  return <>
+    {layers.route && planned.map((points, index) => <Polyline key={'route-' + index} points={points} color="#799eaa" opacity={0.75} dashed />)}
+    {layers.signals && layers.truth && truthElevation != null && signals.map(({ measurement, anchor, nlos }) => <Polyline key={measurement.anchor_id + '@' + anchor.elevation} points={[toScene(frame.evaluation.ground_truth, truthElevation + 0.35), toScene(anchor.anchor.position, anchor.elevation + 1.6)]} color={nlos ? COLORS.fault : COLORS.anchor} opacity={nlos ? 0.8 : 0.35} dashed={nlos} />)}
+    {layers.truth && trails.truth.map((points, index) => <Polyline key={'truth-' + index} points={points} color={COLORS.truth} dashed />)}
+    {layers.proposed && trails.proposed.map((points, index) => <Polyline key={'proposed-' + index} points={points} color={COLORS.proposed} />)}
+    {layers.uncertainty && ellipse.length > 0 && <Polyline points={ellipse} color={COLORS.proposed} opacity={0.85} dashed />}
+    {layers.truth && truthElevation != null && <Marker point={frame.evaluation.ground_truth} kind="truth" elevation={truthElevation + 0.16} />}
+    {layers.proposed && estimate != null && frame.tracking.position && <Marker point={frame.tracking.position} kind="proposed" elevation={estimate + 0.16} />}
   </>;
 }

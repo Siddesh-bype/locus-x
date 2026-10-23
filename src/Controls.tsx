@@ -21,9 +21,14 @@ function Slider({ label, value, max, step, unit, onCommit }: { label: string; va
   </label>;
 }
 
-export default function Controls({ frame, floor, update }: { frame: Frame; floor: Floor; update: UpdateSettings }) {
+export default function Controls({ frame, floor, update, routes }: { frame: Frame; floor: Floor; update: UpdateSettings; routes?: Record<string, string> }) {
   const settings = frame.settings;
-  const active = frame.anchors.length - settings.disabled_anchors.length;
+  const multifloor = frame.localization_mode !== '2d_on_known_floor';
+  // The API repeats an anchor ID on every storey. A bare disabled anchor applies to all
+  // of them, so show each ID once rather than pretending they are independent sites.
+  const anchorIds = multifloor ? [...new Set(frame.anchors.map(anchor => anchor.id))] : frame.anchors.map(anchor => anchor.id);
+  const active = anchorIds.filter(id => !settings.disabled_anchors.includes(id)).length;
+  const routeOptions = routes ?? Object.fromEntries(Object.keys(floor.routes).map(id => [id, floor.route_names[id] ?? id]));
   return <div className="experiment-controls">
     <section className="control-section">
       <div className="section-title"><h3>Scenario</h3><SlidersHorizontal size={14} /></div>
@@ -36,22 +41,22 @@ export default function Controls({ frame, floor, update }: { frame: Frame; floor
     </section>
     <section className="control-section">
       <div className="section-title"><h3>Anchor network</h3><span className="mono">{active}/{frame.anchors.length}</span></div>
-      <div className="anchor-toggles">{frame.anchors.map(anchor => {
-        const enabled = !settings.disabled_anchors.includes(anchor.id);
-        const available = frame.simulator_labels.find(l => l.anchor_id === anchor.id)?.available;
-        return <button key={anchor.id} className={(enabled ? 'enabled' : 'disabled') + (enabled && !available ? ' missing' : '')}
-          aria-pressed={enabled} aria-label={'Toggle anchor ' + anchor.id}
-          onClick={() => void update(current => ({ disabled_anchors: current.disabled_anchors.includes(anchor.id) ? current.disabled_anchors.filter(id => id !== anchor.id) : [...current.disabled_anchors, anchor.id] }))}>
-          <Radio size={12} />{anchor.id}<i />
+      <div className="anchor-toggles">{anchorIds.map(id => {
+        const enabled = !settings.disabled_anchors.includes(id);
+        const available = frame.simulator_labels.find(l => l.anchor_id === id)?.available;
+        return <button key={id} className={(enabled ? 'enabled' : 'disabled') + (enabled && !available ? ' missing' : '')}
+          aria-pressed={enabled} aria-label={'Toggle anchor ' + id}
+          onClick={() => void update(current => ({ disabled_anchors: current.disabled_anchors.includes(id) ? current.disabled_anchors.filter(item => item !== id) : [...current.disabled_anchors, id] }))}>
+          <Radio size={12} />{id}<i />
         </button>;
       })}</div>
-      <p className="small-note">At least three non-collinear anchors for a range fix.</p>
+      <p className="small-note">{multifloor ? 'Each ID is installed on every storey; this toggle disables that ID everywhere. ' : ''}At least three non-collinear anchors for a range fix.</p>
     </section>
     <section className="control-section">
-      <div className="section-title"><h3>Target & reproducibility</h3><RotateCw size={14} /></div>
-      <label className="field-label" htmlFor="target-route">Service route</label>
+      <div className="section-title"><h3>{multifloor ? 'Route & reproducibility' : 'Target & reproducibility'}</h3><RotateCw size={14} /></div>
+      <label className="field-label" htmlFor="target-route">{multifloor ? 'Multi-floor route' : 'Service route'}</label>
       <label className="select-wrap"><select id="target-route" aria-label="Target route" value={settings.route} onChange={event => void update({ route: event.target.value })}>
-        {Object.keys(floor.routes).map(id => <option key={id} value={id}>{floor.route_names[id] ?? id}</option>)}
+        {Object.entries(routeOptions).map(([id, name]) => <option key={id} value={id}>{name}</option>)}
       </select><ChevronDown size={14} /></label>
       <div className="compact-controls">
         <label>Speed · m/s<input aria-label="Target speed" type="number" min="0.2" max="3" step="0.1" key={settings.speed} defaultValue={settings.speed}

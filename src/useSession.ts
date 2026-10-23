@@ -5,7 +5,30 @@ import type { EnvironmentCatalog, EnvironmentDefinition, Frame, Sample, Settings
 
 export type SettingsUpdate = Partial<Settings> | ((current: Settings) => Partial<Settings>);
 export type UpdateSettings = (settings: SettingsUpdate) => Promise<boolean>;
+export type SessionMode = '2d_on_known_floor' | 'multifloor_route_assisted' | 'multifloor_inferred';
 const STORAGE_KEY = 'locus-x-v3-session';
+
+/** Build the creation payload for a mode. The storey is never chosen for multi-floor. */
+function creationBody(definition: EnvironmentDefinition, current: Frame | null, mode: SessionMode) {
+  const settings = current ? { ...current.settings, disabled_anchors: [], disabled_anchor_keys: [] } : undefined;
+  if (mode === '2d_on_known_floor') {
+    const floor = isBuilding(definition)
+      ? definition.floors.find(item => item.id === definition.default_floor_id) ?? definition.floors[0]
+      : floorsOf(definition)[0];
+    const routes = Object.keys(floor.routes);
+    const route = current && routes.includes(current.settings.route) ? current.settings.route : routes[0];
+    return { environment_id: definition.id, floor_id: floor.id, settings: settings ? { ...settings, route } : undefined };
+  }
+  if (!isBuilding(definition)) throw new Error('Multi-floor sessions require a building environment.');
+  const routes = definition.transition_routes ?? [];
+  if (!routes.length) throw new Error('This building declares no multi-floor routes.');
+  const route = current && routes.some(item => item.id === current.settings.route) ? current.settings.route : routes[0].id;
+  return {
+    environment_id: definition.id,
+    settings: settings ? { ...settings, route, disabled_anchors: [] } : undefined,
+    multifloor: { mode: mode === 'multifloor_route_assisted' ? 'route_assisted' : 'inferred', route_id: route },
+  };
+}
 
 export function useSession() {
   const [environments, setEnvironments] = useState<EnvironmentDefinition[]>([]);
@@ -88,10 +111,25 @@ export function useSession() {
       if (!definition) throw new Error('Unknown environment.');
       const current = latest.current;
       if (current?.environment_id === id) return current;
-      const floor = isBuilding(definition) ? definition.floors.find(f => f.id === definition.default_floor_id)! : floorsOf(definition)[0];
-      const settings = current ? { ...current.settings, disabled_anchors: [], route: current.settings.route in floor.routes ? current.settings.route : Object.keys(floor.routes)[0] } : undefined;
-      const next = await request<Frame>('/sessions', { method: 'POST', body: JSON.stringify({ environment_id: id, floor_id: floor.id, settings }) });
+      const mode: SessionMode = current && current.localization_mode !== '2d_on_known_floor' && isBuilding(definition)
+        ? current.localization_mode : '2d_on_known_floor';
+      const next = await request<Frame>('/sessions', { method: 'POST', body: JSON.stringify(creationBody(definition, current, mode)) });
       // Release only the old ephemeral session after the replacement succeeds.
+      if (current) await request<void>(`/sessions/${current.session_id}`, { method: 'DELETE' }).catch(() => undefined);
+      return next;
+    });
+  }, [enqueue]);
+
+  const selectMode = useCallback((mode: SessionMode) => {
+    setRunning(false);
+    return enqueue(async () => {
+      const current = latest.current;
+      const definition = current
+        ? catalog.current.find(env => env.id === current.environment_id)
+        : catalog.current.find(env => env.id === 'hospital_v3') ?? catalog.current[0];
+      if (!definition) throw new Error('The session environment is unavailable. Reconnect to reload the catalog.');
+      if (current?.localization_mode === mode) return current;
+      const next = await request<Frame>('/sessions', { method: 'POST', body: JSON.stringify(creationBody(definition, current, mode)) });
       if (current) await request<void>(`/sessions/${current.session_id}`, { method: 'DELETE' }).catch(() => undefined);
       return next;
     });
@@ -113,7 +151,7 @@ export function useSession() {
   const floor = useMemo(() => environment && frame ? floorForFrame(environment, frame) : null, [environment, frame]);
 
   return {
-    environments, environment, floor, frame, history, running, setRunning, error, busy, connect, selectEnvironment,
+    environments, environment, floor, frame, history, running, setRunning, error, busy, connect, selectEnvironment, selectMode,
     selectFloor: (floor_id: string) => { setRunning(false); return mutate('floor', { floor_id }); },
     update: (settings: SettingsUpdate) => mutate('controls', settings),
     reset: () => { setRunning(false); return mutate('reset'); },

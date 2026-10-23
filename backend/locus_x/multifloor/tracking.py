@@ -29,7 +29,7 @@ from typing import Literal
 import numpy as np
 
 from ..building import Building
-from ..schemas import Ellipse, Event, Measurement
+from ..schemas import Ellipse, Event, FloorState, Measurement, TransitionState
 from ..tracking import covariance_ellipse
 from .coordinates import Anchor3D, anchor_index
 from .positioning import (
@@ -59,28 +59,6 @@ FLOOR_JUMP_GRACE = 0.5
 
 HORIZONTAL_ONLY_SIGMA = 0.5
 """Conservative sigma for a horizontal projection whose vertical is unobservable."""
-
-
-@dataclass(frozen=True, slots=True)
-class FloorState:
-    """The reported storey, with where it came from and whether it is trusted."""
-
-    floor_id: str | None
-    source: Literal["configured", "route_assisted", "inferred"]
-    confidence: float | None
-    ambiguous: bool
-
-
-@dataclass(frozen=True, slots=True)
-class TransitionState:
-    """One vertical traverse, as far as the tracker currently knows it."""
-
-    phase: Literal["entering", "traversing", "exiting", "reacquiring"]
-    transition_id: str | None = None
-    connection_id: str | None = None
-    from_floor_id: str | None = None
-    to_floor_id: str | None = None
-    progress: float | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -393,7 +371,12 @@ class FloorAwareTracker:
             ambiguous = decision.ambiguous
         else:
             return (
-                FloorState(self.floor_id, "configured", None, self.floor_id is None),
+                FloorState(
+                    floor_id=self.floor_id,
+                    source="configured",
+                    confidence=None,
+                    ambiguous=self.floor_id is None,
+                ),
                 None,
             )
 
@@ -456,10 +439,10 @@ class FloorAwareTracker:
         confident = self.floor_id is not None and not ambiguous
         return (
             FloorState(
-                self.floor_id,
-                source,
-                confidence if confident else None,
-                ambiguous or self.floor_id is None,
+                floor_id=self.floor_id,
+                source=source,
+                confidence=confidence if confident else None,
+                ambiguous=ambiguous or self.floor_id is None,
             ),
             transition,
         )

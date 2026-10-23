@@ -21,11 +21,27 @@ export interface Floor extends Environment {
   anchor_layout_id: string;
   route_names: Record<string, string>;
 }
+export interface TransitionRoute {
+  id: string; name: string; loop: boolean;
+  legs: { floor_id: string; waypoints: { position: Point; dwell: number }[] }[];
+  transitions: { id: string; kind: 'stairs' | 'elevator'; connection_id: string; from_floor_id: string; to_floor_id: string; travel_seconds: number; dwell_before: number; dwell_after: number }[];
+}
 export interface Building {
   schema_version: '3.0'; version: string; id: string; name: string; description: string;
   width: number; height: number; default_floor_id: string; floors: Floor[];
   connections: { id: string; kind: 'stairs' | 'elevator'; stops: { floor_id: string; access_id: string }[] }[];
+  transition_routes?: TransitionRoute[];
   validation: { units: 'metres'; source: 'fictional-procedural'; geometry_revision: string; notes: string };
+}
+export type LocalizationMode = '2d_on_known_floor' | 'multifloor_route_assisted' | 'multifloor_inferred';
+export type FloorSource = 'configured' | 'route_assisted' | 'inferred';
+export type TransitionPhase = 'entering' | 'traversing' | 'exiting' | 'reacquiring';
+export interface FloorState {
+  floor_id: string | null; source: FloorSource; confidence: number | null; ambiguous: boolean;
+}
+export interface TransitionState {
+  phase: TransitionPhase; transition_id: string | null; connection_id: string | null;
+  from_floor_id: string | null; to_floor_id: string | null; progress: number | null;
 }
 export type EnvironmentDefinition = Environment | Building;
 export interface EnvironmentCatalog {
@@ -35,7 +51,8 @@ export interface EnvironmentCatalog {
 }
 export interface Settings {
   scenario: Scenario; noise_std: number; nlos_bias: number; dropout: number;
-  disabled_anchors: string[]; walls_enabled: boolean; route: string; speed: number; seed: number;
+  disabled_anchors: string[]; disabled_anchor_keys?: string[]; walls_enabled: boolean;
+  route: string; speed: number; seed: number;
 }
 export interface Estimate {
   position: Point | null; status: string; reason: string; residuals: Record<string, number>;
@@ -44,7 +61,7 @@ export interface Estimate {
 }
 export interface Frame {
   environment_id: string; environment_version: string; environment_sha256: string;
-  floor_id: string; floor_elevation: number; localization_mode: '2d_on_known_floor';
+  floor_id: string | null; floor_elevation: number | null; localization_mode: LocalizationMode;
   session_id: string; revision: number; frame_index: number; timestamp: number; settings: Settings; anchors: Anchor[];
   measurements: { anchor_id: string; anchor_position: Point; timestamp: number; observed_range: number }[];
   simulator_labels: { anchor_id: string; available: boolean; kind: 'los' | 'nlos' | 'disabled' | 'outage' | 'packet_loss'; intersected_walls: string[]; true_range: number; injected_bias: number }[];
@@ -54,13 +71,16 @@ export interface Frame {
     ellipse: { major: number; minor: number; angle: number; level: number } | null;
     status: string; reason: string; updated: boolean; outage_seconds: number; runtime_ms: number;
   };
-  evaluation: { ground_truth: Point; baseline_error: number | null; proposed_error: number | null; covered_95: boolean | null; has_nlos: boolean; has_dropout: boolean };
+  evaluation: { ground_truth: Point; baseline_error: number | null; proposed_error: number | null; covered_95: boolean | null; has_nlos: boolean; has_dropout: boolean; ground_truth_elevation?: number | null };
   events: { timestamp: number; message: string; level: string }[];
+  floor_state?: FloorState | null; transition?: TransitionState | null;
+  elevation_estimate?: number | null; floor_probabilities?: Record<string, number> | null;
 }
 export interface Sample {
   t: number; baseline: number | null; proposed: number | null;
   truth?: Point; basePosition?: Point | null; proposedPosition?: Point | null;
-  floor_id?: string; environment_id?: string; frame_index?: number;
+  truthElevation?: number | null; proposedElevation?: number | null;
+  floor_id?: string | null; environment_id?: string; frame_index?: number;
   baselineUpdated?: boolean; proposedUpdated?: boolean;
   baselineRuntime?: number; proposedRuntime?: number; covered95?: boolean | null;
 }
