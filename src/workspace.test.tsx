@@ -40,6 +40,7 @@ function multifloorFrame(overrides: Partial<Frame> = {}): Frame {
     ...base, floor_id: 'first', floor_elevation: 4.2, localization_mode: 'multifloor_inferred',
     floor_state: { floor_id: 'first', source: 'inferred', confidence: 0.91, ambiguous: false },
     elevation_estimate: 5.35, floor_probabilities: { ground: 0.01, first: 0.98, second: 0.01 },
+    baseline: { ...base.baseline, position: null, status: 'not_applicable', reason: 'The single-floor 2D baseline does not apply to a multi-floor session' },
     evaluation: { ...base.evaluation, baseline_error: null, ground_truth_elevation: 5.4, covered_95: true },
     ...overrides,
   };
@@ -271,7 +272,8 @@ describe('rendered control contracts', () => {
   });
   it('reports the 3D pipeline honestly in diagnostics instead of faking a 2D baseline', () => {
     const current = multifloorFrame();
-    const markup = renderToStaticMarkup(<Diagnostics frame={current} floor={building.floors[1]} history={recordFrame([], null, current)} technical />);
+    const history = recordFrame(recordFrame([], null, { ...current, timestamp: 0 }), { ...current, timestamp: 0 }, { ...current, timestamp: 1, frame_index: 1 });
+    const markup = renderToStaticMarkup(<Diagnostics frame={current} floor={building.floors[1]} history={history} technical />);
     expect(markup).toContain('3D PIPELINE');
     expect(markup).toContain('no 2D baseline exists');
     expect(markup).toContain('Device elevation · estimate');
@@ -279,5 +281,9 @@ describe('rendered control contracts', () => {
     expect(markup).toContain('Truth elevation');
     expect(markup).not.toContain('Known floor elevation');
     expect(markup).not.toContain('Range observations');
+    // A baseline that never ran is absent, not a 0 % result.
+    const baselineColumn = [...markup.matchAll(/<th scope="row">[^<]+<\/th><td>([^<]*)<\/td>/g)].map(match => match[1]);
+    expect(baselineColumn).toHaveLength(7);
+    expect(baselineColumn.every(value => value === '—' || value === 'N/A')).toBe(true);
   });
 });

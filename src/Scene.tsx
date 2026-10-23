@@ -64,7 +64,7 @@ function SceneContent({ environment, frame, history, layers, view, cutaway, sele
         {active && !multifloor && <ExperimentOverlays floor={floor} frame={frame} history={history} layers={layers} />}
       </group>;
     })}
-    {multifloor && <MultifloorOverlays environment={environment} frame={frame} history={history} layers={layers} />}
+    {multifloor && <MultifloorOverlays environment={environment} frame={frame} history={history} layers={layers} mode={effectiveMode} />}
     {effectiveMode === 'exploded' && layers.access && isBuilding(environment) && environment.connections.map(connection => {
       const points = connection.stops.flatMap(stop => {
         const display = visible.find(f => f.floor.id === stop.floor_id);

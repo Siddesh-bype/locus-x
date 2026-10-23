@@ -8,14 +8,17 @@ export default function Diagnostics({ frame, floor, history, technical }: { fram
   const multifloor = frame.localization_mode !== '2d_on_known_floor';
   const ambiguous = frame.floor_state?.ambiguous || frame.floor_id === null;
   const baseline = windowMetrics(history, 'baseline'), proposed = windowMetrics(history, 'proposed');
+  // The baseline was never run in a multi-floor session: absent data is not a 0% result.
+  const baselineUnavailable = frame.baseline.status === 'not_applicable';
+  const baselineCell = (value: string) => baselineUnavailable ? '—' : value;
   const metrics = [
-    ['RMSE', fmt(baseline.rmse) + ' m', fmt(proposed.rmse) + ' m'],
-    ['Median', fmt(baseline.median) + ' m', fmt(proposed.median) + ' m'],
-    ['P95 error', fmt(baseline.p95) + ' m', fmt(proposed.p95) + ' m'],
-    ['Valid position', percent(baseline.validRate), percent(proposed.validRate)],
-    ['Fresh update', percent(baseline.updateRate), percent(proposed.updateRate)],
-    ['Mean latency', fmt(baseline.latency, 1) + ' ms', fmt(proposed.latency, 1) + ' ms'],
-    ['95% coverage', 'N/A', percent(proposed.coverage)],
+    ['RMSE', baselineCell(fmt(baseline.rmse) + ' m'), fmt(proposed.rmse) + ' m'],
+    ['Median', baselineCell(fmt(baseline.median) + ' m'), fmt(proposed.median) + ' m'],
+    ['P95 error', baselineCell(fmt(baseline.p95) + ' m'), fmt(proposed.p95) + ' m'],
+    ['Valid position', baselineCell(percent(baseline.validRate)), percent(proposed.validRate)],
+    ['Fresh update', baselineCell(percent(baseline.updateRate)), percent(proposed.updateRate)],
+    ['Mean latency', baselineCell(fmt(baseline.latency, 1) + ' ms'), fmt(proposed.latency, 1) + ' ms'],
+    ['95% coverage', baselineUnavailable ? '—' : 'N/A', percent(proposed.coverage)],
   ];
   return <aside className="diagnostics-panel" aria-label="Actual localization results">
     <div className="panel-heading"><Activity size={16} /><h2>{multifloor ? 'Multi-floor result' : 'Live comparison'}</h2><span className="live-label">{multifloor ? '3D PIPELINE' : '2 METHODS'}</span></div>

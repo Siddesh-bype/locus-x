@@ -99,7 +99,7 @@ horizontal plane. Angles are radians in that plane.
 | `measurements` | array | always | Available range observations only; ordering in §4. |
 | `simulator_labels` | array | always | One label per entry in `anchors`, including unavailable anchors; ordering in §4. |
 | `baseline` | `Estimate` | always | Legacy 2D baseline. Multi-floor: `status = "not_applicable"`, `position = null`, reason set. |
-| `robust` | `Estimate` | always | Multi-floor: the 3D solve's horizontal projection and its 2×2 block of the 3D covariance. |
+| `robust` | `Estimate` | always | Multi-floor: the 3D solve's horizontal projection and its full 3×3 covariance. |
 | `tracking` | object | always | Multi-floor: the tracker's horizontal state. Elevation is separate. |
 | `evaluation` | object | always | Truth-based scoring plus truth elevation (§5). |
 | `events` | array | always | Last 20 engine events. |
@@ -246,9 +246,11 @@ A multi-floor frame never manufactures a 2D result:
 * `baseline.status = "not_applicable"`, `baseline.position = null`, a reason is
   set and `runtime_ms = 0`;
 * `robust.position` is the horizontal projection of the 3D solve;
-  `robust.covariance` is its 2×2 horizontal block; residuals and reliability are
-  keyed by observation key `"<floor_id>:<anchor_id>"` (not by bare anchor id);
+  `robust.covariance` is the solve's full 3×3 covariance in `(x, y, z)` order;
+  residuals and reliability are keyed by observation key
+  `"<floor_id>:<anchor_id>"` (not by bare anchor id);
 * `tracking.position`, `velocity`, `covariance` and `ellipse` are horizontal;
+  `tracking.covariance` is the 2×2 horizontal block, not the 3×3 solve covariance;
 * `elevation_estimate` is the vertical state;
 * `evaluation.proposed_error` and `covered_95` are horizontal metrics.
 

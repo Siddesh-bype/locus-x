@@ -58,6 +58,24 @@ export function displayElevation(floor: Floor, index: number, mode: ViewMode): n
   return floor.elevation + (mode === 'exploded' ? index * EXPLODE_GAP : 0);
 }
 
+/**
+ * Rendered height for a root-level overlay. Floor groups carry the exploded spacing,
+ * so an overlay must be shifted by the group it belongs to; when the storey is unknown
+ * the nearest physical plane is the best available group.
+ */
+export function overlayElevation(physical: number, floors: Floor[], mode: ViewMode, floorId: string | null): number {
+  if (mode !== 'exploded' || !floors.length) return physical;
+  let index = floorId == null ? -1 : floors.findIndex(floor => floor.id === floorId);
+  if (index < 0) index = floors.reduce((best, floor, candidate) =>
+    Math.abs(floor.elevation - physical) < Math.abs(floors[best].elevation - physical) ? candidate : best, 0);
+  return physical + index * EXPLODE_GAP;
+}
+
+/** Configured routes are not all loops; only close the polyline when the route says so. */
+export function routePolyline(waypoints: Point[], loop: boolean): Point[] {
+  return loop && waypoints.length > 0 ? [...waypoints, waypoints[0]] : [...waypoints];
+}
+
 export function humanizeId(id: string): string {
   const words = id.replace(/[-_]+/g, ' ');
   return words.charAt(0).toUpperCase() + words.slice(1);

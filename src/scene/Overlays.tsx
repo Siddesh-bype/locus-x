@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import * as THREE from 'three';
 import { toScene } from '../lib';
 import type { EnvironmentDefinition, Floor, Frame, Point, Sample } from '../types';
-import { elevatedTrajectorySegments, ellipsePoints, floorsOf, isBuilding, trajectorySegments, type SceneLayers } from '../workspace';
+import { elevatedTrajectorySegments, ellipsePoints, floorsOf, isBuilding, overlayElevation, routePolyline, trajectorySegments, type SceneLayers, type ViewMode } from '../workspace';
 import { Label, Polyline, Solids } from './Primitives';
 import { solid } from './architectureGeometry';
 
@@ -80,26 +80,35 @@ export function ExperimentOverlays({ floor, frame, history, layers }: { floor: F
  * on a selected floor. Truth uses the simulator's own elevation, so the comparison is
  * vertical as well as horizontal; the 2D baseline does not exist here and is not drawn.
  */
-export function MultifloorOverlays({ environment, frame, history, layers }: { environment: EnvironmentDefinition; frame: Frame; history: Sample[]; layers: SceneLayers }) {
+export function MultifloorOverlays({ environment, frame, history, layers, mode }: { environment: EnvironmentDefinition; frame: Frame; history: Sample[]; layers: SceneLayers; mode: ViewMode }) {
   const floors = useMemo(() => floorsOf(environment), [environment]);
   const building = isBuilding(environment) ? environment : null;
   const route = building?.transition_routes?.find(item => item.id === frame.settings.route);
+  const overlayFloorId = frame.floor_state?.floor_id ?? frame.floor_id;
   const planned = useMemo(() => floors.flatMap(floor => {
     const leg = route?.legs.find(item => item.floor_id === floor.id);
-    if (!leg) return [];
-    return [[...leg.waypoints, leg.waypoints[0]].map(waypoint => toScene(waypoint.position, floor.elevation + 0.09))];
-  }), [floors, route]);
-  const trails = useMemo(() => ({
-    truth: elevatedTrajectorySegments(history, 'truth', 'truthElevation'),
-    proposed: elevatedTrajectorySegments(history, 'proposedPosition', 'proposedElevation'),
-  }), [history]);
+    if (!leg || !route) return [];
+    const elevation = overlayElevation(floor.elevation, floors, mode, floor.id) + 0.09;
+    return [routePolyline(leg.waypoints.map(waypoint => waypoint.position), route.loop).map(waypoint => toScene(waypoint, elevation))];
+  }), [floors, route, mode]);
+  const trails = useMemo(() => {
+    const lift = (points: [number, number, number][]) => points.map(([x, y, z]) =>
+      [x, overlayElevation(y, floors, mode, null), z] as [number, number, number]);
+    return {
+      truth: elevatedTrajectorySegments(history, 'truth', 'truthElevation').map(lift),
+      proposed: elevatedTrajectorySegments(history, 'proposedPosition', 'proposedElevation').map(lift),
+    };
+  }, [history, floors, mode]);
   const estimate = frame.elevation_estimate;
   const truthElevation = frame.evaluation.ground_truth_elevation;
-  const ellipse = useMemo(() => ellipsePoints(frame, (estimate ?? 0) + 0.16), [frame, estimate]);
+  // A withheld estimate has no height to draw at; never fall back to the ground plane.
+  const ellipse = useMemo(() => estimate == null ? []
+    : ellipsePoints(frame, overlayElevation(estimate, floors, mode, overlayFloorId) + 0.16),
+    [frame, estimate, floors, mode, overlayFloorId]);
   // Measurements are the available labels in building order, so align them through the
   // label list rather than assuming every anchor produced a range.
   const signals = useMemo(() => {
-    const floorAnchors = floors.flatMap(floor => floor.anchors.map(anchor => ({ anchor, elevation: floor.elevation })));
+    const floorAnchors = floors.flatMap(floor => floor.anchors.map(anchor => ({ anchor, floorId: floor.id, elevation: floor.elevation })));
     const available = frame.simulator_labels.flatMap((label, index) => label.available ? [index] : []);
     return frame.measurements.flatMap((measurement, index) => {
       const target = floorAnchors[available[index]];
@@ -110,11 +119,11 @@ export function MultifloorOverlays({ environment, frame, history, layers }: { en
   if (estimate == null && truthElevation == null) return null;
   return <>
     {layers.route && planned.map((points, index) => <Polyline key={'route-' + index} points={points} color="#799eaa" opacity={0.75} dashed />)}
-    {layers.signals && layers.truth && truthElevation != null && signals.map(({ measurement, anchor, nlos }) => <Polyline key={measurement.anchor_id + '@' + anchor.elevation} points={[toScene(frame.evaluation.ground_truth, truthElevation + 0.35), toScene(anchor.anchor.position, anchor.elevation + 1.6)]} color={nlos ? COLORS.fault : COLORS.anchor} opacity={nlos ? 0.8 : 0.35} dashed={nlos} />)}
+    {layers.signals && layers.truth && truthElevation != null && signals.map(({ measurement, anchor, nlos }) => <Polyline key={measurement.anchor_id + '@' + anchor.floorId} points={[toScene(frame.evaluation.ground_truth, overlayElevation(truthElevation, floors, mode, overlayFloorId) + 0.35), toScene(anchor.anchor.position, overlayElevation(anchor.elevation, floors, mode, anchor.floorId) + 1.6)]} color={nlos ? COLORS.fault : COLORS.anchor} opacity={nlos ? 0.8 : 0.35} dashed={nlos} />)}
     {layers.truth && trails.truth.map((points, index) => <Polyline key={'truth-' + index} points={points} color={COLORS.truth} dashed />)}
     {layers.proposed && trails.proposed.map((points, index) => <Polyline key={'proposed-' + index} points={points} color={COLORS.proposed} />)}
     {layers.uncertainty && ellipse.length > 0 && <Polyline points={ellipse} color={COLORS.proposed} opacity={0.85} dashed />}
-    {layers.truth && truthElevation != null && <Marker point={frame.evaluation.ground_truth} kind="truth" elevation={truthElevation + 0.16} />}
-    {layers.proposed && estimate != null && frame.tracking.position && <Marker point={frame.tracking.position} kind="proposed" elevation={estimate + 0.16} />}
+    {layers.truth && truthElevation != null && <Marker point={frame.evaluation.ground_truth} kind="truth" elevation={overlayElevation(truthElevation, floors, mode, overlayFloorId) + 0.16} />}
+    {layers.proposed && estimate != null && frame.tracking.position && <Marker point={frame.tracking.position} kind="proposed" elevation={overlayElevation(estimate, floors, mode, overlayFloorId) + 0.16} />}
   </>;
 }
