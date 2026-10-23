@@ -76,6 +76,18 @@ def test_invalid_controls(payload):
     assert client.patch(path, json={"expected_revision": 0, **payload}).status_code == 422
 
 
+@pytest.mark.parametrize("key", ["garbage", "first", "first:", ":A1", "ground:A99"])
+def test_a_2d_session_rejects_floor_scoped_anchor_keys_without_storing_them(key):
+    """A 2D environment has no floors, so the key cannot be honoured; reject at the boundary."""
+    frame = client.post("/api/v1/sessions", json={}).json()
+    session = f"/api/v1/sessions/{frame['session_id']}"
+    response = client.patch(
+        f"{session}/controls", json={"expected_revision": 0, "disabled_anchor_keys": [key]}
+    )
+    assert response.status_code == 422
+    assert client.get(session).json()["settings"]["disabled_anchor_keys"] == []
+
+
 def test_unknown_environment_and_extra_truth_rejected():
     assert client.post("/api/v1/sessions", json={"environment_id": "missing"}).status_code == 404
     assert client.post("/api/v1/sessions", json={"ground_truth": [1, 1]}).status_code == 422

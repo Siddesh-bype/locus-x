@@ -1,5 +1,6 @@
 """V3 composes the existing floor contract; the V1 Environment remains unchanged."""
 
+from collections.abc import Collection
 from math import dist
 from typing import Literal, get_args
 
@@ -20,6 +21,33 @@ def is_building_config(raw: dict) -> bool:
     """Single loader discriminator, derived from the literal so it cannot go stale."""
     version = raw.get("schema_version")
     return isinstance(version, str) and version in BUILDING_SCHEMA_VERSIONS
+
+
+def parse_anchor_key(key: str) -> tuple[str, str]:
+    """Split a floor-scoped ``"<floor_id>:<anchor_id>"`` key, rejecting empty parts."""
+    floor_id, separator, anchor_id = key.partition(":")
+    if not separator or not floor_id or not anchor_id:
+        raise ValueError(
+            f"Malformed floor-scoped anchor key {key!r}; expected '<floor_id>:<anchor_id>'"
+        )
+    return floor_id, anchor_id
+
+
+def validate_anchor_keys(keys: Collection[str], installed: Collection[str]) -> None:
+    """Reject duplicate, malformed or unknown floor-scoped anchor keys.
+
+    ``installed`` holds the configuration's valid keys. A 2D environment has no floors, so
+    it has nothing to pass here and must reject floor-scoped keys outright instead.
+    """
+    if len(keys) != len(set(keys)):
+        raise ValueError("Floor-scoped anchor keys must be unique")
+    known = set(installed)
+    for key in keys:
+        floor_id, anchor_id = parse_anchor_key(key)
+        if f"{floor_id}:{anchor_id}" not in known:
+            raise ValueError(
+                f"Unknown floor-scoped anchor key {key!r}; no such floor/anchor pair is installed"
+            )
 
 
 class BuildingRoom(Room):

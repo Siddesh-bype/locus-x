@@ -21,7 +21,7 @@ Obstruction
 *Same floor* (``state.floor_id == anchor.floor_id``): walls live on one floor, so the
 legacy rule is reused verbatim — ``bias = nlos_bias * min(walls, 3) / 2``, gated by
 ``Settings.walls_enabled``, with the crossed wall IDs reported in
-``intersected_walls``.
+``intersected_walls`` (an empty list when ``walls_enabled`` is false).
 
 *Any floor*: slabs attenuate. ``slab_hops`` is the number of floor datums **strictly**
 between the target's ``z`` and the anchor's ``z`` (a target resting exactly on a datum
@@ -29,8 +29,13 @@ adds nothing) and the added bias is
 ``building.slab_bias_per_slab * min(slab_hops, MAX_SLABS)``. This is deliberately
 integer: during a vertical traverse the continuous ``z`` crosses each datum once, so
 the attenuation steps rather than ramps, and the reported range is non-monotonic —
-it is minimal when the target passes the anchor's own elevation. Slab attenuation is
-geometry, not a wall, so it applies even with ``walls_enabled = False``.
+it is minimal when the target passes the anchor's own elevation.
+
+**The slab model is synthetic.** ``building.slab_bias_per_slab`` is a simulator
+parameter chosen to make storeys separable, not a calibrated propagation model. It is
+a configured term rather than a wall, so it applies even with
+``walls_enabled = False``, and it saturates at ``MAX_SLABS`` while the reported
+``slab_hops`` stay raw and uncapped.
 
 A same-floor pair therefore has ``slab_hops == 0`` and only the wall term; a
 cross-floor pair has no wall term (a wall cannot block a path through a slab) and only
@@ -54,11 +59,9 @@ outage already decided the outcome), then draw ``rng.normal()`` for the noise
 **unconditionally**, including for unavailable anchors. Reordering the draws would
 silently change every observation, so it is load-bearing.
 
-``i`` is the anchor's position in the flat list used for this call: by default
-``floor_anchors(building)`` — floors in declared order, each floor's anchors in
-declaration order — and a caller-supplied ``anchors`` sequence in its own order.
-Disabling never removes an anchor from that list, so one anchor's stream never shifts
-because another was disabled.
+``i`` is the anchor's position in ``floor_anchors(building)`` — floors in declared
+order, each floor's anchors in declaration order. That is the building-wide flat index,
+so it does not shift when an anchor is disabled or filtered out of an observation set.
 
 Timed outage
 ------------
@@ -81,10 +84,10 @@ from math import dist
 
 import numpy as np
 
-from ..building import Building
+from ..building import Building, validate_anchor_keys
 from ..geometry import intersects
 from ..schemas import FaultLabel, Measurement, Settings
-from .coordinates import Anchor3D, anchor_key, floor_anchors, resolve_anchor
+from .coordinates import Anchor3D, anchor_index, anchor_key, floor_anchors
 from .route import RouteState
 
 MAX_SLABS = 3
@@ -109,14 +112,8 @@ def count_slab_hops(target_z: float, anchor_z: float, datums: Sequence[float]) -
 
 
 def _disabled_keys(building: Building, keys: Sequence[str]) -> set[str]:
-    """Validate floor-scoped anchor keys and return them as a set."""
-    for key in keys:
-        floor_id, separator, anchor_id = key.partition(":")
-        if not separator or not floor_id or not anchor_id:
-            raise ValueError(
-                f"Malformed disabled anchor key {key!r}; expected '<floor_id>:<anchor_id>'"
-            )
-        resolve_anchor(building, floor_id, anchor_id)
+    """Validate floor-scoped keys here too; the session validates them at the boundary."""
+    validate_anchor_keys(keys, anchor_index(building))
     return set(keys)
 
 
@@ -130,18 +127,44 @@ def generate_measurements_3d(
 ) -> tuple[list[Measurement], list[FaultLabel], dict[str, int]]:
     """Observe every anchor from one 3D target state.
 
-    Returns the available ``measurements`` in anchor order, one ``FaultLabel`` per
-    anchor (available or not), and ``slab_hops`` keyed ``"<floor_id>:<anchor_id>"`` with
-    the raw count of intervening floor datums per anchor.
+    Returns the available ``measurements``, one ``FaultLabel`` per anchor (available or
+    not), and ``slab_hops`` keyed ``"<floor_id>:<anchor_id>"`` with the raw count of
+    intervening floor datums per anchor (the bias saturates at ``MAX_SLABS``, the count
+    does not).
 
-    ``anchors`` overrides the default ``floor_anchors(building)`` sequence; the seeding
-    index is then the position in that sequence, so a caller must pass the same sequence
-    on every frame of a run to keep the draws stable.
+    Alignment contract: anchor IDs repeat on every storey, so the k-th measurement is
+    the k-th entry of ``labels`` that is ``available``, in list order;
+    ``labels``/``slab_hops`` are the only place floor identity survives. Keying
+    measurements by ``anchor_id`` alone silently collapses floors.
+
+    ``anchors`` filters the observed set; it never renumbers. The seeding index is
+    always the anchor's position in ``floor_anchors(building)`` (floors in declared
+    order, anchors in declaration order), so a subset reproduces the full run's draws
+    for the anchors it keeps. Every supplied entry must be an installed anchor key.
     """
-    installed = list(floor_anchors(building)) if anchors is None else list(anchors)
+    canonical = floor_anchors(building)
+    flat_index = {
+        anchor_key(anchor.floor_id, anchor.anchor_id): position
+        for position, anchor in enumerate(canonical)
+    }
+    if anchors is None:
+        selected = canonical
+    else:
+        selected = list(anchors)
+        seen: set[str] = set()
+        for anchor in selected:
+            key = anchor_key(anchor.floor_id, anchor.anchor_id)
+            if key not in flat_index:
+                raise ValueError(
+                    f"Unknown anchor key {key!r}; anchors must be a subset of the "
+                    "building's installed anchors"
+                )
+            if key in seen:
+                raise ValueError(f"Duplicate anchor key {key!r} in the 3D measurement list")
+            seen.add(key)
     floors = {floor.id: floor for floor in building.floors}
     datums = [floor.elevation for floor in building.floors]
-    anchor_positions = {
+    floor_positions = {
         anchor_key(floor.id, anchor.id): position
         for floor in building.floors
         for position, anchor in enumerate(floor.anchors)
@@ -156,21 +179,14 @@ def generate_measurements_3d(
     observations: list[Measurement] = []
     labels: list[FaultLabel] = []
     slab_hops: dict[str, int] = {}
-    seen: set[str] = set()
-    for i, anchor in enumerate(installed):
+    for anchor in selected:
         key = anchor_key(anchor.floor_id, anchor.anchor_id)
-        if key in seen:
-            raise ValueError(f"Duplicate anchor key {key!r} in the 3D measurement list")
-        seen.add(key)
-        floor = floors.get(anchor.floor_id)
-        if floor is None:
-            known = ", ".join(candidate.id for candidate in building.floors)
-            raise ValueError(
-                f"Unknown floor {anchor.floor_id!r} for anchor {anchor.anchor_id!r}; "
-                f"known floors are {known}"
-            )
+        # Filtered keys are validated as installed above, so the floor always exists.
+        floor = floors[anchor.floor_id]
         # Per-anchor streams keep surviving observations identical when an anchor is disabled.
-        rng = np.random.default_rng(np.random.SeedSequence([settings.seed, frame_index, i]))
+        rng = np.random.default_rng(
+            np.random.SeedSequence([settings.seed, frame_index, flat_index[key]])
+        )
         true_range = dist((state.x, state.y, state.z), (anchor.x, anchor.y, anchor.z))
         same_floor = state.floor_id == anchor.floor_id
         walls = (
@@ -188,7 +204,7 @@ def generate_measurements_3d(
         kind = "nlos" if bias > 0 else "los"
         if anchor.anchor_id in disabled_ids or key in disabled_keys:
             kind = "disabled"
-        elif outage and anchor_positions.get(key) in OUTAGE_INDICES:
+        elif outage and floor_positions[key] in OUTAGE_INDICES:
             kind = "outage"
         elif rng.random() < settings.dropout:
             kind = "packet_loss"
@@ -213,5 +229,6 @@ def generate_measurements_3d(
                 injected_bias=bias,
             )
         )
+        # Raw count on purpose: only the bias saturates at MAX_SLABS (Task 5 may cap).
         slab_hops[key] = hops
     return observations, labels, slab_hops

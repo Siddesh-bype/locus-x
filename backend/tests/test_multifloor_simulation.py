@@ -13,12 +13,13 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from backend.locus_x.building import Building
+from backend.locus_x.building import Building, validate_anchor_keys
 from backend.locus_x.environment import load_environments
 from backend.locus_x.multifloor import (
     MAX_SLABS,
     OUTAGE_INDICES,
     RouteState,
+    anchor_index,
     anchor_key,
     count_slab_hops,
     floor_anchors,
@@ -263,6 +264,27 @@ def test_cross_floor_anchors_report_no_wall_hits(building):
             )
 
 
+def test_disabling_walls_keeps_the_slab_term_and_drops_the_wall_term(building):
+    state = _state(21.0, 14.0, 1.2, "ground")
+    enabled = Settings(scenario="nlos", nlos_bias=2.5, noise_std=0)
+    _, enabled_labels, _ = _observe(building, enabled, state)
+    # (21, 14) -> ground:A2 crosses reception-e, so the wall term is live when enabled.
+    assert enabled_labels["ground:A2"].injected_bias > 0
+    assert enabled_labels["ground:A2"].kind == "nlos"
+
+    settings = Settings(scenario="nlos", walls_enabled=False, nlos_bias=2.5, noise_std=0)
+    observed, labels, _ = _observe(building, settings, state)
+    blocked = labels["ground:A2"]
+    assert (blocked.intersected_walls, blocked.injected_bias, blocked.kind) == ([], 0, "los")
+    cross = labels["first:A1"]
+    assert cross.intersected_walls == []
+    assert cross.injected_bias == pytest.approx(building.slab_bias_per_slab)
+    assert cross.kind == "nlos"
+    assert observed["first:A1"].observed_range - cross.true_range == pytest.approx(
+        building.slab_bias_per_slab, abs=1e-9
+    )
+
+
 # ------------------------------------------------------- slab attenuation -----
 
 
@@ -425,18 +447,35 @@ def test_the_legacy_disabled_list_still_disables_an_id_on_every_floor(building):
 @pytest.mark.parametrize(
     "key, message",
     [
-        ("first", "Malformed disabled anchor key 'first'"),
-        ("first:", "Malformed disabled anchor key 'first:'"),
-        (":A1", "Malformed disabled anchor key ':A1'"),
-        ("", "Malformed disabled anchor key ''"),
-        ("roof:A1", "Unknown floor 'roof'"),
-        ("first:A99", "Unknown anchor 'A99' on floor 'first'"),
+        ("first", "Malformed floor-scoped anchor key 'first'"),
+        ("first:", "Malformed floor-scoped anchor key 'first:'"),
+        (":A1", "Malformed floor-scoped anchor key ':A1'"),
+        ("", "Malformed floor-scoped anchor key ''"),
+        ("roof:A1", "Unknown floor-scoped anchor key 'roof:A1'"),
+        ("first:A99", "Unknown floor-scoped anchor key 'first:A99'"),
     ],
 )
 def test_invalid_floor_scoped_keys_are_rejected_at_the_point_of_use(building, key, message):
     settings = Settings(disabled_anchor_keys=[key])
     with pytest.raises(ValueError, match=message):
         generate_measurements_3d(building, settings, _state(4.0, 14.0, 1.2, "ground"), 0)
+
+
+def test_duplicate_floor_scoped_keys_are_rejected_at_the_point_of_use(building):
+    settings = Settings(disabled_anchor_keys=["first:A1", "first:A1"])
+    with pytest.raises(ValueError, match="Floor-scoped anchor keys must be unique"):
+        generate_measurements_3d(building, settings, _state(4.0, 14.0, 1.2, "ground"), 0)
+
+
+def test_validate_anchor_keys_accepts_installed_pairs_and_rejects_the_rest(building):
+    installed = set(anchor_index(building))
+    validate_anchor_keys(["ground:A1", "second:A8"], installed)
+    with pytest.raises(ValueError, match="must be unique"):
+        validate_anchor_keys(["ground:A1", "ground:A1"], installed)
+    with pytest.raises(ValueError, match="Malformed floor-scoped anchor key 'A1'"):
+        validate_anchor_keys(["A1"], installed)
+    with pytest.raises(ValueError, match="Unknown floor-scoped anchor key 'roof:A1'"):
+        validate_anchor_keys(["roof:A1"], installed)
 
 
 # ------------------------------------------------------------------ outage ----
@@ -453,7 +492,12 @@ def test_the_timed_outage_hits_the_same_perimeter_anchors_on_every_floor(buildin
         for floor_id in ("ground", "first", "second")
         for position in ("A2", "A4", "A6", "A8")
     }
-    # 12 + 10 is the exclusive upper bound of the scenario-gated window.
+    # Inclusive lower edge, exclusive upper edge of the scenario-gated window.
+    for timestamp, fires in ((12.0, True), (11.999, False), (21.999, True), (22.0, False)):
+        _, edge, _ = _observe(
+            building, settings, _state(4.0, 14.0, 1.2, "ground", timestamp=timestamp)
+        )
+        assert any(label.kind == "outage" for label in edge.values()) is fires
     for timestamp in (5.0, 22.0, 30.0):
         _, quiet, _ = _observe(
             building, settings, _state(4.0, 14.0, 1.2, "ground", timestamp=timestamp)
@@ -498,6 +542,23 @@ def test_an_anchor_override_restricts_the_returned_streams(building):
         generate_measurements_3d(
             building, settings, _state(1.0, 1.0, 5.4, "first"), 0, anchors=[chosen[0], chosen[0]]
         )
+
+
+def test_an_anchor_subset_reproduces_the_full_run_for_the_anchors_it_keeps(building):
+    """Seeding uses the building-wide index, so filtering must not renumber the streams."""
+    settings = Settings(scenario="clean", noise_std=1.5, dropout=0.0, nlos_bias=0, seed=5)
+    state = _state(1.0, 1.0, 5.4, "first")
+    full, _, _ = _observe(building, settings, state, frame_index=3)
+    chosen = [
+        resolve_anchor(building, "second", "A3"),
+        resolve_anchor(building, "ground", "A1"),
+        resolve_anchor(building, "first", "A6"),
+    ]
+    subset, _, _ = _observe(building, settings, state, frame_index=3, anchors=chosen)
+    assert set(subset) == {anchor_key(anchor.floor_id, anchor.anchor_id) for anchor in chosen}
+    # The draws are seeded per anchor, so a filtered run must agree exactly with the full one.
+    for key, measurement in subset.items():
+        assert measurement.observed_range == full[key].observed_range
 
 
 def test_floor_scoped_keys_are_available_to_settings_and_controls():
