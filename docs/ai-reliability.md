@@ -2,7 +2,7 @@
 
 ## Scope
 
-This document records the implemented LOS/NLOS reliability model, its data protocol, the inference contract and the measured end-to-end result. The model is a third method: it does not replace the geometric baseline or LOCUS-X. The AI branch adjusts the existing robust estimator's per-anchor weights and falls back to LOCUS-X when the model cannot establish a reliable consensus.
+This document records the implemented LOS/NLOS reliability model, its data protocol, the inference contract and the measured end-to-end result. The model is a third method: it does not replace the geometric baseline or LOCUS-X. The AI branch adjusts the existing robust estimator's per-anchor weights and falls back to LOCUS-X when the model cannot establish a reliable consensus. The later Phase 4-6 frozen test and its negative result are in the [final report](ai-reliability-final.md); the live runtime remains v1.
 
 The implementation is in:
 
@@ -56,7 +56,7 @@ Feature groups:
 - Map: wall count and mean wall count on the anchor-to-position segment.
 - Temporal: previous residual, residual delta, position delta and time delta.
 
-The adapter converts `P(NLOS)` to `p_los = 1 - p_nlos`. An earlier inverted conversion downweighted LOS anchors. The artifacts show the correction happened between `competition-ai-v1` and `competition-ai-v2`, after the already-inspected seeds 101/202 had been rerun; because the repository had no Git history at that point, the exact origin is not recoverable. The current direction is covered by the existing results and a new truth-isolation test, and Phase 5 still needs a dedicated probability-direction test.
+The adapter converts `P(NLOS)` to `p_los = 1 - p_nlos`. An earlier inverted conversion downweighted LOS anchors. The artifacts show the correction happened between `competition-ai-v1` and `competition-ai-v2`, after the already-inspected seeds 101/202 had been rerun; because the repository had no Git history at that point, the exact origin is not recoverable. The current direction is covered by a dedicated probability-direction test and the truth-isolation test.
 
 Test-set classification metrics:
 

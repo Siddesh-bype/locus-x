@@ -1,0 +1,78 @@
+{
+  "created_at": "2026-10-22T17:54:21.725854+00:00",
+  "command": "python -m backend.locus_x.ai_final",
+  "protocol": {
+    "seeds": [
+      8001,
+      8009,
+      8017,
+      8023,
+      8039,
+      8053,
+      8069,
+      8081
+    ],
+    "route": "held_out",
+    "dt": 0.5,
+    "steps": 120,
+    "layouts": [
+      "hospital_floor_01",
+      "ground",
+      "first",
+      "second"
+    ],
+    "variants": [
+      "clean",
+      "noise",
+      "high_noise",
+      "nlos",
+      "packet_loss",
+      "anchor_outage",
+      "chaos",
+      "noise_nlos",
+      "noise_packet",
+      "noise_outage",
+      "nlos_packet",
+      "nlos_outage",
+      "packet_outage",
+      "noise_nlos_packet",
+      "noise_nlos_outage",
+      "noise_packet_outage",
+      "nlos_packet_outage",
+      "all_four"
+    ],
+    "counts": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  "runs": 3456,
+  "frames": 414720,
+  "classifier_samples": 1635824,
+  "bootstrap_resamples": 2000,
+  "policy_sha256": "4c38a30b7bfb19f19b9d67bd05b79c2183e4cf4ff62020d7cbb17e15d2abfca8",
+  "test_manifest_sha256": "f7e4c0fe7fc81cf5a09198a94640686759edd6071378ee657a6692c2b0906942",
+  "model_sha256": {
+    "config.json": "45001e5436ae460666869d3cfdb199e877277993f2fc537044388c62aef76fe4",
+    "metrics.json": "bb34dc292cd532c0bbf2cb19541d3cce43a50631a7b2b4469bf69d8d88d23f31",
+    "weights.npz": "663d22559f3602771c174a4fb85cf6f980cb0932e3fbc06cf25dc3cf556c90cb",
+    "v2/config.json": "3ae963edce33f18f3d3765c55858eac5f41285b5ebc1db6040bc023cfec88a98",
+    "v2/policy-v2.json": "ff818fd2f2bf77428e2509d9536b3840c912a790278ef3fea35723e037a2e0a7",
+    "v2/promotion.json": "b3374945edf11d967744ca8f648defa026f2fc434de695d40622af9629abc2e8",
+    "v2/seed_20261021.npz": "29130abab89b917daa3ac5924c3cea5aebc151f02d50a244339e1d2f06d706a6",
+    "v2/seed_20261022.npz": "cd9a0ba748ac68f9a1600462a58b6ac3ba74fa6543caf6f14ac656e01cc9515e",
+    "v2/seed_20261023.npz": "e403a7da6fcc446b7dc45af66e8ff9bd3bea79e7082694d603da50735358be61",
+    "v2/seed_20261024.npz": "b34ae54f933ab673bb0d2563364b45742ca1ca87f8e16f7fca7b2e4045240556",
+    "v2/seed_20261025.npz": "eab83f5032e74c2bfaa725c0dce3fd978320e7a3e772d36b72b68329b86db63e",
+    "v2/selection.json": "c5d38f6bc3f3b28af30a880689c910842d0c5aec8115127277a2537cb10e34f7"
+  },
+  "report_rows": {
+    "metrics": 144,
+    "bootstrap": 108,
+    "classifier": 62
+  }
+}
