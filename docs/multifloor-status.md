@@ -3,7 +3,10 @@
 Date: 23 October 2026. Branch: `feat/multifloor-positioning` (local; not pushed, no pull request).
 Evidence commit: **`a1fb985`** — `fix(multifloor): prove floor alignment and reproduce the protocol artifact`.
 The documentation commit that contains this file follows the evidence commit and changes
-only Markdown, so every executable result below was produced by exactly `a1fb985`.
+only Markdown, so every executable result below was produced by exactly `a1fb985`, except
+the live HTTP check in [Live HTTP verification](#live-http-verification): that script now
+also asserts and records the finite floor-likelihood map, so its output was produced by
+the later fix-round commit that changes `scripts/verify_v3_http.py` and this document.
 
 This phase adds continuous 3-D ranging, inferred and route-assisted storey state, a
 two-mode evaluation protocol, multi-floor API sessions and the matching frontend contract.
@@ -136,6 +139,34 @@ that a chunk exceeds 500 kB.
 | Multi-floor protocol, route-assisted | `& ".\.venv\Scripts\python.exe" -m backend.locus_x.multifloor.benchmark --config configs/benchmarks/v3/multifloor-route-assisted.json --output artifacts/multifloor-benchmark-runs/route-assisted` | `f055b90006a443b61e69915030006935bc087a1d9a62b599f8fcbd08fa9a954c` | `7af0c5877930b9018bb9e6f1bcabc5475f87779e633e323c733c7ad552fd33b9` | `a1fb985` | `artifacts/multifloor-benchmark-runs/route-assisted` |
 | Live HTTP verification | `& ".\.venv\Scripts\python.exe" scripts/verify_v3_http.py --url http://127.0.0.1:8021 --output artifacts/multifloor-verify/live-api.json` | n/a | n/a (script prints session state, not the hash; the served `hospital_v3` is the document pinned above) | `a1fb985` | `artifacts/multifloor-verify/live-api.json` |
 
+The benchmark CLI prints only a 16-character `config_sha256` prefix and never the
+environment hash, so the 64-character stamps above come from this command:
+
+```powershell
+@'
+from pathlib import Path
+from backend.locus_x.environment import load_environments
+from backend.locus_x.multifloor.benchmark import (
+    MultiFloorBenchmarkConfig,
+    config_sha256,
+    environment_sha256,
+)
+building = load_environments()["hospital_v3"]
+print(f"environment_sha256 hospital_v3: {environment_sha256(building)}")
+for name in ("multifloor-inferred", "multifloor-route-assisted"):
+    config = MultiFloorBenchmarkConfig.model_validate_json(
+        Path(f"configs/benchmarks/v3/{name}.json").read_text(encoding="utf-8")
+    )
+    print(f"config_sha256 {name}: {config_sha256(config)}")
+'@ | & ".\.venv\Scripts\python.exe" -
+```
+
+```
+environment_sha256 hospital_v3: 7af0c5877930b9018bb9e6f1bcabc5475f87779e633e323c733c7ad552fd33b9
+config_sha256 multifloor-inferred: fd5c9f570d3568b8c45e9aa0f8da0013763712dcbd1f5da07830fcb7db0c1fb2
+config_sha256 multifloor-route-assisted: f055b90006a443b61e69915030006935bc087a1d9a62b599f8fcbd08fa9a954c
+```
+
 The orchestration commands used in this session were:
 
 ```powershell
@@ -168,8 +199,19 @@ sha256(Environment.model_dump_json()) = fa1d5b056ee2b775d1f65fba958431332e4557f2
 ```
 
 The competition protocol was reproduced into a new directory
-(`artifacts/multifloor-verify/reference-reproduction`, 56 rows, 8,960 evaluated frames).
-It completed in 86.2 s. It was compared row-by-row against the retained
+(`artifacts/multifloor-verify/reference-reproduction`, 56 rows, **17,920 evaluated frames**).
+It completed in 86.2 s. The frame count is rows × frames per row — 320 each — and is
+printed by:
+
+```powershell
+& ".\.venv\Scripts\python.exe" -c "import json; rows = json.load(open('artifacts/multifloor-verify/reference-reproduction/results.json', encoding='utf-8'))['rows']; print('rows:', len(rows), 'frames per row:', {row['frames'] for row in rows}, 'evaluated frames:', sum(row['frames'] for row in rows))"
+```
+
+```
+rows: 56 frames per row: {320} evaluated frames: 17920
+```
+
+It was compared row-by-row against the retained
 `artifacts/multifloor-baseline/reference-reproduction/results.json`:
 
 ```powershell
@@ -186,7 +228,7 @@ problems = [
     if old[key] != fresh[key]
 ]
 print(f"rows compared: {len(base['rows'])} baseline / {len(new['rows'])} reproduction")
-print(f"rows byte-equal on every field except latency_ms: {len(base['rows']) - len({p[0] for p in problems})}")
+print(f"rows value-equal on every field except latency_ms: {len(base['rows']) - len({p[0] for p in problems})}")
 print(f"field mismatches: {len(problems)}")
 print(f"config identical: {base['config'] == new['config']}")
 print(f"environment_id: {new['environment_id']}")
@@ -200,7 +242,7 @@ print(f"baseline elapsed_seconds: {base['elapsed_seconds']:.1f}; reproduction el
 
 ```
 rows compared: 56 baseline / 56 reproduction
-rows byte-equal on every field except latency_ms: 56
+rows value-equal on every field except latency_ms: 56
 field mismatches: 0
 config identical: True
 environment_id: hospital_floor_01
@@ -211,8 +253,9 @@ latency differs (expected): True
 baseline elapsed_seconds: 67.0; reproduction elapsed_seconds: 86.2
 ```
 
-All 56 accuracy rows, the traces and the distributions reproduce exactly. Wall-clock
-latency and run duration do not, by design. The legacy benchmark keeps its historical
+All 56 accuracy rows are value-equal on every parsed field except `latency_ms`; the traces
+and the distributions are identical. Wall-clock latency and run duration do not reproduce,
+by design. The legacy benchmark keeps its historical
 `elapsed_seconds` field; the multi-floor artifact deliberately does not (next section).
 
 ## Multi-floor protocol runs
@@ -220,8 +263,10 @@ latency and run duration do not, by design. The legacy benchmark keeps its histo
 Both protocol files describe the same work (7 scenarios × 5 multi-floor routes × 2 seeds
 × 240 steps = **16,800 frames** per run) and differ only in which mode they name as the
 protocol identity. Each run evaluates both modes on one generated observation stream per
-frame, so the two tables below show the same horizontal, vertical, coverage and latency
-inputs with different floor evidence.
+frame, so the two tables below score the same horizontal and vertical observations and the
+same coverage inputs, differing only in floor evidence. Latency is an output, not an input:
+it differs between the two modes within a single run, so it is not part of what the modes
+share.
 
 The runs were executed one at a time. Durations printed by the benchmark were **551.2 s**
 and **644.6 s**. `results.json` contains no wall-clock field; the duration exists only on
@@ -420,7 +465,7 @@ Saved artifacts\multifloor-benchmark-runs\route-assisted\metrics.csv and results
 | Frames | 16,800 | 16,800 |
 | Horizontal RMSE / P95 (m) | 0.493 / 0.955 | 0.493 / 0.955 |
 | Vertical RMSE (m) | 0.572 | 0.572 |
-| Floor accuracy | **0.552** | `n/a` (configured, not inferred) |
+| Floor accuracy | **0.552** (6,603 / 11,970) | `n/a` (configured, not inferred) |
 | Transition success | **80/126** | **126/126** (freshness by construction) |
 | Recovery mean (s) / unresolved | 0.000 / 0 | 0.000 / 0 |
 | Ambiguity rate | 0.561 | 0.287 |
@@ -429,10 +474,15 @@ Reading rules that the printed caveat enforces:
 
 - The ranges, routes and slab attenuation are **synthetic**. These are not real-radio or
   calibration results and no deployment claim follows from them.
-- **Floor accuracy counts a withheld storey as a miss.** Inferred accuracy 0.552 must be
-  read with ambiguity 0.561: most misses are the ambiguity gate firing under `nlos`,
-  `high_noise` and `chaos`, not confidently wrong storeys. The per-scenario rows show the
-  split; a single headline number invites the wrong reading.
+- **Floor accuracy counts a withheld storey as a miss, and its denominator is not the
+  frame count.** `floor_accuracy` is 6,603 correct out of **11,970 frames that have a
+  truth storey** (`floor_frames`), i.e. 0.552; the other 4,830 of the 16,800 frames are
+  mid-traverse, where the route reports no truth storey and the metric is excluded
+  (`multifloor/evaluation.py:98-99`). Ambiguity 0.561, by contrast, is over all 16,800
+  frames. Of the 5,367 misses, roughly 4,590 are abstentions — frames whose `ambiguous`
+  flag is set outside the excluded mid-traverse band — and 777 are frames where a storey
+  was reported and was wrong. The per-scenario rows show the split; a single headline
+  number invites the wrong reading.
 - **Route-assisted transition success is freshness by construction.** The storey comes
   from the configured route, so `126/126` says the pipeline settles on the route's target
   floor within the tolerance window; it is not evidence of floor inference and must not be
@@ -445,6 +495,22 @@ Reading rules that the printed caveat enforces:
 - Recovery is `0.000` everywhere because the mandated timed outage removes four anchors per
   floor, not all ranges; the filter keeps accepting updates, so the metric demonstrates
   wiring rather than recovery from a blackout (see below).
+
+The floor-accuracy split is printed from the inferred artifact by:
+
+```powershell
+& ".\.venv\Scripts\python.exe" -c "import json; total = next(t for t in json.load(open('artifacts/multifloor-benchmark-runs/inferred/results.json', encoding='utf-8'))['mode_totals'] if t['mode'] == 'inferred'); correct = round(total['floor_accuracy'] * total['floor_frames']); misses = total['floor_frames'] - correct; mid = total['frames'] - total['floor_frames']; abstained = total['ambiguous_frames'] - mid; print('frames:', total['frames']); print('floor_frames:', total['floor_frames']); print('mid-traverse (no truth storey):', mid); print('correct:', correct); print('misses:', misses); print('abstained:', abstained); print('reported and wrong:', misses - abstained)"
+```
+
+```
+frames: 16800
+floor_frames: 11970
+mid-traverse (no truth storey): 4830
+correct: 6603
+misses: 5367
+abstained: 4590
+reported and wrong: 777
+```
 
 The two artifacts were compared against each other for the deterministic fields:
 
@@ -499,10 +565,11 @@ latency differs between runs: True
 ## Live HTTP verification
 
 `scripts/verify_v3_http.py` now also creates an **inferred** and a **route-assisted**
-multi-floor session, confirms the payload's mode/source and the finite per-floor likelihood
-map, advances 16 × 1 s into `ascent_stairs`' first traverse (window
-`[15.46, 35.46)` s), reads `floor_state` and `transition`, and asserts that `POST /floor`
-returns **409** for both.
+multi-floor session, asserts the payload's mode/source, asserts that the likelihood map
+covers every storey and that every value is finite (`math.isfinite`), advances 16 × 1 s
+into `ascent_stairs`' first traverse (window `[15.46, 35.46)` s), reads `floor_state` and
+`transition`, and asserts that `POST /floor` returns **409** for both. The map below is the
+one the script checked and recorded.
 
 Started a local server and ran the script:
 
@@ -556,6 +623,11 @@ Output, verbatim:
         "to_floor_id": null,
         "progress": null
       },
+      "floor_probabilities": {
+        "ground": 1.0,
+        "first": 3.853789077378599e-31,
+        "second": 3.4995166780917696e-91
+      },
       "floor_endpoint": 409
     },
     {
@@ -576,6 +648,11 @@ Output, verbatim:
         "to_floor_id": "first",
         "progress": 0.026912418072929795
       },
+      "floor_probabilities": {
+        "ground": 1.0,
+        "first": 3.853789077378599e-31,
+        "second": 3.4995166780917696e-91
+      },
       "floor_endpoint": 409
     }
   ]
@@ -590,7 +667,10 @@ This is live API behaviour, not a browser observation. It shows:
 - route-assisted mode reports the same ambiguous storey but names the configured traverse
   (`ascent-stairs-1`, `west-stairs`, ground → first) and progress; that identity is
   configuration, not inference;
-- a client cannot select a storey for a multi-floor session: both calls return 409.
+- a client cannot select a storey for a multi-floor session: both calls return 409;
+- every storey appears in `floor_probabilities` and every value is finite
+  (`ground` dominates at this frame; `first` and `second` are tiny likelihood scores, not
+  `nan`/`inf`), so the map is an exported likelihood, not a calibrated posterior.
 
 ## Browser pass — pending controller verification
 
@@ -635,6 +715,12 @@ The controller runs the Playwright browser pass and authors this section.
 `artifacts/` is ignored by Git (`.gitignore:13`), and `*.log` is ignored too. The raw
 outputs of these runs exist only in this working copy; they are not part of the commit.
 The tables above are the durable record.
+
+A fresh clone must regenerate the reference baseline into
+`artifacts/multifloor-baseline/reference-reproduction`
+(`--config configs/benchmarks/competition.json`) before the row-by-row comparison in
+[Legacy freeze and reference reproduction](#legacy-freeze-and-reference-reproduction) can
+run, because that directory is gitignored and does not exist in the checkout.
 
 Regenerate everything, one at a time (the multi-floor runs take roughly 9–11 minutes each
 on this machine and must not share one output directory):

@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import math
 from pathlib import Path
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
@@ -105,6 +106,7 @@ def verify(base_url):
             )
             # Likelihood scores over every storey, exported as finite numbers.
             assert sorted(session["floor_probabilities"]) == sorted(floor_ids)
+            assert all(math.isfinite(value) for value in session["floor_probabilities"].values())
 
             # A client may not choose the storey: the endpoint refuses before mutation.
             call(
@@ -135,6 +137,9 @@ def verify(base_url):
                 assert transition["connection_id"] is None
                 assert frame["floor_state"]["source"] == "inferred"
                 assert frame["floor_state"]["floor_id"] is None
+            probabilities = frame["floor_probabilities"]
+            assert sorted(probabilities) == sorted(floor_ids)
+            assert all(math.isfinite(value) for value in probabilities.values())
             multifloor.append(
                 {
                     "mode": mode,
@@ -142,6 +147,7 @@ def verify(base_url):
                     "timestamp": frame["timestamp"],
                     "floor_state": frame["floor_state"],
                     "transition": transition,
+                    "floor_probabilities": probabilities,
                     "floor_endpoint": 409,
                 }
             )
