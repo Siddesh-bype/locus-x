@@ -7,9 +7,15 @@ assistance argument, so the inferred path never reads the simulator's floor.
 
 Honesty rules enforced here:
 
-* A floor change is accepted only while the transition state machine is active, or
-  when the implied vertical speed between the two floors is physically possible for
-  the elapsed time. Otherwise the previous floor is held and an event is raised.
+* A horizontal-only fix never invents a vertical answer. A filter with no 3D history
+  withholds ``position``/``z`` (status ``degraded``); a filter that already holds a 3D
+  state updates ``x``/``y`` and carries the predicted ``z`` and its covariance forward,
+  including across an outage.
+* A floor change is accepted when route assistance reports a traverse, or when the
+  implied vertical speed between the floors is physically possible for the elapsed time
+  since the floor was established -- and that reference survives ambiguous frames.
+  Otherwise the last established floor is held (flagged ambiguous) and an event is
+  raised.
 * While the storey is ambiguous the reported floor is ``None`` -- never the last
   confident value dressed up as a confident one.
 * ``updated`` is true only on an accepted measurement update; coasting keeps the
@@ -154,7 +160,9 @@ class FloorAwareTracker:
         self.timestamp: float | None = None
         self.last_update: float | None = None
         self.floor_id: str | None = None
+        self.last_floor: str | None = None
         self.floor_since: float | None = None
+        self.vertical_known = False
         self.phase: Literal["idle", "entering", "traversing", "exiting", "reacquiring"] = "idle"
         self.events: list[Event] = []
 
@@ -164,7 +172,9 @@ class FloorAwareTracker:
         self.timestamp = None
         self.last_update = None
         self.floor_id = None
+        self.last_floor = None
         self.floor_since = None
+        self.vertical_known = False
         self.phase = "idle"
         self.events = []
 
@@ -243,15 +253,14 @@ class FloorAwareTracker:
             expired = (
                 self.last_update is not None and timestamp - self.last_update >= MAX_COAST_SECONDS
             )
-            if self.state is None or expired:
-                self.state = np.zeros(6)
-                self.state[:rows] = measurement
-                self.covariance = np.zeros((6, 6))
-                self.covariance[:rows, :rows] = measurement_cov
-                self.covariance[rows:, rows:] = np.eye(6 - rows) * 4
+            first_vertical = rows == 3 and not self.vertical_known
+            if self.state is None or first_vertical or (expired and rows == 3):
+                self._initialize(measurement, measurement_cov, rows)
                 updated = True
-                reason = "Initialized from ranges" if not expired else "Reacquired after outage"
-                if expired:
+                if rows == 2:
+                    reason = "Initialized from a horizontal-only fix; vertical position unavailable"
+                elif expired:
+                    reason = "Reacquired after outage"
                     self.events.append(
                         Event(
                             timestamp=timestamp,
@@ -259,6 +268,26 @@ class FloorAwareTracker:
                             level="warning",
                         )
                     )
+                else:
+                    reason = "Initialized from ranges"
+            elif expired:
+                # Rows are 2 here (a 3-row expiry is reinitialised above). A horizontal-only
+                # fix must never invent z: carry the predicted vertical state and its
+                # covariance instead of resetting them to zero.
+                carried = self.vertical_known
+                self._initialize(measurement, measurement_cov, rows, keep_vertical=carried)
+                updated = True
+                if carried:
+                    reason = "Horizontal-only reacquire; vertical position carried forward"
+                    self.events.append(
+                        Event(
+                            timestamp=timestamp,
+                            message="Position reacquired after a tracking outage",
+                            level="warning",
+                        )
+                    )
+                else:
+                    reason = "Horizontal-only fix; vertical position unavailable"
             else:
                 observation = np.eye(rows, 6)
                 innovation = measurement - observation @ self.state
@@ -274,24 +303,35 @@ class FloorAwareTracker:
                         + gain @ measurement_cov @ gain.T
                     )
                     updated = True
-                    reason = "Robust 3D range fix + motion update"
+                    reason = (
+                        "Robust 3D range fix + motion update"
+                        if rows == 3
+                        else "Horizontal-only fix + motion update; vertical carried forward"
+                    )
                 else:
                     reason = "Range fix inconsistent with motion; prediction only"
             if updated:
                 self.last_update = timestamp
+                if rows == 3:
+                    self.vertical_known = True
 
         floor_state, transition_state = self._update_floor(timestamp, decision, assist)
         outage = 0.0 if self.last_update is None else timestamp - self.last_update
         available = self.state is not None and outage < MAX_COAST_SECONDS
-        status = "tracking" if updated else ("degraded" if available else "unavailable")
+        positioned = available and self.vertical_known
+        status = (
+            "tracking" if updated and positioned else ("degraded" if available else "unavailable")
+        )
         if not available and self.state is not None:
             reason = "No accepted update for 3 s; position withheld"
-        covariance = self.covariance[:3, :3] if available and self.covariance is not None else None
-        position = tuple(self.state[:3]) if available and self.state is not None else None
+        elif available and not self.vertical_known:
+            reason = "Horizontal-only tracking; vertical position withheld"
+        covariance = self.covariance[:3, :3] if positioned and self.covariance is not None else None
+        position = tuple(self.state[:3]) if positioned and self.state is not None else None
         return Tracking3D(
             position=position,  # type: ignore[arg-type]
             z=position[2] if position is not None else None,
-            velocity=tuple(self.state[3:]) if available and self.state is not None else None,
+            velocity=tuple(self.state[3:]) if positioned and self.state is not None else None,
             covariance=covariance.tolist() if covariance is not None else None,
             ellipse=(covariance_ellipse(covariance[:2, :2]) if covariance is not None else None),
             floor_state=floor_state,
@@ -302,6 +342,34 @@ class FloorAwareTracker:
             outage_seconds=outage,
             runtime_ms=(perf_counter() - start) * 1000,
         )
+
+    def _initialize(
+        self,
+        measurement: np.ndarray,
+        measurement_cov: np.ndarray,
+        rows: int,
+        *,
+        keep_vertical: bool = False,
+    ) -> None:
+        """Restart from a fix, optionally carrying the existing 3D vertical state.
+
+        ``keep_vertical`` is only meaningful for a two-row fix on a filter that already
+        holds a vertical estimate: ``z`` and ``vz`` (and their joint covariance) are the
+        predicted values from this step, so the measurement never invents a storey.
+        """
+        vertical_state: np.ndarray | None = None
+        vertical_covariance: np.ndarray | None = None
+        if keep_vertical and self.state is not None and self.covariance is not None:
+            vertical_state = np.array(self.state[2:])
+            vertical_covariance = np.array(self.covariance[2:, 2:])
+        self.state = np.zeros(6)
+        self.state[:rows] = measurement
+        self.covariance = np.zeros((6, 6))
+        self.covariance[:rows, :rows] = measurement_cov
+        self.covariance[rows:, rows:] = np.eye(6 - rows) * 4
+        if vertical_state is not None and vertical_covariance is not None:
+            self.state[2:] = vertical_state
+            self.covariance[2:, 2:] = vertical_covariance
 
     def _update_floor(
         self,
@@ -330,24 +398,37 @@ class FloorAwareTracker:
             )
 
         self._advance_phase(target, assist)
+        # The anti-jump reference survives ambiguity: while the storey is unknown the
+        # last established floor and the time it was established are retained, so a
+        # confident decision after an ambiguous frame is still checked against them.
+        reference = self.floor_id if self.floor_id is not None else self.last_floor
+        # Only route assistance knows a traverse is really happening, so only then does
+        # the phase machine exempt a floor change from the elapsed-time bound.
+        assisted_traverse = assist is not None and self.phase in (
+            "exiting",
+            "reacquiring",
+            "traversing",
+        )
         if (
             target is not None
-            and self.floor_id is not None
-            and target != self.floor_id
-            and self.phase not in ("exiting", "reacquiring", "traversing")
-            and not self._floor_change_allowed(self.floor_id, target, timestamp)
+            and reference is not None
+            and target != reference
+            and not assisted_traverse
+            and not self._floor_change_allowed(reference, target, timestamp)
         ):
             self.events.append(
                 Event(
                     timestamp=timestamp,
                     message=(
-                        f"Floor change {self.floor_id} -> {target} rejected: "
+                        f"Floor change {reference} -> {target} rejected: "
                         "inconsistent with the configured vertical speed"
                     ),
                     level="warning",
                 )
             )
-            target = self.floor_id
+            # Hold the last established floor, flagged ambiguous, rather than both
+            # accepting the impossible jump and forgetting where the device was.
+            target = self.last_floor
             ambiguous = True
             # The rejected hypothesis must not leave its likelihood looking like
             # confidence in the storey that was actually kept.
@@ -355,12 +436,12 @@ class FloorAwareTracker:
 
         if target is None:
             self.floor_id = None
-            self.floor_since = None
+            # ``last_floor`` and ``floor_since`` deliberately survive an ambiguous frame.
         else:
-            changed = target != self.floor_id
-            self.floor_id = target
-            if changed or self.floor_since is None:
+            if target != self.last_floor or self.floor_since is None:
+                self.last_floor = target
                 self.floor_since = timestamp
+            self.floor_id = target
 
         transition: TransitionState | None = None
         if self.phase != "idle":
