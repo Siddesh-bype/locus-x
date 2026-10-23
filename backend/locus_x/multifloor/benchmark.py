@@ -18,7 +18,8 @@ Honesty notes that every number inherits:
   accuracy is therefore ``None``; transition success in that mode only measures freshness
   and settling, not floor detection.
 * Latency is measured compute time on the machine that ran the protocol. It is
-  nondeterministic, unlike every other reported field.
+  nondeterministic, unlike every other reported field. Wall-clock run duration is printed
+  to stdout and deliberately not written to the artifact, so ``results.json`` reproduces.
 """
 
 import argparse
@@ -27,6 +28,7 @@ import hashlib
 import json
 from collections.abc import Callable, Sequence
 from datetime import UTC, datetime
+from math import isfinite
 from pathlib import Path
 from time import perf_counter
 from typing import Literal
@@ -86,6 +88,8 @@ class MultiFloorBenchmarkConfig(StrictModel):
             raise ValueError("Seeds must be unsigned 31-bit integers")
         if len(set(self.routes)) != len(self.routes):
             raise ValueError("Routes must be unique")
+        if len(set(self.scenarios)) != len(self.scenarios):
+            raise ValueError("Scenarios must be unique")
         if len(self.scenarios) * len(self.routes) * len(self.seeds) * self.steps > MAX_FRAMES:
             raise ValueError("Limit benchmark to 25,000 frames per run")
         return self
@@ -113,8 +117,11 @@ def _observations(
 
     ``Measurement.anchor_id`` repeats on every storey, so the k-th available label in
     :func:`floor_anchors` order is the k-th measurement. The alignment is checked rather
-    than assumed: a mismatch would silently file ranges under the wrong floor. The mapping
-    is built once per frame and the same object is handed to both localizers.
+    than assumed: a mismatch would silently file ranges under the wrong floor.
+    ``_run_stream`` also proves the generator's floor-qualified ``slab_hops`` key order
+    equals ``keys``, so a storey-order divergence fails loudly instead of filing ranges
+    under the wrong storey. The mapping is built once per frame and the same object is
+    handed to both localizers.
     """
     available = [key for key, label in zip(keys, labels, strict=True) if label.available]
     if len(available) != len(measurements):
@@ -195,7 +202,18 @@ def _run_stream(
     for frame_index in range(config.steps):
         timestamp = frame_index * config.dt
         state = route_state(building, route, timestamp, speed=settings.speed)
-        measurements, labels, _ = generate_measurements_3d(building, settings, state, frame_index)
+        measurements, labels, slab_hops = generate_measurements_3d(
+            building, settings, state, frame_index
+        )
+        # Floor identity survives only in the generator's anchor order: ``labels`` and
+        # ``slab_hops`` are aligned with it, and anchor IDs repeat across storeys. If that
+        # order ever diverged from the observation keys, ranges would be filed under the
+        # wrong storey and every metric would be wrong with no failure.
+        if list(slab_hops) != list(keys):
+            raise RuntimeError(
+                "Floor alignment broke: the generator's slab_hops key order diverges from "
+                "the observation key order, so ranges would be filed under the wrong storey"
+            )
         observations = _observations(keys, measurements, labels)
         outage = any(label.kind == "outage" for label in labels)
         if outage and not in_outage:
@@ -272,11 +290,15 @@ def _run_stream(
 
 
 def _mean(values: Sequence[float]) -> float | None:
-    return float(np.mean(values)) if values else None
+    """Mean over finite values only; a ``nan`` must not discard the artifact at JSON time."""
+    finite = [value for value in values if isfinite(value)]
+    return float(np.mean(finite)) if finite else None
 
 
 def _p95(values: Sequence[float]) -> float | None:
-    return float(np.percentile(values, 95)) if values else None
+    """P95 over finite values only, for the same reason as :func:`_mean`."""
+    finite = [value for value in values if isfinite(value)]
+    return float(np.percentile(finite, 95)) if finite else None
 
 
 def _aggregate(
@@ -390,7 +412,16 @@ def run_multifloor_benchmark(
     validated document); it must be a :class:`~locus_x.building.Building`, because the
     multi-floor protocol has no meaning on a single-floor ``Environment``.
     """
-    configuration = load_environments()[config.environment_id] if building is None else building
+    if building is None:
+        environments = load_environments()
+        configuration = environments.get(config.environment_id)
+        if configuration is None:
+            raise ValueError(
+                f"Unknown environment {config.environment_id!r}; available environments are "
+                f"{', '.join(sorted(environments))}"
+            )
+    else:
+        configuration = building
     if not isinstance(configuration, Building):
         raise ValueError(
             "The multi-floor protocol requires a Building with transition_routes; "
@@ -402,7 +433,6 @@ def run_multifloor_benchmark(
     if unknown:
         raise ValueError(f"Unknown multi-floor route(s): {', '.join(unknown)}")
     keys = [anchor_key(anchor.floor_id, anchor.anchor_id) for anchor in floor_anchors(building)]
-    start = perf_counter()
     total = len(config.scenarios) * len(config.routes) * len(config.seeds) * config.steps
     completed = 0
 
@@ -480,7 +510,6 @@ def run_multifloor_benchmark(
         "protocol_frames": total,
         "rows": rows,
         "mode_totals": totals,
-        "elapsed_seconds": perf_counter() - start,
         "notes": (
             "Synthetic ranges, routes and slab attenuation; no real-radio, calibration or "
             "deployment claim. Both modes consumed one generated observation stream per "
@@ -491,7 +520,8 @@ def run_multifloor_benchmark(
             "read it with the ambiguity rate. Ellipse coverage is empirical under the "
             "synthetic noise model. Latency is measured compute time and is the only "
             "nondeterministic field; everything else reproduces for the same config and "
-            "seeds."
+            "seeds. Wall-clock run duration is printed to stdout and deliberately not "
+            "stored here."
         ),
     }
 
@@ -510,12 +540,23 @@ def _print_report(result: dict) -> None:
     order = [primary, *(mode for mode in MODES if mode != primary)]
     labels = {
         "inferred": "storey inferred from ranges only",
-        "route_assisted": "storey from the configured route (not inference; floor accuracy n/a)",
+        "route_assisted": "storey from the configured route; not inference, floor accuracy n/a",
     }
     print(
         f"Multi-floor protocol {result['config']['mode']!r}: {result['protocol_frames']} frames, "
         f"environment {result['environment_id']}@{result['environment_version']}, "
         f"config_sha256={result['config_sha256'][:16]}..."
+    )
+    print()
+    print(
+        "Caveat: synthetic ranges, routes and slab attenuation; no real-radio, calibration "
+        "or deployment claim. Floor probabilities are likelihood scores, not calibrated "
+        "posteriors."
+    )
+    print(
+        "Route-assisted transition success is freshness by construction (the storey follows "
+        "the configured route and settling only), not floor inference: never read it as "
+        "better than inferred."
     )
     header = (
         f"{'scenario':<15}{'route':<20}{'frames':>7}{'h_rmse':>8}{'h_p95':>8}{'v_rmse':>8}"
@@ -566,6 +607,7 @@ def main() -> None:
         parser.error(
             "Output contains existing experiment artifacts; choose a new --output directory"
         )
+    start = perf_counter()
     result = run_multifloor_benchmark(config)
     args.output.mkdir(parents=True, exist_ok=True)
     (args.output / "results.json").write_text(
@@ -577,9 +619,7 @@ def main() -> None:
         writer.writerows(result["rows"])
     _print_report(result)
     print()
-    print(
-        f"Saved {args.output / 'metrics.csv'} and results.json in {result['elapsed_seconds']:.1f}s"
-    )
+    print(f"Saved {args.output / 'metrics.csv'} and results.json in {perf_counter() - start:.1f}s")
 
 
 if __name__ == "__main__":

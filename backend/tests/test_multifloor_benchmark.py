@@ -29,6 +29,7 @@ from backend.locus_x.multifloor import (
 from backend.locus_x.multifloor import benchmark as benchmark_module
 from backend.locus_x.multifloor.benchmark import (
     MAX_FRAMES,
+    TRANSITION_TOLERANCE,
     MultiFloorBenchmarkConfig,
     config_sha256,
     run_multifloor_benchmark,
@@ -36,11 +37,13 @@ from backend.locus_x.multifloor.benchmark import (
 from backend.locus_x.multifloor.benchmark import (
     main as benchmark_main,
 )
+from backend.locus_x.multifloor.route import route_state, transition_windows
 from backend.locus_x.multifloor.tracking import MultiFloorLocalizer
 from backend.locus_x.schemas import PRESETS
 
 ROOT = Path(__file__).resolve().parents[2]
 PROTOCOL_DIR = ROOT / "configs/benchmarks/v3"
+BUILDING_PATH = ROOT / "configs/environments/hospital_v3.json"
 SCENARIOS = [
     "clean",
     "noise",
@@ -123,6 +126,14 @@ def _short_config(**overrides) -> MultiFloorBenchmarkConfig:
     return MultiFloorBenchmarkConfig(**payload)
 
 
+def _building() -> Building:
+    return Building.model_validate(json.loads(BUILDING_PATH.read_text(encoding="utf-8")))
+
+
+def _route(building: Building, route_id: str):
+    return next(route for route in building.transition_routes if route.id == route_id)
+
+
 # ------------------------------------------------------------ metric maths -----
 
 
@@ -138,6 +149,14 @@ def test_error_summary_reports_rmse_median_and_p95_over_finite_values_only():
         "median": None,
         "p95": None,
     }
+
+
+def test_latency_aggregates_skip_non_finite_values_instead_of_poisoning_the_artifact():
+    # A nan reaching json.dumps(..., allow_nan=False) would discard the whole run.
+    assert benchmark_module._mean([1.0, float("nan"), 3.0]) == pytest.approx(2.0)
+    assert benchmark_module._p95([float("inf"), 2.0, 4.0]) == pytest.approx(3.9)
+    assert benchmark_module._mean([float("nan"), float("-inf")]) is None
+    assert benchmark_module._p95([]) is None
 
 
 def test_horizontal_and_vertical_errors_use_the_frame_truth():
@@ -267,6 +286,69 @@ def test_recovery_delay_is_measured_from_the_first_non_outage_frame():
     assert recovery_delays(frames, [99.0]) == [None]
 
 
+# ------------------------------------------------------- transition windows -----
+
+
+def test_a_looping_route_repeats_its_transition_windows_every_period():
+    building = _building()
+    route = _route(building, "cross_floor_survey")
+    speed = 1.2
+    horizon = 300.0
+    windows = transition_windows(building, route, speed=speed)
+    period = route_state(building, route, 0.0, speed=speed).period
+    events = benchmark_module._transition_events(
+        building, route, last_timestamp=horizon, speed=speed
+    )
+
+    # The expected repetition count follows from the window end and the tolerance; it
+    # does not reuse the implementation's loop.
+    expected_counts = {
+        window.transition_id: int((horizon - TRANSITION_TOLERANCE - window.end) // period) + 1
+        for window in windows
+    }
+    by_transition: dict[str, list[float]] = defaultdict(list)
+    for end, target, transition_id in events:
+        by_transition[transition_id].append(end)
+        assert target == next(
+            transition.to_floor_id
+            for transition in route.transitions
+            if transition.id == transition_id
+        )
+    assert {transition_id: len(times) for transition_id, times in by_transition.items()} == (
+        expected_counts
+    )
+    assert len(events) > len(windows)  # the loop really did repeat
+    for times in by_transition.values():
+        assert times == sorted(times)
+        assert all(
+            later - earlier == pytest.approx(period)
+            for earlier, later in zip(times, times[1:], strict=False)
+        )
+
+
+def test_a_horizon_that_truncates_the_tolerance_window_drops_that_transition():
+    building = _building()
+    route = _route(building, "ascent_stairs")
+    speed = 1.2
+    window = transition_windows(building, route, speed=speed)[0]
+    assert (
+        benchmark_module._transition_events(
+            building,
+            route,
+            last_timestamp=window.end + TRANSITION_TOLERANCE - 0.05,
+            speed=speed,
+        )
+        == []
+    )
+    events = benchmark_module._transition_events(
+        building, route, last_timestamp=window.end + TRANSITION_TOLERANCE, speed=speed
+    )
+    assert len(events) == 1
+    end, target, transition_id = events[0]
+    assert end == pytest.approx(window.end)
+    assert (target, transition_id) == (route.transitions[0].to_floor_id, window.transition_id)
+
+
 # ------------------------------------------------- both modes, one stream ------
 
 
@@ -304,6 +386,20 @@ def test_both_modes_consume_one_observation_stream_per_frame(monkeypatch):
     assert all(row["frames"] == frames for row in result["rows"])
 
 
+def test_a_generator_order_that_diverges_from_the_observation_keys_fails_loudly(monkeypatch):
+    original_generate = benchmark_module.generate_measurements_3d
+
+    def reordered_generator(*args, **kwargs):
+        measurements, labels, slab_hops = original_generate(*args, **kwargs)
+        # Same values, different storey order: exactly the drift that would file ranges
+        # under the wrong floor without a failure.
+        return measurements, labels, dict(reversed(list(slab_hops.items())))
+
+    monkeypatch.setattr(benchmark_module, "generate_measurements_3d", reordered_generator)
+    with pytest.raises(RuntimeError, match="slab_hops key order"):
+        run_multifloor_benchmark(_short_config())
+
+
 def test_route_assisted_never_reports_floor_accuracy_and_inferred_always_does():
     result = run_multifloor_benchmark(_short_config())
     inferred = [row for row in result["rows"] if row["mode"] == "inferred"]
@@ -335,6 +431,9 @@ def test_a_short_protocol_round_trips_through_strict_json():
         "inferred",
         "route_assisted",
     ]
+    # Wall-clock duration is printed, never stored: results.json must reproduce.
+    assert "elapsed_seconds" not in decoded
+    assert "deliberately not stored" in decoded["notes"]
 
 
 def test_the_config_rejects_a_matrix_over_the_frame_budget():
@@ -349,6 +448,13 @@ def test_the_config_rejects_a_matrix_over_the_frame_budget():
         )
     # The shipped protocols sit inside the budget (arithmetic pinned here on purpose).
     assert len(SCENARIOS) * len(ROUTES) * 2 * 240 == 16_800 <= MAX_FRAMES
+
+
+def test_the_config_rejects_duplicate_scenarios_as_well_as_duplicate_routes():
+    with pytest.raises(ValidationError, match="Scenarios must be unique"):
+        _short_config(scenarios=["clean", "clean"])
+    with pytest.raises(ValidationError, match="Routes must be unique"):
+        _short_config(routes=["ascent_stairs", "ascent_stairs"])
 
 
 def test_both_protocol_files_carry_the_identical_matrix_and_name_one_mode():
@@ -376,6 +482,11 @@ def test_unknown_routes_and_single_floor_environments_are_rejected():
         run_multifloor_benchmark(_short_config(), building=single_floor)
 
 
+def test_an_unknown_environment_raises_a_readable_value_error():
+    with pytest.raises(ValueError, match="Unknown environment 'no_such_building'"):
+        run_multifloor_benchmark(_short_config(environment_id="no_such_building"))
+
+
 def test_the_cli_refuses_to_overwrite_existing_artifacts(tmp_path, monkeypatch, capsys):
     config_path = tmp_path / "protocol.json"
     config_path.write_text(json.dumps(_short_config().model_dump(mode="json")), encoding="utf-8")
@@ -391,10 +502,27 @@ def test_the_cli_refuses_to_overwrite_existing_artifacts(tmp_path, monkeypatch, 
     assert "existing experiment artifacts" in capsys.readouterr().err
 
 
-def test_the_environment_hash_is_the_validated_building_document():
-    building = Building.model_validate(
-        json.loads((ROOT / "configs/environments/hospital_v3.json").read_text(encoding="utf-8"))
+def test_the_cli_prints_run_duration_but_does_not_store_it(tmp_path, monkeypatch, capsys):
+    config_path = tmp_path / "protocol.json"
+    config_path.write_text(json.dumps(_short_config().model_dump(mode="json")), encoding="utf-8")
+    output = tmp_path / "run"
+    monkeypatch.setattr(
+        sys, "argv", ["benchmark", "--config", str(config_path), "--output", str(output)]
     )
+    benchmark_main()
+    printed = capsys.readouterr().out
+    assert "results.json in" in printed
+    artifact = json.loads((output / "results.json").read_text(encoding="utf-8"))
+    assert "elapsed_seconds" not in artifact
+    assert "deliberately not stored" in artifact["notes"]
+
+
+def test_the_environment_hash_is_the_pinned_validated_building_document():
+    building = _building()
     result = run_multifloor_benchmark(_short_config(steps=10), building=building)
     assert result["environment_id"] == "hospital_v3"
-    assert result["environment_sha256"] == benchmark_module.environment_sha256(building)
+    # Pinned literal, not the helper the result was produced with: a changed building
+    # document or a changed hashing convention must fail here.
+    assert result["environment_sha256"] == (
+        "7af0c5877930b9018bb9e6f1bcabc5475f87779e633e323c733c7ad552fd33b9"
+    )
