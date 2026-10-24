@@ -4,6 +4,9 @@ import * as THREE from 'three';
 import { toScene } from './lib';
 import { Architecture } from './scene/Architecture';
 import CameraRig from './scene/CameraRig';
+import CampusContext from './scene/CampusContext';
+import Connectors from './scene/Connectors';
+import { CAMPUS_ORIGIN } from './scene/campusLayout';
 import { Anchors, ExperimentOverlays, MultifloorOverlays } from './scene/Overlays';
 import { Label, Polyline } from './scene/Primitives';
 import type { EnvironmentDefinition, Frame, Sample } from './types';
@@ -29,10 +32,10 @@ function GroundGrid({ width, length, elevation }: { width: number; length: numbe
 export interface SceneProps {
   environment: EnvironmentDefinition; frame: Frame; history: Sample[];
   layers: SceneLayers; view: ViewState; cutaway: boolean;
-  selectFloor: (id: string) => void;
+  selectFloor: (id: string) => void; selectEnvironment: (id: string) => void;
 }
 
-function SceneContent({ environment, frame, history, layers, view, cutaway, selectFloor }: SceneProps) {
+function SceneContent({ environment, frame, history, layers, view, cutaway, selectFloor, selectEnvironment }: SceneProps) {
   const floors = useMemo(() => floorsOf(environment), [environment]);
   const multifloor = isMultifloor(frame);
   const activeFloorId = frame.floor_id ?? (isBuilding(environment) ? environment.default_floor_id : floors[0]?.id ?? '');
@@ -54,6 +57,7 @@ function SceneContent({ environment, frame, history, layers, view, cutaway, sele
     <directionalLight position={[5, 55, -8]} intensity={2.6} castShadow shadow-mapSize={[1024, 1024]} shadow-camera-left={-55} shadow-camera-right={55} shadow-camera-top={55} shadow-camera-bottom={-55} shadow-camera-far={140} shadow-bias={-0.001} />
     <CameraRig bounds={bounds} view={view} />
     <GroundGrid width={environment.width} length={environment.height} elevation={bounds.bottom} />
+    {environment.id in CAMPUS_ORIGIN && effectiveMode !== 'floor' && <CampusContext environmentId={environment.id} width={environment.width} selectEnvironment={selectEnvironment} />}
     {visible.map(({ floor, elevation, active }) => {
       const index = floors.findIndex(f => f.id === floor.id);
       const offset = multifloor ? floors.slice(0, index).reduce((count, item) => count + item.anchors.length, 0) : 0;
@@ -65,14 +69,7 @@ function SceneContent({ environment, frame, history, layers, view, cutaway, sele
       </group>;
     })}
     {multifloor && <MultifloorOverlays environment={environment} frame={frame} history={history} layers={layers} mode={effectiveMode} />}
-    {effectiveMode === 'exploded' && layers.access && isBuilding(environment) && environment.connections.map(connection => {
-      const points = connection.stops.flatMap(stop => {
-        const display = visible.find(f => f.floor.id === stop.floor_id);
-        const core = display?.floor.access_cores.find(c => c.id === stop.access_id);
-        return display && core ? [toScene(core.center, display.elevation)] : [];
-      });
-      return <Polyline key={connection.id} points={points} color="#9badb5" opacity={0.7} dashed />;
-    })}
+    {effectiveMode !== 'floor' && layers.access && isBuilding(environment) && <Connectors connections={environment.connections} visible={visible} />}
     <Label text="N / +Y" position={toScene([environment.width + 2, environment.height + 2], bounds.bottom)} scale={2.8} color="#899c9b" />
     <Polyline points={[toScene([environment.width + 2, environment.height - 2], bounds.bottom), toScene([environment.width + 2, environment.height + 1], bounds.bottom)]} color="#9aabab" />
   </>;

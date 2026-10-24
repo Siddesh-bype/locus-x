@@ -163,6 +163,18 @@ def test_probability_conversion_uses_one_minus_p_nlos(tmp_path, monkeypatch):
 
 
 def test_truth_and_labels_do_not_change_ai_policy_decisions():
+    dataset_frames = (
+        ROOT
+        / "artifacts"
+        / "ai-reliability"
+        / "phase3-v2"
+        / "dataset"
+        / "validation"
+        / "frames"
+        / "features.npy"
+    )
+    if not dataset_frames.exists():
+        pytest.skip("Phase 3 validation dataset frames not present on disk")
     frames, manifest = load_frames("validation")
     run_id = int(manifest["run_catalog"][0]["run_id"])
     indices = np.flatnonzero(frames["run_id"] == run_id)[:120]

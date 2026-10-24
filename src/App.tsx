@@ -32,6 +32,8 @@ export default function App() {
   const selectEnvironment = (id: string) => { void session.selectEnvironment(id).then(ok => {
     if (ok) dispatchView({ type: 'floor' });
   }); };
+  // Walking to another building from the 3D campus keeps the current view mode.
+  const visitBuilding = (id: string) => { void session.selectEnvironment(id); };
   const openTab = (value: string) => { if (value !== 'simulation') setRunning(false); setTab(value); };
   const floorLabel = frame ? frame.floor_id ?? 'floor-ambiguous' : 'unknown';
   const exportScenario = () => frame && download('locus-x-' + frame.environment_id + '-' + floorLabel + '-scenario.json', JSON.stringify({ environment_id: frame.environment_id, floor_id: frame.floor_id, settings: frame.settings }, null, 2));
@@ -62,7 +64,7 @@ export default function App() {
           <p>{session.error ? 'Start the local FastAPI server on port 8000, then reconnect.' : 'Loading validated floor geometry and the first observations.'}</p>
           {session.error && <code>python -m uvicorn backend.locus_x.main:app --host 127.0.0.1 --port 8000</code>}
         </main> : <>
-          <div className="simulation-heading"><div><div className="eyebrow">ENVIRONMENT LAB <span>/</span> {isBuilding(environment) ? floors.length + '-FLOOR HOSPITAL' : 'REFERENCE FLOOR'}</div><h1>{environment.name}<span className="heading-dot">.</span></h1><p>Same observations. Three estimators. Measured outcomes.</p></div>
+          <div className="simulation-heading"><div><div className="eyebrow">ENVIRONMENT LAB <span>/</span> {isBuilding(environment) ? floors.length + '-FLOOR ' + (environment.id.startsWith('hospital') ? 'HOSPITAL' : 'BUILDING') : 'REFERENCE FLOOR'}</div><h1>{environment.name}<span className="heading-dot">.</span></h1><p>Same observations. Three estimators. Measured outcomes.</p></div>
             <div className="run-controls"><span className="simulation-time"><i className={running ? 'live-dot' : 'paused-dot'} /><span>{running ? 'RUNNING' : 'PAUSED'}</span><b>{fmt(frame.timestamp, 1)}<small>s</small></b></span>
               <button className="icon-button" aria-label="Reset simulation to initial floor and settings" title="Reset to initial floor and settings" disabled={session.busy} onClick={() => void session.reset()}><RotateCcw size={16} /></button>
               <button className="icon-button" aria-label="Advance one frame" title="Advance one frame · 0.2 s" disabled={running || session.busy || !!session.error} onClick={() => void session.step()}><SkipForward size={17} /></button>
@@ -72,13 +74,13 @@ export default function App() {
           <div className={'simulation-layout ' + (expanded ? 'expanded-layout' : '')}>
             {!expanded && <EnvironmentPanel environment={environment} environments={session.environments} floor={displayFloor} frame={frame} busy={session.busy && !running} update={session.update} selectEnvironment={selectEnvironment} selectFloor={selectFloor} selectMode={mode => { void session.selectMode(mode); }} layers={layers} setLayer={(key, value) => setLayers(current => toggleLayer(current, key, value))} resetLayers={() => { setLayers(DEFAULT_LAYERS); setCutaway(true); }} cutaway={cutaway} setCutaway={setCutaway} />}
             <main className="simulation-main">
-              <section className={'viewport-panel ' + (expanded ? 'expanded-viewport' : '')} aria-label="Interactive hospital digital twin">
+              <section className={'viewport-panel ' + (expanded ? 'expanded-viewport' : '')} aria-label="Interactive building digital twin">
                 <div className="viewport-top"><div className="viewport-title"><span className="viewport-status" /><span>SPATIAL VIEW</span><small>{activeView.mode === 'floor' ? displayFloor.name : floors.length + ' floors'}</small></div>
                   <div className="view-switch" role="group" aria-label="Building view">
                     {(['floor', 'building', 'exploded'] as const).map(mode => <button key={mode} aria-pressed={activeView.mode === mode} disabled={floors.length === 1 && mode !== 'floor'} onClick={() => dispatchView({ type: 'mode', mode })}>{mode === 'floor' ? 'Floor' : mode === 'building' ? 'Building' : 'Exploded'}</button>)}
                   </div>
                 </div>
-                <div className="scene-container"><Suspense fallback={<div className="scene-error"><LoaderCircle className="spin" />Loading hospital geometry…</div>}><Scene environment={environment} frame={frame} history={history} layers={layers} view={activeView} cutaway={cutaway} selectFloor={selectFloor} /></Suspense></div>
+                <div className="scene-container"><Suspense fallback={<div className="scene-error"><LoaderCircle className="spin" />Loading building geometry…</div>}><Scene environment={environment} frame={frame} history={history} layers={layers} view={activeView} cutaway={cutaway} selectFloor={selectFloor} selectEnvironment={visitBuilding} /></Suspense></div>
                 {multifloor ? <MultifloorStatus frame={frame} floors={floors} /> : <div className="scene-info"><span className="floor-badge" style={{ borderColor: displayFloor.color }}>{displayFloor.short_name}</span><div><strong>{displayFloor.name}<span>ACTIVE EXPERIMENT</span></strong><small>Known floor · 2D localization</small></div></div>}
                 <div className="scene-tools"><div className="angle-switch"><button aria-label="Perspective camera" aria-pressed={activeView.angle === 'perspective'} onClick={() => dispatchView({ type: 'angle', angle: 'perspective' })}>3D</button><button aria-label="Plan camera" aria-pressed={activeView.angle === 'plan'} onClick={() => dispatchView({ type: 'angle', angle: 'plan' })}>Plan</button></div>
                   <button className="icon-button" aria-label="Zoom in" title="Zoom in" onClick={() => dispatchView({ type: 'zoom', amount: 1.2 })}><Plus size={17} /></button><button className="icon-button" aria-label="Zoom out" title="Zoom out" onClick={() => dispatchView({ type: 'zoom', amount: 1 / 1.2 })}><Minus size={17} /></button><button className="icon-button" aria-label="Fit building to viewport" title="Fit to viewport" onClick={() => dispatchView({ type: 'reset' })}><Focus size={17} /></button><button className="icon-button" aria-label={expanded ? 'Restore panels' : 'Expand viewport'} title={expanded ? 'Restore panels' : 'Expand viewport'} onClick={() => setExpanded(!expanded)}>{expanded ? <X size={17} /> : <Maximize2 size={16} />}</button>

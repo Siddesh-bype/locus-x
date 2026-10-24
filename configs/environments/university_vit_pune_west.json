@@ -1,0 +1,3766 @@
+{
+  "schema_version": "3.1",
+  "version": "3.1.0",
+  "id": "vit_pune_west_v3",
+  "name": "VIT Pune - West block (approximate)",
+  "description": "Approximate 3-floor academic building of VIT Pune, Bibwewadi, for synthetic localization experiments.",
+  "width": 36,
+  "height": 30,
+  "default_floor_id": "ground",
+  "floors": [
+    {
+      "id": "ground",
+      "name": "Ground floor",
+      "description": "Entrance, offices and classrooms",
+      "short_name": "G",
+      "elevation": 0,
+      "color": "#0fb5a0",
+      "width": 36,
+      "height": 30,
+      "anchors": [
+        {
+          "id": "A1",
+          "position": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "A2",
+          "position": [
+            18.0,
+            1
+          ]
+        },
+        {
+          "id": "A3",
+          "position": [
+            35,
+            1
+          ]
+        },
+        {
+          "id": "A4",
+          "position": [
+            35,
+            12
+          ]
+        },
+        {
+          "id": "A5",
+          "position": [
+            35,
+            29
+          ]
+        },
+        {
+          "id": "A6",
+          "position": [
+            18.0,
+            29
+          ]
+        },
+        {
+          "id": "A7",
+          "position": [
+            1,
+            29
+          ]
+        },
+        {
+          "id": "A8",
+          "position": [
+            1,
+            12
+          ]
+        }
+      ],
+      "anchor_mount_heights": {},
+      "walls": [
+        {
+          "id": "ext-south-w",
+          "a": [
+            0,
+            0
+          ],
+          "b": [
+            16.4,
+            0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-south-e",
+          "a": [
+            19.6,
+            0
+          ],
+          "b": [
+            36,
+            0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-east",
+          "a": [
+            36,
+            0
+          ],
+          "b": [
+            36,
+            30
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-north",
+          "a": [
+            36,
+            30
+          ],
+          "b": [
+            0,
+            30
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-west",
+          "a": [
+            0,
+            30
+          ],
+          "b": [
+            0,
+            0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "s00-w",
+          "a": [
+            0.0,
+            10
+          ],
+          "b": [
+            5.2,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "s00-e",
+          "a": [
+            6.8,
+            10
+          ],
+          "b": [
+            12.0,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "entrance-w",
+          "a": [
+            12.0,
+            10
+          ],
+          "b": [
+            17.2,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "entrance-e",
+          "a": [
+            18.8,
+            10
+          ],
+          "b": [
+            24.0,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-entrance",
+          "a": [
+            12.0,
+            0
+          ],
+          "b": [
+            12.0,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "s02-w",
+          "a": [
+            24.0,
+            10
+          ],
+          "b": [
+            29.2,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "s02-e",
+          "a": [
+            30.8,
+            10
+          ],
+          "b": [
+            36.0,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-s02",
+          "a": [
+            24.0,
+            0
+          ],
+          "b": [
+            24.0,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "n00-w",
+          "a": [
+            8.0,
+            14
+          ],
+          "b": [
+            11.85,
+            14
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "n00-e",
+          "a": [
+            13.450000000000001,
+            14
+          ],
+          "b": [
+            17.3,
+            14
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "n01-w",
+          "a": [
+            17.3,
+            14
+          ],
+          "b": [
+            21.2,
+            14
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "n01-e",
+          "a": [
+            22.8,
+            14
+          ],
+          "b": [
+            26.7,
+            14
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-n01",
+          "a": [
+            17.3,
+            14
+          ],
+          "b": [
+            17.3,
+            30
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "n02-w",
+          "a": [
+            26.7,
+            14
+          ],
+          "b": [
+            30.55,
+            14
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "n02-e",
+          "a": [
+            32.15,
+            14
+          ],
+          "b": [
+            36.0,
+            14
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-n02",
+          "a": [
+            26.7,
+            14
+          ],
+          "b": [
+            26.7,
+            30
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "core-east",
+          "a": [
+            8,
+            14
+          ],
+          "b": [
+            8,
+            30
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "core-divider",
+          "a": [
+            5,
+            20
+          ],
+          "b": [
+            5,
+            30
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "stair-entry-w",
+          "a": [
+            0,
+            20
+          ],
+          "b": [
+            1.7,
+            20
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "stair-entry-e",
+          "a": [
+            3.3,
+            20
+          ],
+          "b": [
+            5,
+            20
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "lift-entry-w",
+          "a": [
+            5,
+            20
+          ],
+          "b": [
+            5.6,
+            20
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "lift-entry-e",
+          "a": [
+            7.4,
+            20
+          ],
+          "b": [
+            8,
+            20
+          ],
+          "height": 3.2
+        }
+      ],
+      "rooms": [
+        {
+          "id": "s00",
+          "name": "Office W0S1",
+          "kind": "office",
+          "center": [
+            6.0,
+            5.0
+          ],
+          "size": [
+            12.0,
+            10
+          ]
+        },
+        {
+          "id": "entrance",
+          "name": "Main entrance & lobby",
+          "kind": "reception",
+          "center": [
+            18.0,
+            5.0
+          ],
+          "size": [
+            12.0,
+            10
+          ]
+        },
+        {
+          "id": "s02",
+          "name": "Classroom W0S3",
+          "kind": "classroom",
+          "center": [
+            30.0,
+            5.0
+          ],
+          "size": [
+            12.0,
+            10
+          ]
+        },
+        {
+          "id": "n00",
+          "name": "Staff W0N1",
+          "kind": "staff",
+          "center": [
+            12.65,
+            22.0
+          ],
+          "size": [
+            9.3,
+            16
+          ]
+        },
+        {
+          "id": "n01",
+          "name": "Classroom W0N2",
+          "kind": "classroom",
+          "center": [
+            22.0,
+            22.0
+          ],
+          "size": [
+            9.399999999999999,
+            16
+          ]
+        },
+        {
+          "id": "n02",
+          "name": "Seminar W0N3",
+          "kind": "seminar",
+          "center": [
+            31.35,
+            22.0
+          ],
+          "size": [
+            9.3,
+            16
+          ]
+        }
+      ],
+      "routes": {
+        "asset_round": [
+          {
+            "position": [
+              4,
+              12
+            ],
+            "dwell": 1
+          },
+          {
+            "position": [
+              6.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              6.0,
+              5.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              6.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              30.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              30.0,
+              5.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              30.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              22.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              22.0,
+              22.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              22.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              12.65,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              12.65,
+              22.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              12.65,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              4,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              4,
+              17
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              4,
+              12
+            ],
+            "dwell": 0
+          }
+        ],
+        "held_out": [
+          {
+            "position": [
+              4,
+              12
+            ],
+            "dwell": 1
+          },
+          {
+            "position": [
+              18.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              18.0,
+              5.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              18.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              6.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              6.0,
+              5.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              6.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              12.65,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              12.65,
+              22.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              12.65,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              31.35,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              31.35,
+              22.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              31.35,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              4,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              4,
+              17
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              4,
+              12
+            ],
+            "dwell": 0
+          }
+        ]
+      },
+      "route_names": {
+        "asset_round": "Campus service round",
+        "held_out": "Evaluation service round"
+      },
+      "corridors": [
+        {
+          "id": "main-corridor",
+          "name": "Main corridor",
+          "center": [
+            18.0,
+            12
+          ],
+          "size": [
+            36,
+            4
+          ]
+        },
+        {
+          "id": "core-lobby",
+          "name": "Lift & stair lobby",
+          "center": [
+            4,
+            17
+          ],
+          "size": [
+            8,
+            6
+          ]
+        }
+      ],
+      "doors": [
+        {
+          "id": "door-ext-south",
+          "a": [
+            16.4,
+            0
+          ],
+          "b": [
+            19.6,
+            0
+          ],
+          "height": 2.3,
+          "connects": [
+            "outside",
+            "entrance"
+          ]
+        },
+        {
+          "id": "door-s00",
+          "a": [
+            5.2,
+            10
+          ],
+          "b": [
+            6.8,
+            10
+          ],
+          "height": 2.3,
+          "connects": [
+            "s00",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-entrance",
+          "a": [
+            17.2,
+            10
+          ],
+          "b": [
+            18.8,
+            10
+          ],
+          "height": 2.3,
+          "connects": [
+            "entrance",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-s02",
+          "a": [
+            29.2,
+            10
+          ],
+          "b": [
+            30.8,
+            10
+          ],
+          "height": 2.3,
+          "connects": [
+            "s02",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-n00",
+          "a": [
+            11.85,
+            14
+          ],
+          "b": [
+            13.450000000000001,
+            14
+          ],
+          "height": 2.3,
+          "connects": [
+            "n00",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-n01",
+          "a": [
+            21.2,
+            14
+          ],
+          "b": [
+            22.8,
+            14
+          ],
+          "height": 2.3,
+          "connects": [
+            "n01",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-n02",
+          "a": [
+            30.55,
+            14
+          ],
+          "b": [
+            32.15,
+            14
+          ],
+          "height": 2.3,
+          "connects": [
+            "n02",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-stair-entry",
+          "a": [
+            1.7,
+            20
+          ],
+          "b": [
+            3.3,
+            20
+          ],
+          "height": 2.3,
+          "connects": [
+            "core-lobby",
+            "stair-west"
+          ]
+        },
+        {
+          "id": "door-lift-entry",
+          "a": [
+            5.6,
+            20
+          ],
+          "b": [
+            7.4,
+            20
+          ],
+          "height": 2.3,
+          "connects": [
+            "core-lobby",
+            "lift-west"
+          ]
+        }
+      ],
+      "access_cores": [
+        {
+          "id": "stair-west",
+          "name": "West staircase",
+          "kind": "stairs",
+          "center": [
+            2.5,
+            25.0
+          ],
+          "size": [
+            5,
+            10
+          ],
+          "entry": [
+            2.5,
+            20
+          ]
+        },
+        {
+          "id": "lift-west",
+          "name": "Lift",
+          "kind": "elevator",
+          "center": [
+            6.5,
+            25.0
+          ],
+          "size": [
+            3,
+            10
+          ],
+          "entry": [
+            6.5,
+            20
+          ]
+        }
+      ],
+      "movement_regions": [
+        "s00",
+        "entrance",
+        "s02",
+        "n00",
+        "n01",
+        "n02",
+        "main-corridor",
+        "core-lobby"
+      ],
+      "candidate_anchors": [
+        {
+          "id": "C01",
+          "position": [
+            1.0,
+            1
+          ]
+        },
+        {
+          "id": "C02",
+          "position": [
+            6.7,
+            1
+          ]
+        },
+        {
+          "id": "C03",
+          "position": [
+            12.3,
+            1
+          ]
+        },
+        {
+          "id": "C04",
+          "position": [
+            18.0,
+            1
+          ]
+        },
+        {
+          "id": "C05",
+          "position": [
+            23.7,
+            1
+          ]
+        },
+        {
+          "id": "C06",
+          "position": [
+            29.3,
+            1
+          ]
+        },
+        {
+          "id": "C07",
+          "position": [
+            35.0,
+            1
+          ]
+        },
+        {
+          "id": "C08",
+          "position": [
+            1.0,
+            29
+          ]
+        },
+        {
+          "id": "C09",
+          "position": [
+            6.7,
+            29
+          ]
+        },
+        {
+          "id": "C10",
+          "position": [
+            12.3,
+            29
+          ]
+        },
+        {
+          "id": "C11",
+          "position": [
+            18.0,
+            29
+          ]
+        },
+        {
+          "id": "C12",
+          "position": [
+            23.7,
+            29
+          ]
+        },
+        {
+          "id": "C13",
+          "position": [
+            29.3,
+            29
+          ]
+        },
+        {
+          "id": "C14",
+          "position": [
+            35.0,
+            29
+          ]
+        },
+        {
+          "id": "C15",
+          "position": [
+            2.0,
+            12
+          ]
+        },
+        {
+          "id": "C16",
+          "position": [
+            7.7,
+            12
+          ]
+        },
+        {
+          "id": "C17",
+          "position": [
+            13.3,
+            12
+          ]
+        },
+        {
+          "id": "C18",
+          "position": [
+            19.0,
+            12
+          ]
+        },
+        {
+          "id": "C19",
+          "position": [
+            24.7,
+            12
+          ]
+        },
+        {
+          "id": "C20",
+          "position": [
+            30.3,
+            12
+          ]
+        },
+        {
+          "id": "C21",
+          "position": [
+            4,
+            17
+          ]
+        }
+      ],
+      "anchor_layout_id": "perimeter-eight-v3.0.0"
+    },
+    {
+      "id": "first",
+      "name": "First floor",
+      "description": "Lecture classrooms",
+      "short_name": "01",
+      "elevation": 4.2,
+      "color": "#3b82f6",
+      "width": 36,
+      "height": 30,
+      "anchors": [
+        {
+          "id": "A1",
+          "position": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "A2",
+          "position": [
+            18.0,
+            1
+          ]
+        },
+        {
+          "id": "A3",
+          "position": [
+            35,
+            1
+          ]
+        },
+        {
+          "id": "A4",
+          "position": [
+            35,
+            12
+          ]
+        },
+        {
+          "id": "A5",
+          "position": [
+            35,
+            29
+          ]
+        },
+        {
+          "id": "A6",
+          "position": [
+            18.0,
+            29
+          ]
+        },
+        {
+          "id": "A7",
+          "position": [
+            1,
+            29
+          ]
+        },
+        {
+          "id": "A8",
+          "position": [
+            1,
+            12
+          ]
+        }
+      ],
+      "anchor_mount_heights": {},
+      "walls": [
+        {
+          "id": "ext-south",
+          "a": [
+            0,
+            0
+          ],
+          "b": [
+            36,
+            0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-east",
+          "a": [
+            36,
+            0
+          ],
+          "b": [
+            36,
+            30
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-north",
+          "a": [
+            36,
+            30
+          ],
+          "b": [
+            0,
+            30
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-west",
+          "a": [
+            0,
+            30
+          ],
+          "b": [
+            0,
+            0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "s10-w",
+          "a": [
+            0.0,
+            10
+          ],
+          "b": [
+            5.2,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "s10-e",
+          "a": [
+            6.8,
+            10
+          ],
+          "b": [
+            12.0,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "s11-w",
+          "a": [
+            12.0,
+            10
+          ],
+          "b": [
+            17.2,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "s11-e",
+          "a": [
+            18.8,
+            10
+          ],
+          "b": [
+            24.0,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-s11",
+          "a": [
+            12.0,
+            0
+          ],
+          "b": [
+            12.0,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "s12-w",
+          "a": [
+            24.0,
+            10
+          ],
+          "b": [
+            29.2,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "s12-e",
+          "a": [
+            30.8,
+            10
+          ],
+          "b": [
+            36.0,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-s12",
+          "a": [
+            24.0,
+            0
+          ],
+          "b": [
+            24.0,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "n10-w",
+          "a": [
+            8.0,
+            14
+          ],
+          "b": [
+            11.85,
+            14
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "n10-e",
+          "a": [
+            13.450000000000001,
+            14
+          ],
+          "b": [
+            17.3,
+            14
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "n11-w",
+          "a": [
+            17.3,
+            14
+          ],
+          "b": [
+            21.2,
+            14
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "n11-e",
+          "a": [
+            22.8,
+            14
+          ],
+          "b": [
+            26.7,
+            14
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-n11",
+          "a": [
+            17.3,
+            14
+          ],
+          "b": [
+            17.3,
+            30
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "n12-w",
+          "a": [
+            26.7,
+            14
+          ],
+          "b": [
+            30.55,
+            14
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "n12-e",
+          "a": [
+            32.15,
+            14
+          ],
+          "b": [
+            36.0,
+            14
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-n12",
+          "a": [
+            26.7,
+            14
+          ],
+          "b": [
+            26.7,
+            30
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "core-east",
+          "a": [
+            8,
+            14
+          ],
+          "b": [
+            8,
+            30
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "core-divider",
+          "a": [
+            5,
+            20
+          ],
+          "b": [
+            5,
+            30
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "stair-entry-w",
+          "a": [
+            0,
+            20
+          ],
+          "b": [
+            1.7,
+            20
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "stair-entry-e",
+          "a": [
+            3.3,
+            20
+          ],
+          "b": [
+            5,
+            20
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "lift-entry-w",
+          "a": [
+            5,
+            20
+          ],
+          "b": [
+            5.6,
+            20
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "lift-entry-e",
+          "a": [
+            7.4,
+            20
+          ],
+          "b": [
+            8,
+            20
+          ],
+          "height": 3.2
+        }
+      ],
+      "rooms": [
+        {
+          "id": "s10",
+          "name": "Classroom W1S1",
+          "kind": "classroom",
+          "center": [
+            6.0,
+            5.0
+          ],
+          "size": [
+            12.0,
+            10
+          ]
+        },
+        {
+          "id": "s11",
+          "name": "Classroom W1S2",
+          "kind": "classroom",
+          "center": [
+            18.0,
+            5.0
+          ],
+          "size": [
+            12.0,
+            10
+          ]
+        },
+        {
+          "id": "s12",
+          "name": "Classroom W1S3",
+          "kind": "classroom",
+          "center": [
+            30.0,
+            5.0
+          ],
+          "size": [
+            12.0,
+            10
+          ]
+        },
+        {
+          "id": "n10",
+          "name": "Classroom W1N1",
+          "kind": "classroom",
+          "center": [
+            12.65,
+            22.0
+          ],
+          "size": [
+            9.3,
+            16
+          ]
+        },
+        {
+          "id": "n11",
+          "name": "Classroom W1N2",
+          "kind": "classroom",
+          "center": [
+            22.0,
+            22.0
+          ],
+          "size": [
+            9.399999999999999,
+            16
+          ]
+        },
+        {
+          "id": "n12",
+          "name": "Classroom W1N3",
+          "kind": "classroom",
+          "center": [
+            31.35,
+            22.0
+          ],
+          "size": [
+            9.3,
+            16
+          ]
+        }
+      ],
+      "routes": {
+        "asset_round": [
+          {
+            "position": [
+              4,
+              12
+            ],
+            "dwell": 1
+          },
+          {
+            "position": [
+              6.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              6.0,
+              5.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              6.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              30.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              30.0,
+              5.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              30.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              22.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              22.0,
+              22.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              22.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              12.65,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              12.65,
+              22.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              12.65,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              4,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              4,
+              17
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              4,
+              12
+            ],
+            "dwell": 0
+          }
+        ],
+        "held_out": [
+          {
+            "position": [
+              4,
+              12
+            ],
+            "dwell": 1
+          },
+          {
+            "position": [
+              18.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              18.0,
+              5.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              18.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              6.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              6.0,
+              5.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              6.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              12.65,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              12.65,
+              22.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              12.65,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              31.35,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              31.35,
+              22.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              31.35,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              4,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              4,
+              17
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              4,
+              12
+            ],
+            "dwell": 0
+          }
+        ]
+      },
+      "route_names": {
+        "asset_round": "Campus service round",
+        "held_out": "Evaluation service round"
+      },
+      "corridors": [
+        {
+          "id": "main-corridor",
+          "name": "Main corridor",
+          "center": [
+            18.0,
+            12
+          ],
+          "size": [
+            36,
+            4
+          ]
+        },
+        {
+          "id": "core-lobby",
+          "name": "Lift & stair lobby",
+          "center": [
+            4,
+            17
+          ],
+          "size": [
+            8,
+            6
+          ]
+        }
+      ],
+      "doors": [
+        {
+          "id": "door-s10",
+          "a": [
+            5.2,
+            10
+          ],
+          "b": [
+            6.8,
+            10
+          ],
+          "height": 2.3,
+          "connects": [
+            "s10",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-s11",
+          "a": [
+            17.2,
+            10
+          ],
+          "b": [
+            18.8,
+            10
+          ],
+          "height": 2.3,
+          "connects": [
+            "s11",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-s12",
+          "a": [
+            29.2,
+            10
+          ],
+          "b": [
+            30.8,
+            10
+          ],
+          "height": 2.3,
+          "connects": [
+            "s12",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-n10",
+          "a": [
+            11.85,
+            14
+          ],
+          "b": [
+            13.450000000000001,
+            14
+          ],
+          "height": 2.3,
+          "connects": [
+            "n10",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-n11",
+          "a": [
+            21.2,
+            14
+          ],
+          "b": [
+            22.8,
+            14
+          ],
+          "height": 2.3,
+          "connects": [
+            "n11",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-n12",
+          "a": [
+            30.55,
+            14
+          ],
+          "b": [
+            32.15,
+            14
+          ],
+          "height": 2.3,
+          "connects": [
+            "n12",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-stair-entry",
+          "a": [
+            1.7,
+            20
+          ],
+          "b": [
+            3.3,
+            20
+          ],
+          "height": 2.3,
+          "connects": [
+            "core-lobby",
+            "stair-west"
+          ]
+        },
+        {
+          "id": "door-lift-entry",
+          "a": [
+            5.6,
+            20
+          ],
+          "b": [
+            7.4,
+            20
+          ],
+          "height": 2.3,
+          "connects": [
+            "core-lobby",
+            "lift-west"
+          ]
+        }
+      ],
+      "access_cores": [
+        {
+          "id": "stair-west",
+          "name": "West staircase",
+          "kind": "stairs",
+          "center": [
+            2.5,
+            25.0
+          ],
+          "size": [
+            5,
+            10
+          ],
+          "entry": [
+            2.5,
+            20
+          ]
+        },
+        {
+          "id": "lift-west",
+          "name": "Lift",
+          "kind": "elevator",
+          "center": [
+            6.5,
+            25.0
+          ],
+          "size": [
+            3,
+            10
+          ],
+          "entry": [
+            6.5,
+            20
+          ]
+        }
+      ],
+      "movement_regions": [
+        "s10",
+        "s11",
+        "s12",
+        "n10",
+        "n11",
+        "n12",
+        "main-corridor",
+        "core-lobby"
+      ],
+      "candidate_anchors": [
+        {
+          "id": "C01",
+          "position": [
+            1.0,
+            1
+          ]
+        },
+        {
+          "id": "C02",
+          "position": [
+            6.7,
+            1
+          ]
+        },
+        {
+          "id": "C03",
+          "position": [
+            12.3,
+            1
+          ]
+        },
+        {
+          "id": "C04",
+          "position": [
+            18.0,
+            1
+          ]
+        },
+        {
+          "id": "C05",
+          "position": [
+            23.7,
+            1
+          ]
+        },
+        {
+          "id": "C06",
+          "position": [
+            29.3,
+            1
+          ]
+        },
+        {
+          "id": "C07",
+          "position": [
+            35.0,
+            1
+          ]
+        },
+        {
+          "id": "C08",
+          "position": [
+            1.0,
+            29
+          ]
+        },
+        {
+          "id": "C09",
+          "position": [
+            6.7,
+            29
+          ]
+        },
+        {
+          "id": "C10",
+          "position": [
+            12.3,
+            29
+          ]
+        },
+        {
+          "id": "C11",
+          "position": [
+            18.0,
+            29
+          ]
+        },
+        {
+          "id": "C12",
+          "position": [
+            23.7,
+            29
+          ]
+        },
+        {
+          "id": "C13",
+          "position": [
+            29.3,
+            29
+          ]
+        },
+        {
+          "id": "C14",
+          "position": [
+            35.0,
+            29
+          ]
+        },
+        {
+          "id": "C15",
+          "position": [
+            2.0,
+            12
+          ]
+        },
+        {
+          "id": "C16",
+          "position": [
+            7.7,
+            12
+          ]
+        },
+        {
+          "id": "C17",
+          "position": [
+            13.3,
+            12
+          ]
+        },
+        {
+          "id": "C18",
+          "position": [
+            19.0,
+            12
+          ]
+        },
+        {
+          "id": "C19",
+          "position": [
+            24.7,
+            12
+          ]
+        },
+        {
+          "id": "C20",
+          "position": [
+            30.3,
+            12
+          ]
+        },
+        {
+          "id": "C21",
+          "position": [
+            4,
+            17
+          ]
+        }
+      ],
+      "anchor_layout_id": "perimeter-eight-v3.0.0"
+    },
+    {
+      "id": "second",
+      "name": "Second floor",
+      "description": "Laboratories",
+      "short_name": "02",
+      "elevation": 8.4,
+      "color": "#f59e0b",
+      "width": 36,
+      "height": 30,
+      "anchors": [
+        {
+          "id": "A1",
+          "position": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "A2",
+          "position": [
+            18.0,
+            1
+          ]
+        },
+        {
+          "id": "A3",
+          "position": [
+            35,
+            1
+          ]
+        },
+        {
+          "id": "A4",
+          "position": [
+            35,
+            12
+          ]
+        },
+        {
+          "id": "A5",
+          "position": [
+            35,
+            29
+          ]
+        },
+        {
+          "id": "A6",
+          "position": [
+            18.0,
+            29
+          ]
+        },
+        {
+          "id": "A7",
+          "position": [
+            1,
+            29
+          ]
+        },
+        {
+          "id": "A8",
+          "position": [
+            1,
+            12
+          ]
+        }
+      ],
+      "anchor_mount_heights": {},
+      "walls": [
+        {
+          "id": "ext-south",
+          "a": [
+            0,
+            0
+          ],
+          "b": [
+            36,
+            0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-east",
+          "a": [
+            36,
+            0
+          ],
+          "b": [
+            36,
+            30
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-north",
+          "a": [
+            36,
+            30
+          ],
+          "b": [
+            0,
+            30
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-west",
+          "a": [
+            0,
+            30
+          ],
+          "b": [
+            0,
+            0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "s20-w",
+          "a": [
+            0.0,
+            10
+          ],
+          "b": [
+            5.2,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "s20-e",
+          "a": [
+            6.8,
+            10
+          ],
+          "b": [
+            12.0,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "s21-w",
+          "a": [
+            12.0,
+            10
+          ],
+          "b": [
+            17.2,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "s21-e",
+          "a": [
+            18.8,
+            10
+          ],
+          "b": [
+            24.0,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-s21",
+          "a": [
+            12.0,
+            0
+          ],
+          "b": [
+            12.0,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "s22-w",
+          "a": [
+            24.0,
+            10
+          ],
+          "b": [
+            29.2,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "s22-e",
+          "a": [
+            30.8,
+            10
+          ],
+          "b": [
+            36.0,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-s22",
+          "a": [
+            24.0,
+            0
+          ],
+          "b": [
+            24.0,
+            10
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "n20-w",
+          "a": [
+            8.0,
+            14
+          ],
+          "b": [
+            11.85,
+            14
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "n20-e",
+          "a": [
+            13.450000000000001,
+            14
+          ],
+          "b": [
+            17.3,
+            14
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "n21-w",
+          "a": [
+            17.3,
+            14
+          ],
+          "b": [
+            21.2,
+            14
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "n21-e",
+          "a": [
+            22.8,
+            14
+          ],
+          "b": [
+            26.7,
+            14
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-n21",
+          "a": [
+            17.3,
+            14
+          ],
+          "b": [
+            17.3,
+            30
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "n22-w",
+          "a": [
+            26.7,
+            14
+          ],
+          "b": [
+            30.55,
+            14
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "n22-e",
+          "a": [
+            32.15,
+            14
+          ],
+          "b": [
+            36.0,
+            14
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-n22",
+          "a": [
+            26.7,
+            14
+          ],
+          "b": [
+            26.7,
+            30
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "core-east",
+          "a": [
+            8,
+            14
+          ],
+          "b": [
+            8,
+            30
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "core-divider",
+          "a": [
+            5,
+            20
+          ],
+          "b": [
+            5,
+            30
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "stair-entry-w",
+          "a": [
+            0,
+            20
+          ],
+          "b": [
+            1.7,
+            20
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "stair-entry-e",
+          "a": [
+            3.3,
+            20
+          ],
+          "b": [
+            5,
+            20
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "lift-entry-w",
+          "a": [
+            5,
+            20
+          ],
+          "b": [
+            5.6,
+            20
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "lift-entry-e",
+          "a": [
+            7.4,
+            20
+          ],
+          "b": [
+            8,
+            20
+          ],
+          "height": 3.2
+        }
+      ],
+      "rooms": [
+        {
+          "id": "s20",
+          "name": "Lab W2S1",
+          "kind": "lab",
+          "center": [
+            6.0,
+            5.0
+          ],
+          "size": [
+            12.0,
+            10
+          ]
+        },
+        {
+          "id": "s21",
+          "name": "Lab W2S2",
+          "kind": "lab",
+          "center": [
+            18.0,
+            5.0
+          ],
+          "size": [
+            12.0,
+            10
+          ]
+        },
+        {
+          "id": "s22",
+          "name": "Lab W2S3",
+          "kind": "lab",
+          "center": [
+            30.0,
+            5.0
+          ],
+          "size": [
+            12.0,
+            10
+          ]
+        },
+        {
+          "id": "n20",
+          "name": "Lab W2N1",
+          "kind": "lab",
+          "center": [
+            12.65,
+            22.0
+          ],
+          "size": [
+            9.3,
+            16
+          ]
+        },
+        {
+          "id": "n21",
+          "name": "Staff W2N2",
+          "kind": "staff",
+          "center": [
+            22.0,
+            22.0
+          ],
+          "size": [
+            9.399999999999999,
+            16
+          ]
+        },
+        {
+          "id": "n22",
+          "name": "Lab W2N3",
+          "kind": "lab",
+          "center": [
+            31.35,
+            22.0
+          ],
+          "size": [
+            9.3,
+            16
+          ]
+        }
+      ],
+      "routes": {
+        "asset_round": [
+          {
+            "position": [
+              4,
+              12
+            ],
+            "dwell": 1
+          },
+          {
+            "position": [
+              6.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              6.0,
+              5.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              6.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              30.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              30.0,
+              5.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              30.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              22.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              22.0,
+              22.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              22.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              12.65,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              12.65,
+              22.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              12.65,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              4,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              4,
+              17
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              4,
+              12
+            ],
+            "dwell": 0
+          }
+        ],
+        "held_out": [
+          {
+            "position": [
+              4,
+              12
+            ],
+            "dwell": 1
+          },
+          {
+            "position": [
+              18.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              18.0,
+              5.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              18.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              6.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              6.0,
+              5.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              6.0,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              12.65,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              12.65,
+              22.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              12.65,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              31.35,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              31.35,
+              22.0
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              31.35,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              4,
+              12
+            ],
+            "dwell": 0
+          },
+          {
+            "position": [
+              4,
+              17
+            ],
+            "dwell": 2
+          },
+          {
+            "position": [
+              4,
+              12
+            ],
+            "dwell": 0
+          }
+        ]
+      },
+      "route_names": {
+        "asset_round": "Campus service round",
+        "held_out": "Evaluation service round"
+      },
+      "corridors": [
+        {
+          "id": "main-corridor",
+          "name": "Main corridor",
+          "center": [
+            18.0,
+            12
+          ],
+          "size": [
+            36,
+            4
+          ]
+        },
+        {
+          "id": "core-lobby",
+          "name": "Lift & stair lobby",
+          "center": [
+            4,
+            17
+          ],
+          "size": [
+            8,
+            6
+          ]
+        }
+      ],
+      "doors": [
+        {
+          "id": "door-s20",
+          "a": [
+            5.2,
+            10
+          ],
+          "b": [
+            6.8,
+            10
+          ],
+          "height": 2.3,
+          "connects": [
+            "s20",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-s21",
+          "a": [
+            17.2,
+            10
+          ],
+          "b": [
+            18.8,
+            10
+          ],
+          "height": 2.3,
+          "connects": [
+            "s21",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-s22",
+          "a": [
+            29.2,
+            10
+          ],
+          "b": [
+            30.8,
+            10
+          ],
+          "height": 2.3,
+          "connects": [
+            "s22",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-n20",
+          "a": [
+            11.85,
+            14
+          ],
+          "b": [
+            13.450000000000001,
+            14
+          ],
+          "height": 2.3,
+          "connects": [
+            "n20",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-n21",
+          "a": [
+            21.2,
+            14
+          ],
+          "b": [
+            22.8,
+            14
+          ],
+          "height": 2.3,
+          "connects": [
+            "n21",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-n22",
+          "a": [
+            30.55,
+            14
+          ],
+          "b": [
+            32.15,
+            14
+          ],
+          "height": 2.3,
+          "connects": [
+            "n22",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-stair-entry",
+          "a": [
+            1.7,
+            20
+          ],
+          "b": [
+            3.3,
+            20
+          ],
+          "height": 2.3,
+          "connects": [
+            "core-lobby",
+            "stair-west"
+          ]
+        },
+        {
+          "id": "door-lift-entry",
+          "a": [
+            5.6,
+            20
+          ],
+          "b": [
+            7.4,
+            20
+          ],
+          "height": 2.3,
+          "connects": [
+            "core-lobby",
+            "lift-west"
+          ]
+        }
+      ],
+      "access_cores": [
+        {
+          "id": "stair-west",
+          "name": "West staircase",
+          "kind": "stairs",
+          "center": [
+            2.5,
+            25.0
+          ],
+          "size": [
+            5,
+            10
+          ],
+          "entry": [
+            2.5,
+            20
+          ]
+        },
+        {
+          "id": "lift-west",
+          "name": "Lift",
+          "kind": "elevator",
+          "center": [
+            6.5,
+            25.0
+          ],
+          "size": [
+            3,
+            10
+          ],
+          "entry": [
+            6.5,
+            20
+          ]
+        }
+      ],
+      "movement_regions": [
+        "s20",
+        "s21",
+        "s22",
+        "n20",
+        "n21",
+        "n22",
+        "main-corridor",
+        "core-lobby"
+      ],
+      "candidate_anchors": [
+        {
+          "id": "C01",
+          "position": [
+            1.0,
+            1
+          ]
+        },
+        {
+          "id": "C02",
+          "position": [
+            6.7,
+            1
+          ]
+        },
+        {
+          "id": "C03",
+          "position": [
+            12.3,
+            1
+          ]
+        },
+        {
+          "id": "C04",
+          "position": [
+            18.0,
+            1
+          ]
+        },
+        {
+          "id": "C05",
+          "position": [
+            23.7,
+            1
+          ]
+        },
+        {
+          "id": "C06",
+          "position": [
+            29.3,
+            1
+          ]
+        },
+        {
+          "id": "C07",
+          "position": [
+            35.0,
+            1
+          ]
+        },
+        {
+          "id": "C08",
+          "position": [
+            1.0,
+            29
+          ]
+        },
+        {
+          "id": "C09",
+          "position": [
+            6.7,
+            29
+          ]
+        },
+        {
+          "id": "C10",
+          "position": [
+            12.3,
+            29
+          ]
+        },
+        {
+          "id": "C11",
+          "position": [
+            18.0,
+            29
+          ]
+        },
+        {
+          "id": "C12",
+          "position": [
+            23.7,
+            29
+          ]
+        },
+        {
+          "id": "C13",
+          "position": [
+            29.3,
+            29
+          ]
+        },
+        {
+          "id": "C14",
+          "position": [
+            35.0,
+            29
+          ]
+        },
+        {
+          "id": "C15",
+          "position": [
+            2.0,
+            12
+          ]
+        },
+        {
+          "id": "C16",
+          "position": [
+            7.7,
+            12
+          ]
+        },
+        {
+          "id": "C17",
+          "position": [
+            13.3,
+            12
+          ]
+        },
+        {
+          "id": "C18",
+          "position": [
+            19.0,
+            12
+          ]
+        },
+        {
+          "id": "C19",
+          "position": [
+            24.7,
+            12
+          ]
+        },
+        {
+          "id": "C20",
+          "position": [
+            30.3,
+            12
+          ]
+        },
+        {
+          "id": "C21",
+          "position": [
+            4,
+            17
+          ]
+        }
+      ],
+      "anchor_layout_id": "perimeter-eight-v3.0.0"
+    }
+  ],
+  "connections": [
+    {
+      "id": "west-stairs",
+      "kind": "stairs",
+      "stops": [
+        {
+          "floor_id": "ground",
+          "access_id": "stair-west"
+        },
+        {
+          "floor_id": "first",
+          "access_id": "stair-west"
+        },
+        {
+          "floor_id": "second",
+          "access_id": "stair-west"
+        }
+      ]
+    },
+    {
+      "id": "main-lift",
+      "kind": "elevator",
+      "stops": [
+        {
+          "floor_id": "ground",
+          "access_id": "lift-west"
+        },
+        {
+          "floor_id": "first",
+          "access_id": "lift-west"
+        },
+        {
+          "floor_id": "second",
+          "access_id": "lift-west"
+        }
+      ]
+    }
+  ],
+  "target_device_height": 1.2,
+  "slab_bias_per_slab": 1.5,
+  "transition_routes": [
+    {
+      "id": "ascent_stairs",
+      "name": "Stair ascent to the second floor",
+      "loop": false,
+      "legs": [
+        {
+          "floor_id": "ground",
+          "waypoints": [
+            {
+              "position": [
+                4,
+                12
+              ],
+              "dwell": 1
+            },
+            {
+              "position": [
+                14,
+                12
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                12
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                17
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                2.5,
+                20
+              ],
+              "dwell": 0
+            }
+          ]
+        },
+        {
+          "floor_id": "first",
+          "waypoints": [
+            {
+              "position": [
+                2.5,
+                20
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                17
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                12
+              ],
+              "dwell": 1
+            },
+            {
+              "position": [
+                14,
+                12
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                12
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                17
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                2.5,
+                20
+              ],
+              "dwell": 0
+            }
+          ]
+        },
+        {
+          "floor_id": "second",
+          "waypoints": [
+            {
+              "position": [
+                2.5,
+                20
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                17
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                12
+              ],
+              "dwell": 1
+            },
+            {
+              "position": [
+                14,
+                12
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                12
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                17
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                2.5,
+                20
+              ],
+              "dwell": 0
+            }
+          ]
+        }
+      ],
+      "transitions": [
+        {
+          "id": "ascent_stairs-1",
+          "kind": "stairs",
+          "connection_id": "west-stairs",
+          "from_floor_id": "ground",
+          "to_floor_id": "first",
+          "travel_seconds": 20,
+          "dwell_before": 0,
+          "dwell_after": 0
+        },
+        {
+          "id": "ascent_stairs-2",
+          "kind": "stairs",
+          "connection_id": "west-stairs",
+          "from_floor_id": "first",
+          "to_floor_id": "second",
+          "travel_seconds": 20,
+          "dwell_before": 0,
+          "dwell_after": 0
+        }
+      ]
+    },
+    {
+      "id": "ascent_lift",
+      "name": "Lift ascent to the second floor",
+      "loop": false,
+      "legs": [
+        {
+          "floor_id": "ground",
+          "waypoints": [
+            {
+              "position": [
+                4,
+                12
+              ],
+              "dwell": 1
+            },
+            {
+              "position": [
+                14,
+                12
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                12
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                17
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                6.5,
+                20
+              ],
+              "dwell": 0
+            }
+          ]
+        },
+        {
+          "floor_id": "first",
+          "waypoints": [
+            {
+              "position": [
+                6.5,
+                20
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                17
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                12
+              ],
+              "dwell": 1
+            },
+            {
+              "position": [
+                14,
+                12
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                12
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                17
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                6.5,
+                20
+              ],
+              "dwell": 0
+            }
+          ]
+        },
+        {
+          "floor_id": "second",
+          "waypoints": [
+            {
+              "position": [
+                6.5,
+                20
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                17
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                12
+              ],
+              "dwell": 1
+            },
+            {
+              "position": [
+                14,
+                12
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                12
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                17
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                6.5,
+                20
+              ],
+              "dwell": 0
+            }
+          ]
+        }
+      ],
+      "transitions": [
+        {
+          "id": "ascent_lift-1",
+          "kind": "elevator",
+          "connection_id": "main-lift",
+          "from_floor_id": "ground",
+          "to_floor_id": "first",
+          "travel_seconds": 15,
+          "dwell_before": 0,
+          "dwell_after": 0
+        },
+        {
+          "id": "ascent_lift-2",
+          "kind": "elevator",
+          "connection_id": "main-lift",
+          "from_floor_id": "first",
+          "to_floor_id": "second",
+          "travel_seconds": 15,
+          "dwell_before": 0,
+          "dwell_after": 0
+        }
+      ]
+    },
+    {
+      "id": "descent_stairs",
+      "name": "Stair descent to the ground floor",
+      "loop": false,
+      "legs": [
+        {
+          "floor_id": "second",
+          "waypoints": [
+            {
+              "position": [
+                2.5,
+                20
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                17
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                12
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                14,
+                12
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                12
+              ],
+              "dwell": 1
+            },
+            {
+              "position": [
+                4,
+                17
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                2.5,
+                20
+              ],
+              "dwell": 0
+            }
+          ]
+        },
+        {
+          "floor_id": "first",
+          "waypoints": [
+            {
+              "position": [
+                2.5,
+                20
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                17
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                12
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                14,
+                12
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                12
+              ],
+              "dwell": 1
+            },
+            {
+              "position": [
+                4,
+                17
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                2.5,
+                20
+              ],
+              "dwell": 0
+            }
+          ]
+        },
+        {
+          "floor_id": "ground",
+          "waypoints": [
+            {
+              "position": [
+                2.5,
+                20
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                17
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                12
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                14,
+                12
+              ],
+              "dwell": 0
+            },
+            {
+              "position": [
+                4,
+                12
+              ],
+              "dwell": 1
+            }
+          ]
+        }
+      ],
+      "transitions": [
+        {
+          "id": "descent-stairs-1",
+          "kind": "stairs",
+          "connection_id": "west-stairs",
+          "from_floor_id": "second",
+          "to_floor_id": "first",
+          "travel_seconds": 20,
+          "dwell_before": 0,
+          "dwell_after": 0
+        },
+        {
+          "id": "descent-stairs-2",
+          "kind": "stairs",
+          "connection_id": "west-stairs",
+          "from_floor_id": "first",
+          "to_floor_id": "ground",
+          "travel_seconds": 20,
+          "dwell_before": 0,
+          "dwell_after": 0
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "units": "metres",
+    "source": "fictional-procedural",
+    "geometry_revision": "vit-pune-2026-10-24.2",
+    "notes": "Approximate, not surveyed (OSM way 223964767, ~816 m2): room names are generic, sizes and layout are estimates. 4.2 m storeys; wall height 3.2 m. Routes remain on one known floor."
+  }
+}

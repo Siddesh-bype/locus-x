@@ -1,4 +1,5 @@
 import { memo, useMemo } from 'react';
+import * as THREE from 'three';
 import { toScene } from '../lib';
 import type { Floor } from '../types';
 import type { SceneLayers, ViewMode } from '../workspace';
@@ -11,15 +12,43 @@ interface Props {
 }
 
 export const Architecture = memo(function Architecture({ floor, layers, mode, cutaway, active, rise, blockedWalls, propagation }: Props) {
-  const plates = useMemo(() => slabRectangles(floor).map(([x0, y0, x1, y1]) => solid([(x0 + x1) / 2, (y0 + y1) / 2], [x1 - x0, 0.28, y1 - y0], '#e4e8e5', -0.3)), [floor]);
+  // Each storey reads in its own colour: the floor accent is mixed into slabs and exterior walls.
+  const tint = useMemo(() => (base: string, amount: number) => '#' + new THREE.Color(base).lerp(new THREE.Color(floor.color), amount).getHexString(), [floor.color]);
+  const plates = useMemo(() => slabRectangles(floor).map(([x0, y0, x1, y1]) => solid([(x0 + x1) / 2, (y0 + y1) / 2], [x1 - x0, 0.28, y1 - y0], tint('#e4e8e5', 0.45), -0.3)), [floor, tint]);
   const rooms = useMemo(() => floor.rooms.map(room => solid(room.center, [room.size[0] - 0.18, 0.045, room.size[1] - 0.18], ROOM_COLORS[room.kind] ?? '#e2e7e3')), [floor]);
   const corridors = useMemo(() => floor.corridors.map(region => solid(region.center, [region.size[0], 0.04, region.size[1]], '#f6f3e9', 0.005)), [floor]);
   const equipment = useMemo(() => roomEquipment(floor), [floor]);
   const walls = useMemo(() => floor.walls.map(wall => {
     const height = cutaway ? Math.min(wall.height, wall.id.startsWith('ext') ? 0.62 : 1.05) : wall.height;
-    const color = active && propagation && blockedWalls.has(wall.id) ? '#c4977e' : wall.id.startsWith('ext') ? '#b8c7ca' : '#f4f5f0';
+    const color = active && propagation && blockedWalls.has(wall.id) ? '#c4977e' : wall.id.startsWith('ext') ? tint('#b8c7ca', 0.55) : tint('#f4f5f0', 0.12);
     return solid([(wall.a[0] + wall.b[0]) / 2, (wall.a[1] + wall.b[1]) / 2], [Math.hypot(wall.b[0] - wall.a[0], wall.b[1] - wall.a[1]), height, 0.18], color, 0, Math.atan2(wall.b[1] - wall.a[1], wall.b[0] - wall.a[0]));
-  }), [floor, cutaway, active, propagation, blockedWalls]);
+  }), [floor, cutaway, active, propagation, blockedWalls, tint]);
+
+  // Structural concrete columns and architectural exterior cornices / sunshade chajjas
+  const columns = useMemo(() => {
+    const items: Solid[] = [];
+    for (const wall of floor.walls) {
+      if (!wall.id.startsWith('ext')) continue;
+      const len = Math.hypot(wall.b[0] - wall.a[0], wall.b[1] - wall.a[1]);
+      const angle = Math.atan2(wall.b[1] - wall.a[1], wall.b[0] - wall.a[0]);
+      const count = Math.max(1, Math.floor(len / 6.0));
+      const step = len / count;
+      const colHeight = cutaway ? 0.95 : wall.height;
+      for (let i = 0; i <= count; i++) {
+        const t = i * step;
+        const cx = wall.a[0] + (t / len) * (wall.b[0] - wall.a[0]);
+        const cy = wall.a[1] + (t / len) * (wall.b[1] - wall.a[1]);
+        // Structural concrete pilaster / column
+        items.push(solid([cx, cy], [0.38, colHeight, 0.38], tint('#cbd5e1', 0.35), 0, angle));
+      }
+      // Terracotta accent band / chajja on the upper exterior wall facade
+      if (!cutaway) {
+        items.push(solid([(wall.a[0] + wall.b[0]) / 2, (wall.a[1] + wall.b[1]) / 2], [len + 0.12, 0.18, 0.42], '#9c4126', wall.height - 0.18, angle));
+      }
+    }
+    return items;
+  }, [floor.walls, cutaway, tint]);
+
   const doors = useMemo(() => floor.doors.flatMap(door => {
     const angle = Math.atan2(door.b[1] - door.a[1], door.b[0] - door.a[0]);
     const height = cutaway ? 0.85 : door.height;
@@ -60,7 +89,7 @@ export const Architecture = memo(function Architecture({ floor, layers, mode, cu
       </mesh>)}
     </>}
     {layers.corridors && <Solids items={corridors} />}
-    {layers.walls && <><Solids items={walls} shadows /><Solids items={doors} /></>}
+    {layers.walls && <><Solids items={walls} shadows /><Solids items={doors} /><Solids items={columns} shadows /></>}
     {layers.access && <Solids items={cores} shadows />}
     {layers.labels && <>
       {floor.rooms.map(room => <Label key={room.id ?? room.name} text={room.name} position={toScene([room.center[0], room.center[1] + (room.center[1] > floor.height / 2 ? 2.8 : -2.8)], 1.3)} scale={Math.min(room.size[0] * 0.88, room.name.length * 0.3)} color="#4c6671" />)}

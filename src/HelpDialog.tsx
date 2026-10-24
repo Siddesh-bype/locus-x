@@ -7,7 +7,7 @@ export default function HelpDialog({ close }: { close: () => void }) {
   return <dialog className="help-modal" ref={dialog} onCancel={close} aria-labelledby="help-title">
     <button className="icon-button modal-close" aria-label="Close operating guide" onClick={close} autoFocus><X size={19} /></button>
     <span className="eyebrow">LOCUS-X / OPERATING GUIDE</span><h2 id="help-title">Know what you’re measuring.</h2>
-    <p>Explore a fictional hospital, introduce noisy or missing ranges, and compare two estimators on identical observations.</p>
+    <p>Explore a fictional building (hospital or campus block), introduce noisy or missing ranges, and compare two estimators on identical observations.</p>
     <dl>
       <dt>Inspect the building</dt><dd>Use Floor, Building or Exploded view. Drag to orbit, right-drag to pan, and scroll to zoom. Plan view isolates the selected floor. Selecting a different floor pauses the experiment and resets its tracking state.</dd>
       <dt>Read the comparison</dt><dd>Baseline uses nonlinear least squares. LOCUS-X adds Huber loss, residual consistency weights and a constant-velocity Kalman filter. Both receive the same ranges. A trained reliability classifier can reweight available ranges, with an explicit statistical fallback.</dd>
