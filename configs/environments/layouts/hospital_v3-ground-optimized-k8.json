@@ -1,0 +1,3888 @@
+{
+  "schema_version": "3.0",
+  "version": "3.0.0+optimized-ground-6bcdf747",
+  "id": "hospital_v3-optimized-k8-6bcdf747",
+  "name": "Meridian Hospital \u00b7 optimized layout k=8",
+  "description": "Fictional three-floor hospital for synthetic localization experiments.",
+  "width": 42.0,
+  "height": 28.0,
+  "default_floor_id": "ground",
+  "floors": [
+    {
+      "id": "ground",
+      "name": "Ground floor",
+      "description": "Arrival, emergency and outpatient services",
+      "width": 42.0,
+      "height": 28.0,
+      "anchors": [
+        {
+          "id": "A1",
+          "position": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "id": "A2",
+          "position": [
+            8.0,
+            1.0
+          ]
+        },
+        {
+          "id": "A3",
+          "position": [
+            2.0,
+            14.0
+          ]
+        },
+        {
+          "id": "A4",
+          "position": [
+            15.0,
+            27.0
+          ]
+        },
+        {
+          "id": "A5",
+          "position": [
+            10.0,
+            14.0
+          ]
+        },
+        {
+          "id": "A6",
+          "position": [
+            40.0,
+            14.0
+          ]
+        },
+        {
+          "id": "A7",
+          "position": [
+            22.0,
+            27.0
+          ]
+        },
+        {
+          "id": "A8",
+          "position": [
+            18.0,
+            14.0
+          ]
+        }
+      ],
+      "walls": [
+        {
+          "id": "ext-south-w",
+          "a": [
+            0.0,
+            0.0
+          ],
+          "b": [
+            15.9,
+            0.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-south-e",
+          "a": [
+            19.1,
+            0.0
+          ],
+          "b": [
+            42.0,
+            0.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-east",
+          "a": [
+            42.0,
+            0.0
+          ],
+          "b": [
+            42.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-north",
+          "a": [
+            42.0,
+            28.0
+          ],
+          "b": [
+            0.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-west",
+          "a": [
+            0.0,
+            28.0
+          ],
+          "b": [
+            0.0,
+            0.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "triage-w",
+          "a": [
+            0.0,
+            12.0
+          ],
+          "b": [
+            1.7,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "triage-e",
+          "a": [
+            3.3,
+            12.0
+          ],
+          "b": [
+            5.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "emergency-w",
+          "a": [
+            5.0,
+            12.0
+          ],
+          "b": [
+            7.4,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "emergency-e",
+          "a": [
+            9.6,
+            12.0
+          ],
+          "b": [
+            12.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-emergency",
+          "a": [
+            5.0,
+            0.0
+          ],
+          "b": [
+            5.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "reception-w",
+          "a": [
+            12.0,
+            12.0
+          ],
+          "b": [
+            16.7,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "reception-e",
+          "a": [
+            18.3,
+            12.0
+          ],
+          "b": [
+            23.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-reception",
+          "a": [
+            12.0,
+            0.0
+          ],
+          "b": [
+            12.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "pharmacy-w",
+          "a": [
+            23.0,
+            12.0
+          ],
+          "b": [
+            26.7,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "pharmacy-e",
+          "a": [
+            28.3,
+            12.0
+          ],
+          "b": [
+            32.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-pharmacy",
+          "a": [
+            23.0,
+            0.0
+          ],
+          "b": [
+            23.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "consult-01-w",
+          "a": [
+            32.0,
+            12.0
+          ],
+          "b": [
+            33.7,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "consult-01-e",
+          "a": [
+            35.3,
+            12.0
+          ],
+          "b": [
+            37.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-consult-01",
+          "a": [
+            32.0,
+            0.0
+          ],
+          "b": [
+            32.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "consult-02-w",
+          "a": [
+            37.0,
+            12.0
+          ],
+          "b": [
+            38.7,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "consult-02-e",
+          "a": [
+            40.3,
+            12.0
+          ],
+          "b": [
+            42.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-consult-02",
+          "a": [
+            37.0,
+            0.0
+          ],
+          "b": [
+            37.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "imaging-w",
+          "a": [
+            8.0,
+            16.0
+          ],
+          "b": [
+            11.9,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "imaging-e",
+          "a": [
+            14.1,
+            16.0
+          ],
+          "b": [
+            18.0,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "laboratory-w",
+          "a": [
+            18.0,
+            16.0
+          ],
+          "b": [
+            21.7,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "laboratory-e",
+          "a": [
+            23.3,
+            16.0
+          ],
+          "b": [
+            27.0,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-laboratory",
+          "a": [
+            18.0,
+            16.0
+          ],
+          "b": [
+            18.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "consult-03-w",
+          "a": [
+            27.0,
+            16.0
+          ],
+          "b": [
+            30.2,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "consult-03-e",
+          "a": [
+            31.8,
+            16.0
+          ],
+          "b": [
+            35.0,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-consult-03",
+          "a": [
+            27.0,
+            16.0
+          ],
+          "b": [
+            27.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "support-w",
+          "a": [
+            35.0,
+            16.0
+          ],
+          "b": [
+            37.7,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "support-e",
+          "a": [
+            39.3,
+            16.0
+          ],
+          "b": [
+            42.0,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-support",
+          "a": [
+            35.0,
+            16.0
+          ],
+          "b": [
+            35.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "core-east",
+          "a": [
+            8.0,
+            16.0
+          ],
+          "b": [
+            8.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "core-divider",
+          "a": [
+            5.0,
+            22.0
+          ],
+          "b": [
+            5.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "stair-entry-w",
+          "a": [
+            0.0,
+            22.0
+          ],
+          "b": [
+            1.7,
+            22.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "stair-entry-e",
+          "a": [
+            3.3,
+            22.0
+          ],
+          "b": [
+            5.0,
+            22.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "lift-entry-w",
+          "a": [
+            5.0,
+            22.0
+          ],
+          "b": [
+            5.6,
+            22.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "lift-entry-e",
+          "a": [
+            7.4,
+            22.0
+          ],
+          "b": [
+            8.0,
+            22.0
+          ],
+          "height": 3.2
+        }
+      ],
+      "rooms": [
+        {
+          "name": "Triage",
+          "center": [
+            2.5,
+            6.0
+          ],
+          "size": [
+            5.0,
+            12.0
+          ],
+          "kind": "triage",
+          "id": "triage"
+        },
+        {
+          "name": "Emergency",
+          "center": [
+            8.5,
+            6.0
+          ],
+          "size": [
+            7.0,
+            12.0
+          ],
+          "kind": "emergency",
+          "id": "emergency"
+        },
+        {
+          "name": "Reception & waiting",
+          "center": [
+            17.5,
+            6.0
+          ],
+          "size": [
+            11.0,
+            12.0
+          ],
+          "kind": "reception",
+          "id": "reception"
+        },
+        {
+          "name": "Pharmacy",
+          "center": [
+            27.5,
+            6.0
+          ],
+          "size": [
+            9.0,
+            12.0
+          ],
+          "kind": "pharmacy",
+          "id": "pharmacy"
+        },
+        {
+          "name": "Consultation 01",
+          "center": [
+            34.5,
+            6.0
+          ],
+          "size": [
+            5.0,
+            12.0
+          ],
+          "kind": "consultation",
+          "id": "consult-01"
+        },
+        {
+          "name": "Consultation 02",
+          "center": [
+            39.5,
+            6.0
+          ],
+          "size": [
+            5.0,
+            12.0
+          ],
+          "kind": "consultation",
+          "id": "consult-02"
+        },
+        {
+          "name": "Imaging",
+          "center": [
+            13.0,
+            22.0
+          ],
+          "size": [
+            10.0,
+            12.0
+          ],
+          "kind": "imaging",
+          "id": "imaging"
+        },
+        {
+          "name": "Laboratory",
+          "center": [
+            22.5,
+            22.0
+          ],
+          "size": [
+            9.0,
+            12.0
+          ],
+          "kind": "laboratory",
+          "id": "laboratory"
+        },
+        {
+          "name": "Consultation 03",
+          "center": [
+            31.0,
+            22.0
+          ],
+          "size": [
+            8.0,
+            12.0
+          ],
+          "kind": "consultation",
+          "id": "consult-03"
+        },
+        {
+          "name": "Clinical support",
+          "center": [
+            38.5,
+            22.0
+          ],
+          "size": [
+            7.0,
+            12.0
+          ],
+          "kind": "support",
+          "id": "support"
+        }
+      ],
+      "routes": {
+        "asset_round": [
+          {
+            "position": [
+              4.0,
+              14.0
+            ],
+            "dwell": 1.0
+          },
+          {
+            "position": [
+              17.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              17.5,
+              6.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              17.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              8.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              8.5,
+              6.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              8.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              13.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              13.0,
+              22.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              13.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              27.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              27.5,
+              6.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              27.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              4.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              4.0,
+              19.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              4.0,
+              14.0
+            ],
+            "dwell": 0.0
+          }
+        ],
+        "held_out": [
+          {
+            "position": [
+              4.0,
+              14.0
+            ],
+            "dwell": 1.0
+          },
+          {
+            "position": [
+              39.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              39.5,
+              6.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              39.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              22.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              22.5,
+              22.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              22.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              2.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              2.5,
+              6.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              2.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              31.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              31.0,
+              22.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              31.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              4.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              4.0,
+              19.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              4.0,
+              14.0
+            ],
+            "dwell": 0.0
+          }
+        ]
+      },
+      "short_name": "G",
+      "elevation": 0.0,
+      "color": "#318d87",
+      "corridors": [
+        {
+          "id": "main-corridor",
+          "name": "Main corridor",
+          "center": [
+            21.0,
+            14.0
+          ],
+          "size": [
+            42.0,
+            4.0
+          ]
+        },
+        {
+          "id": "core-lobby",
+          "name": "Lift & stair lobby",
+          "center": [
+            4.0,
+            19.0
+          ],
+          "size": [
+            8.0,
+            6.0
+          ]
+        }
+      ],
+      "doors": [
+        {
+          "id": "door-ext-south",
+          "a": [
+            15.9,
+            0.0
+          ],
+          "b": [
+            19.1,
+            0.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "outside",
+            "reception"
+          ]
+        },
+        {
+          "id": "door-triage",
+          "a": [
+            1.7,
+            12.0
+          ],
+          "b": [
+            3.3,
+            12.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "triage",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-emergency",
+          "a": [
+            7.4,
+            12.0
+          ],
+          "b": [
+            9.6,
+            12.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "emergency",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-reception",
+          "a": [
+            16.7,
+            12.0
+          ],
+          "b": [
+            18.3,
+            12.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "reception",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-pharmacy",
+          "a": [
+            26.7,
+            12.0
+          ],
+          "b": [
+            28.3,
+            12.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "pharmacy",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-consult-01",
+          "a": [
+            33.7,
+            12.0
+          ],
+          "b": [
+            35.3,
+            12.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "consult-01",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-consult-02",
+          "a": [
+            38.7,
+            12.0
+          ],
+          "b": [
+            40.3,
+            12.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "consult-02",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-imaging",
+          "a": [
+            11.9,
+            16.0
+          ],
+          "b": [
+            14.1,
+            16.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "imaging",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-laboratory",
+          "a": [
+            21.7,
+            16.0
+          ],
+          "b": [
+            23.3,
+            16.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "laboratory",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-consult-03",
+          "a": [
+            30.2,
+            16.0
+          ],
+          "b": [
+            31.8,
+            16.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "consult-03",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-support",
+          "a": [
+            37.7,
+            16.0
+          ],
+          "b": [
+            39.3,
+            16.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "support",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-stair-entry",
+          "a": [
+            1.7,
+            22.0
+          ],
+          "b": [
+            3.3,
+            22.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "core-lobby",
+            "stair-west"
+          ]
+        },
+        {
+          "id": "door-lift-entry",
+          "a": [
+            5.6,
+            22.0
+          ],
+          "b": [
+            7.4,
+            22.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "core-lobby",
+            "lift-west"
+          ]
+        }
+      ],
+      "access_cores": [
+        {
+          "id": "stair-west",
+          "name": "West staircase",
+          "center": [
+            2.5,
+            25.0
+          ],
+          "size": [
+            5.0,
+            6.0
+          ],
+          "kind": "stairs",
+          "entry": [
+            2.5,
+            22.0
+          ]
+        },
+        {
+          "id": "lift-west",
+          "name": "Bed lift",
+          "center": [
+            6.5,
+            25.0
+          ],
+          "size": [
+            3.0,
+            6.0
+          ],
+          "kind": "elevator",
+          "entry": [
+            6.5,
+            22.0
+          ]
+        }
+      ],
+      "movement_regions": [
+        "triage",
+        "emergency",
+        "reception",
+        "pharmacy",
+        "consult-01",
+        "consult-02",
+        "imaging",
+        "laboratory",
+        "consult-03",
+        "support",
+        "main-corridor",
+        "core-lobby"
+      ],
+      "candidate_anchors": [
+        {
+          "id": "C01",
+          "position": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C02",
+          "position": [
+            8.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C03",
+          "position": [
+            15.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C04",
+          "position": [
+            22.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C05",
+          "position": [
+            29.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C06",
+          "position": [
+            36.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C07",
+          "position": [
+            41.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C08",
+          "position": [
+            1.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C09",
+          "position": [
+            8.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C10",
+          "position": [
+            15.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C11",
+          "position": [
+            22.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C12",
+          "position": [
+            29.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C13",
+          "position": [
+            36.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C14",
+          "position": [
+            41.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C15",
+          "position": [
+            2.0,
+            14.0
+          ]
+        },
+        {
+          "id": "C16",
+          "position": [
+            10.0,
+            14.0
+          ]
+        },
+        {
+          "id": "C17",
+          "position": [
+            18.0,
+            14.0
+          ]
+        },
+        {
+          "id": "C18",
+          "position": [
+            26.0,
+            14.0
+          ]
+        },
+        {
+          "id": "C19",
+          "position": [
+            34.0,
+            14.0
+          ]
+        },
+        {
+          "id": "C20",
+          "position": [
+            40.0,
+            14.0
+          ]
+        },
+        {
+          "id": "C21",
+          "position": [
+            4.0,
+            20.0
+          ]
+        }
+      ],
+      "anchor_layout_id": "optimized-ground-6bcdf747",
+      "route_names": {
+        "asset_round": "Clinical service round",
+        "held_out": "Evaluation service round"
+      }
+    },
+    {
+      "id": "first",
+      "name": "First floor",
+      "description": "Inpatient care, nursing and treatment",
+      "width": 42.0,
+      "height": 28.0,
+      "anchors": [
+        {
+          "id": "A1",
+          "position": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "id": "A2",
+          "position": [
+            21.0,
+            1.0
+          ]
+        },
+        {
+          "id": "A3",
+          "position": [
+            41.0,
+            1.0
+          ]
+        },
+        {
+          "id": "A4",
+          "position": [
+            41.0,
+            14.0
+          ]
+        },
+        {
+          "id": "A5",
+          "position": [
+            41.0,
+            27.0
+          ]
+        },
+        {
+          "id": "A6",
+          "position": [
+            21.0,
+            27.0
+          ]
+        },
+        {
+          "id": "A7",
+          "position": [
+            1.0,
+            27.0
+          ]
+        },
+        {
+          "id": "A8",
+          "position": [
+            1.0,
+            14.0
+          ]
+        }
+      ],
+      "walls": [
+        {
+          "id": "ext-south",
+          "a": [
+            0.0,
+            0.0
+          ],
+          "b": [
+            42.0,
+            0.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-east",
+          "a": [
+            42.0,
+            0.0
+          ],
+          "b": [
+            42.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-north",
+          "a": [
+            42.0,
+            28.0
+          ],
+          "b": [
+            0.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-west",
+          "a": [
+            0.0,
+            28.0
+          ],
+          "b": [
+            0.0,
+            0.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ward-a-w",
+          "a": [
+            0.0,
+            12.0
+          ],
+          "b": [
+            4.2,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ward-a-e",
+          "a": [
+            5.8,
+            12.0
+          ],
+          "b": [
+            10.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "patient-101-w",
+          "a": [
+            10.0,
+            12.0
+          ],
+          "b": [
+            12.2,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "patient-101-e",
+          "a": [
+            13.8,
+            12.0
+          ],
+          "b": [
+            16.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-patient-101",
+          "a": [
+            10.0,
+            0.0
+          ],
+          "b": [
+            10.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "patient-102-w",
+          "a": [
+            16.0,
+            12.0
+          ],
+          "b": [
+            18.2,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "patient-102-e",
+          "a": [
+            19.8,
+            12.0
+          ],
+          "b": [
+            22.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-patient-102",
+          "a": [
+            16.0,
+            0.0
+          ],
+          "b": [
+            16.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "treatment-w",
+          "a": [
+            22.0,
+            12.0
+          ],
+          "b": [
+            25.7,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "treatment-e",
+          "a": [
+            27.3,
+            12.0
+          ],
+          "b": [
+            31.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-treatment",
+          "a": [
+            22.0,
+            0.0
+          ],
+          "b": [
+            22.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "isolation-w",
+          "a": [
+            31.0,
+            12.0
+          ],
+          "b": [
+            33.2,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "isolation-e",
+          "a": [
+            34.8,
+            12.0
+          ],
+          "b": [
+            37.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-isolation",
+          "a": [
+            31.0,
+            0.0
+          ],
+          "b": [
+            31.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "linen-w",
+          "a": [
+            37.0,
+            12.0
+          ],
+          "b": [
+            38.7,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "linen-e",
+          "a": [
+            40.3,
+            12.0
+          ],
+          "b": [
+            42.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-linen",
+          "a": [
+            37.0,
+            0.0
+          ],
+          "b": [
+            37.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ward-b-w",
+          "a": [
+            8.0,
+            16.0
+          ],
+          "b": [
+            12.2,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ward-b-e",
+          "a": [
+            13.8,
+            16.0
+          ],
+          "b": [
+            18.0,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "nursing-w",
+          "a": [
+            18.0,
+            16.0
+          ],
+          "b": [
+            21.7,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "nursing-e",
+          "a": [
+            23.3,
+            16.0
+          ],
+          "b": [
+            27.0,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-nursing",
+          "a": [
+            18.0,
+            16.0
+          ],
+          "b": [
+            18.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "patient-103-w",
+          "a": [
+            27.0,
+            16.0
+          ],
+          "b": [
+            30.2,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "patient-103-e",
+          "a": [
+            31.8,
+            16.0
+          ],
+          "b": [
+            35.0,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-patient-103",
+          "a": [
+            27.0,
+            16.0
+          ],
+          "b": [
+            27.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "patient-104-w",
+          "a": [
+            35.0,
+            16.0
+          ],
+          "b": [
+            37.7,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "patient-104-e",
+          "a": [
+            39.3,
+            16.0
+          ],
+          "b": [
+            42.0,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-patient-104",
+          "a": [
+            35.0,
+            16.0
+          ],
+          "b": [
+            35.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "core-east",
+          "a": [
+            8.0,
+            16.0
+          ],
+          "b": [
+            8.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "core-divider",
+          "a": [
+            5.0,
+            22.0
+          ],
+          "b": [
+            5.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "stair-entry-w",
+          "a": [
+            0.0,
+            22.0
+          ],
+          "b": [
+            1.7,
+            22.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "stair-entry-e",
+          "a": [
+            3.3,
+            22.0
+          ],
+          "b": [
+            5.0,
+            22.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "lift-entry-w",
+          "a": [
+            5.0,
+            22.0
+          ],
+          "b": [
+            5.6,
+            22.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "lift-entry-e",
+          "a": [
+            7.4,
+            22.0
+          ],
+          "b": [
+            8.0,
+            22.0
+          ],
+          "height": 3.2
+        }
+      ],
+      "rooms": [
+        {
+          "name": "Ward A",
+          "center": [
+            5.0,
+            6.0
+          ],
+          "size": [
+            10.0,
+            12.0
+          ],
+          "kind": "ward",
+          "id": "ward-a"
+        },
+        {
+          "name": "Patient room 101",
+          "center": [
+            13.0,
+            6.0
+          ],
+          "size": [
+            6.0,
+            12.0
+          ],
+          "kind": "patient",
+          "id": "patient-101"
+        },
+        {
+          "name": "Patient room 102",
+          "center": [
+            19.0,
+            6.0
+          ],
+          "size": [
+            6.0,
+            12.0
+          ],
+          "kind": "patient",
+          "id": "patient-102"
+        },
+        {
+          "name": "Treatment",
+          "center": [
+            26.5,
+            6.0
+          ],
+          "size": [
+            9.0,
+            12.0
+          ],
+          "kind": "treatment",
+          "id": "treatment"
+        },
+        {
+          "name": "Isolation room",
+          "center": [
+            34.0,
+            6.0
+          ],
+          "size": [
+            6.0,
+            12.0
+          ],
+          "kind": "isolation",
+          "id": "isolation"
+        },
+        {
+          "name": "Linen & support",
+          "center": [
+            39.5,
+            6.0
+          ],
+          "size": [
+            5.0,
+            12.0
+          ],
+          "kind": "support",
+          "id": "linen"
+        },
+        {
+          "name": "Ward B",
+          "center": [
+            13.0,
+            22.0
+          ],
+          "size": [
+            10.0,
+            12.0
+          ],
+          "kind": "ward",
+          "id": "ward-b"
+        },
+        {
+          "name": "Nursing station",
+          "center": [
+            22.5,
+            22.0
+          ],
+          "size": [
+            9.0,
+            12.0
+          ],
+          "kind": "station",
+          "id": "nursing"
+        },
+        {
+          "name": "Patient room 103",
+          "center": [
+            31.0,
+            22.0
+          ],
+          "size": [
+            8.0,
+            12.0
+          ],
+          "kind": "patient",
+          "id": "patient-103"
+        },
+        {
+          "name": "Patient room 104",
+          "center": [
+            38.5,
+            22.0
+          ],
+          "size": [
+            7.0,
+            12.0
+          ],
+          "kind": "patient",
+          "id": "patient-104"
+        }
+      ],
+      "routes": {
+        "asset_round": [
+          {
+            "position": [
+              4.0,
+              14.0
+            ],
+            "dwell": 1.0
+          },
+          {
+            "position": [
+              22.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              22.5,
+              22.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              22.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              5.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              5.0,
+              6.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              5.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              31.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              31.0,
+              22.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              31.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              26.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              26.5,
+              6.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              26.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              4.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              4.0,
+              19.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              4.0,
+              14.0
+            ],
+            "dwell": 0.0
+          }
+        ],
+        "held_out": [
+          {
+            "position": [
+              4.0,
+              14.0
+            ],
+            "dwell": 1.0
+          },
+          {
+            "position": [
+              19.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              19.0,
+              6.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              19.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              13.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              13.0,
+              22.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              13.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              34.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              34.0,
+              6.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              34.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              38.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              38.5,
+              22.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              38.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              4.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              4.0,
+              19.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              4.0,
+              14.0
+            ],
+            "dwell": 0.0
+          }
+        ]
+      },
+      "short_name": "01",
+      "elevation": 4.2,
+      "color": "#4e7eab",
+      "corridors": [
+        {
+          "id": "main-corridor",
+          "name": "Main corridor",
+          "center": [
+            21.0,
+            14.0
+          ],
+          "size": [
+            42.0,
+            4.0
+          ]
+        },
+        {
+          "id": "core-lobby",
+          "name": "Lift & stair lobby",
+          "center": [
+            4.0,
+            19.0
+          ],
+          "size": [
+            8.0,
+            6.0
+          ]
+        }
+      ],
+      "doors": [
+        {
+          "id": "door-ward-a",
+          "a": [
+            4.2,
+            12.0
+          ],
+          "b": [
+            5.8,
+            12.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "ward-a",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-patient-101",
+          "a": [
+            12.2,
+            12.0
+          ],
+          "b": [
+            13.8,
+            12.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "patient-101",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-patient-102",
+          "a": [
+            18.2,
+            12.0
+          ],
+          "b": [
+            19.8,
+            12.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "patient-102",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-treatment",
+          "a": [
+            25.7,
+            12.0
+          ],
+          "b": [
+            27.3,
+            12.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "treatment",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-isolation",
+          "a": [
+            33.2,
+            12.0
+          ],
+          "b": [
+            34.8,
+            12.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "isolation",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-linen",
+          "a": [
+            38.7,
+            12.0
+          ],
+          "b": [
+            40.3,
+            12.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "linen",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-ward-b",
+          "a": [
+            12.2,
+            16.0
+          ],
+          "b": [
+            13.8,
+            16.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "ward-b",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-nursing",
+          "a": [
+            21.7,
+            16.0
+          ],
+          "b": [
+            23.3,
+            16.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "nursing",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-patient-103",
+          "a": [
+            30.2,
+            16.0
+          ],
+          "b": [
+            31.8,
+            16.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "patient-103",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-patient-104",
+          "a": [
+            37.7,
+            16.0
+          ],
+          "b": [
+            39.3,
+            16.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "patient-104",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-stair-entry",
+          "a": [
+            1.7,
+            22.0
+          ],
+          "b": [
+            3.3,
+            22.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "core-lobby",
+            "stair-west"
+          ]
+        },
+        {
+          "id": "door-lift-entry",
+          "a": [
+            5.6,
+            22.0
+          ],
+          "b": [
+            7.4,
+            22.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "core-lobby",
+            "lift-west"
+          ]
+        }
+      ],
+      "access_cores": [
+        {
+          "id": "stair-west",
+          "name": "West staircase",
+          "center": [
+            2.5,
+            25.0
+          ],
+          "size": [
+            5.0,
+            6.0
+          ],
+          "kind": "stairs",
+          "entry": [
+            2.5,
+            22.0
+          ]
+        },
+        {
+          "id": "lift-west",
+          "name": "Bed lift",
+          "center": [
+            6.5,
+            25.0
+          ],
+          "size": [
+            3.0,
+            6.0
+          ],
+          "kind": "elevator",
+          "entry": [
+            6.5,
+            22.0
+          ]
+        }
+      ],
+      "movement_regions": [
+        "ward-a",
+        "patient-101",
+        "patient-102",
+        "treatment",
+        "isolation",
+        "linen",
+        "ward-b",
+        "nursing",
+        "patient-103",
+        "patient-104",
+        "main-corridor",
+        "core-lobby"
+      ],
+      "candidate_anchors": [
+        {
+          "id": "C01",
+          "position": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C02",
+          "position": [
+            8.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C03",
+          "position": [
+            15.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C04",
+          "position": [
+            22.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C05",
+          "position": [
+            29.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C06",
+          "position": [
+            36.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C07",
+          "position": [
+            41.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C08",
+          "position": [
+            1.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C09",
+          "position": [
+            8.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C10",
+          "position": [
+            15.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C11",
+          "position": [
+            22.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C12",
+          "position": [
+            29.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C13",
+          "position": [
+            36.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C14",
+          "position": [
+            41.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C15",
+          "position": [
+            2.0,
+            14.0
+          ]
+        },
+        {
+          "id": "C16",
+          "position": [
+            10.0,
+            14.0
+          ]
+        },
+        {
+          "id": "C17",
+          "position": [
+            18.0,
+            14.0
+          ]
+        },
+        {
+          "id": "C18",
+          "position": [
+            26.0,
+            14.0
+          ]
+        },
+        {
+          "id": "C19",
+          "position": [
+            34.0,
+            14.0
+          ]
+        },
+        {
+          "id": "C20",
+          "position": [
+            40.0,
+            14.0
+          ]
+        },
+        {
+          "id": "C21",
+          "position": [
+            4.0,
+            20.0
+          ]
+        }
+      ],
+      "anchor_layout_id": "perimeter-eight-v3.0.0",
+      "route_names": {
+        "asset_round": "Clinical service round",
+        "held_out": "Evaluation service round"
+      }
+    },
+    {
+      "id": "second",
+      "name": "Second floor",
+      "description": "Critical care, surgery and recovery",
+      "width": 42.0,
+      "height": 28.0,
+      "anchors": [
+        {
+          "id": "A1",
+          "position": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "id": "A2",
+          "position": [
+            21.0,
+            1.0
+          ]
+        },
+        {
+          "id": "A3",
+          "position": [
+            41.0,
+            1.0
+          ]
+        },
+        {
+          "id": "A4",
+          "position": [
+            41.0,
+            14.0
+          ]
+        },
+        {
+          "id": "A5",
+          "position": [
+            41.0,
+            27.0
+          ]
+        },
+        {
+          "id": "A6",
+          "position": [
+            21.0,
+            27.0
+          ]
+        },
+        {
+          "id": "A7",
+          "position": [
+            1.0,
+            27.0
+          ]
+        },
+        {
+          "id": "A8",
+          "position": [
+            1.0,
+            14.0
+          ]
+        }
+      ],
+      "walls": [
+        {
+          "id": "ext-south",
+          "a": [
+            0.0,
+            0.0
+          ],
+          "b": [
+            42.0,
+            0.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-east",
+          "a": [
+            42.0,
+            0.0
+          ],
+          "b": [
+            42.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-north",
+          "a": [
+            42.0,
+            28.0
+          ],
+          "b": [
+            0.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "ext-west",
+          "a": [
+            0.0,
+            28.0
+          ],
+          "b": [
+            0.0,
+            0.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "icu-w",
+          "a": [
+            0.0,
+            12.0
+          ],
+          "b": [
+            5.9,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "icu-e",
+          "a": [
+            8.1,
+            12.0
+          ],
+          "b": [
+            14.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "theatre-01-w",
+          "a": [
+            14.0,
+            12.0
+          ],
+          "b": [
+            17.7,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "theatre-01-e",
+          "a": [
+            19.3,
+            12.0
+          ],
+          "b": [
+            23.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-theatre-01",
+          "a": [
+            14.0,
+            0.0
+          ],
+          "b": [
+            14.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "theatre-02-w",
+          "a": [
+            23.0,
+            12.0
+          ],
+          "b": [
+            26.7,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "theatre-02-e",
+          "a": [
+            28.3,
+            12.0
+          ],
+          "b": [
+            32.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-theatre-02",
+          "a": [
+            23.0,
+            0.0
+          ],
+          "b": [
+            23.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "clean-utility-w",
+          "a": [
+            32.0,
+            12.0
+          ],
+          "b": [
+            33.7,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "clean-utility-e",
+          "a": [
+            35.3,
+            12.0
+          ],
+          "b": [
+            37.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-clean-utility",
+          "a": [
+            32.0,
+            0.0
+          ],
+          "b": [
+            32.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "equipment-w",
+          "a": [
+            37.0,
+            12.0
+          ],
+          "b": [
+            38.7,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "equipment-e",
+          "a": [
+            40.3,
+            12.0
+          ],
+          "b": [
+            42.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-equipment",
+          "a": [
+            37.0,
+            0.0
+          ],
+          "b": [
+            37.0,
+            12.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "recovery-w",
+          "a": [
+            8.0,
+            16.0
+          ],
+          "b": [
+            13.9,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "recovery-e",
+          "a": [
+            16.1,
+            16.0
+          ],
+          "b": [
+            22.0,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "staff-w",
+          "a": [
+            22.0,
+            16.0
+          ],
+          "b": [
+            26.2,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "staff-e",
+          "a": [
+            27.8,
+            16.0
+          ],
+          "b": [
+            32.0,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-staff",
+          "a": [
+            22.0,
+            16.0
+          ],
+          "b": [
+            22.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "preparation-w",
+          "a": [
+            32.0,
+            16.0
+          ],
+          "b": [
+            36.2,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "preparation-e",
+          "a": [
+            37.8,
+            16.0
+          ],
+          "b": [
+            42.0,
+            16.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "partition-preparation",
+          "a": [
+            32.0,
+            16.0
+          ],
+          "b": [
+            32.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "core-east",
+          "a": [
+            8.0,
+            16.0
+          ],
+          "b": [
+            8.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "core-divider",
+          "a": [
+            5.0,
+            22.0
+          ],
+          "b": [
+            5.0,
+            28.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "stair-entry-w",
+          "a": [
+            0.0,
+            22.0
+          ],
+          "b": [
+            1.7,
+            22.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "stair-entry-e",
+          "a": [
+            3.3,
+            22.0
+          ],
+          "b": [
+            5.0,
+            22.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "lift-entry-w",
+          "a": [
+            5.0,
+            22.0
+          ],
+          "b": [
+            5.6,
+            22.0
+          ],
+          "height": 3.2
+        },
+        {
+          "id": "lift-entry-e",
+          "a": [
+            7.4,
+            22.0
+          ],
+          "b": [
+            8.0,
+            22.0
+          ],
+          "height": 3.2
+        }
+      ],
+      "rooms": [
+        {
+          "name": "Intensive care unit",
+          "center": [
+            7.0,
+            6.0
+          ],
+          "size": [
+            14.0,
+            12.0
+          ],
+          "kind": "icu",
+          "id": "icu"
+        },
+        {
+          "name": "Operating theatre 01",
+          "center": [
+            18.5,
+            6.0
+          ],
+          "size": [
+            9.0,
+            12.0
+          ],
+          "kind": "theatre",
+          "id": "theatre-01"
+        },
+        {
+          "name": "Operating theatre 02",
+          "center": [
+            27.5,
+            6.0
+          ],
+          "size": [
+            9.0,
+            12.0
+          ],
+          "kind": "theatre",
+          "id": "theatre-02"
+        },
+        {
+          "name": "Clean utility",
+          "center": [
+            34.5,
+            6.0
+          ],
+          "size": [
+            5.0,
+            12.0
+          ],
+          "kind": "laboratory",
+          "id": "clean-utility"
+        },
+        {
+          "name": "Equipment store",
+          "center": [
+            39.5,
+            6.0
+          ],
+          "size": [
+            5.0,
+            12.0
+          ],
+          "kind": "storage",
+          "id": "equipment"
+        },
+        {
+          "name": "Recovery",
+          "center": [
+            15.0,
+            22.0
+          ],
+          "size": [
+            14.0,
+            12.0
+          ],
+          "kind": "recovery",
+          "id": "recovery"
+        },
+        {
+          "name": "Staff & on-call",
+          "center": [
+            27.0,
+            22.0
+          ],
+          "size": [
+            10.0,
+            12.0
+          ],
+          "kind": "staff",
+          "id": "staff"
+        },
+        {
+          "name": "Surgical preparation",
+          "center": [
+            37.0,
+            22.0
+          ],
+          "size": [
+            10.0,
+            12.0
+          ],
+          "kind": "treatment",
+          "id": "preparation"
+        }
+      ],
+      "routes": {
+        "asset_round": [
+          {
+            "position": [
+              4.0,
+              14.0
+            ],
+            "dwell": 1.0
+          },
+          {
+            "position": [
+              7.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              7.0,
+              6.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              7.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              15.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              15.0,
+              22.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              15.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              18.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              18.5,
+              6.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              18.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              39.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              39.5,
+              6.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              39.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              4.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              4.0,
+              19.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              4.0,
+              14.0
+            ],
+            "dwell": 0.0
+          }
+        ],
+        "held_out": [
+          {
+            "position": [
+              4.0,
+              14.0
+            ],
+            "dwell": 1.0
+          },
+          {
+            "position": [
+              37.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              37.0,
+              22.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              37.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              27.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              27.5,
+              6.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              27.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              34.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              34.5,
+              6.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              34.5,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              27.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              27.0,
+              22.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              27.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              4.0,
+              14.0
+            ],
+            "dwell": 0.0
+          },
+          {
+            "position": [
+              4.0,
+              19.0
+            ],
+            "dwell": 2.0
+          },
+          {
+            "position": [
+              4.0,
+              14.0
+            ],
+            "dwell": 0.0
+          }
+        ]
+      },
+      "short_name": "02",
+      "elevation": 8.4,
+      "color": "#a4784f",
+      "corridors": [
+        {
+          "id": "main-corridor",
+          "name": "Main corridor",
+          "center": [
+            21.0,
+            14.0
+          ],
+          "size": [
+            42.0,
+            4.0
+          ]
+        },
+        {
+          "id": "core-lobby",
+          "name": "Lift & stair lobby",
+          "center": [
+            4.0,
+            19.0
+          ],
+          "size": [
+            8.0,
+            6.0
+          ]
+        }
+      ],
+      "doors": [
+        {
+          "id": "door-icu",
+          "a": [
+            5.9,
+            12.0
+          ],
+          "b": [
+            8.1,
+            12.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "icu",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-theatre-01",
+          "a": [
+            17.7,
+            12.0
+          ],
+          "b": [
+            19.3,
+            12.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "theatre-01",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-theatre-02",
+          "a": [
+            26.7,
+            12.0
+          ],
+          "b": [
+            28.3,
+            12.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "theatre-02",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-clean-utility",
+          "a": [
+            33.7,
+            12.0
+          ],
+          "b": [
+            35.3,
+            12.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "clean-utility",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-equipment",
+          "a": [
+            38.7,
+            12.0
+          ],
+          "b": [
+            40.3,
+            12.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "equipment",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-recovery",
+          "a": [
+            13.9,
+            16.0
+          ],
+          "b": [
+            16.1,
+            16.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "recovery",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-staff",
+          "a": [
+            26.2,
+            16.0
+          ],
+          "b": [
+            27.8,
+            16.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "staff",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-preparation",
+          "a": [
+            36.2,
+            16.0
+          ],
+          "b": [
+            37.8,
+            16.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "preparation",
+            "main-corridor"
+          ]
+        },
+        {
+          "id": "door-stair-entry",
+          "a": [
+            1.7,
+            22.0
+          ],
+          "b": [
+            3.3,
+            22.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "core-lobby",
+            "stair-west"
+          ]
+        },
+        {
+          "id": "door-lift-entry",
+          "a": [
+            5.6,
+            22.0
+          ],
+          "b": [
+            7.4,
+            22.0
+          ],
+          "height": 2.3,
+          "connects": [
+            "core-lobby",
+            "lift-west"
+          ]
+        }
+      ],
+      "access_cores": [
+        {
+          "id": "stair-west",
+          "name": "West staircase",
+          "center": [
+            2.5,
+            25.0
+          ],
+          "size": [
+            5.0,
+            6.0
+          ],
+          "kind": "stairs",
+          "entry": [
+            2.5,
+            22.0
+          ]
+        },
+        {
+          "id": "lift-west",
+          "name": "Bed lift",
+          "center": [
+            6.5,
+            25.0
+          ],
+          "size": [
+            3.0,
+            6.0
+          ],
+          "kind": "elevator",
+          "entry": [
+            6.5,
+            22.0
+          ]
+        }
+      ],
+      "movement_regions": [
+        "icu",
+        "theatre-01",
+        "theatre-02",
+        "clean-utility",
+        "equipment",
+        "recovery",
+        "staff",
+        "preparation",
+        "main-corridor",
+        "core-lobby"
+      ],
+      "candidate_anchors": [
+        {
+          "id": "C01",
+          "position": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C02",
+          "position": [
+            8.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C03",
+          "position": [
+            15.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C04",
+          "position": [
+            22.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C05",
+          "position": [
+            29.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C06",
+          "position": [
+            36.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C07",
+          "position": [
+            41.0,
+            1.0
+          ]
+        },
+        {
+          "id": "C08",
+          "position": [
+            1.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C09",
+          "position": [
+            8.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C10",
+          "position": [
+            15.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C11",
+          "position": [
+            22.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C12",
+          "position": [
+            29.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C13",
+          "position": [
+            36.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C14",
+          "position": [
+            41.0,
+            27.0
+          ]
+        },
+        {
+          "id": "C15",
+          "position": [
+            2.0,
+            14.0
+          ]
+        },
+        {
+          "id": "C16",
+          "position": [
+            10.0,
+            14.0
+          ]
+        },
+        {
+          "id": "C17",
+          "position": [
+            18.0,
+            14.0
+          ]
+        },
+        {
+          "id": "C18",
+          "position": [
+            26.0,
+            14.0
+          ]
+        },
+        {
+          "id": "C19",
+          "position": [
+            34.0,
+            14.0
+          ]
+        },
+        {
+          "id": "C20",
+          "position": [
+            40.0,
+            14.0
+          ]
+        },
+        {
+          "id": "C21",
+          "position": [
+            4.0,
+            20.0
+          ]
+        }
+      ],
+      "anchor_layout_id": "perimeter-eight-v3.0.0",
+      "route_names": {
+        "asset_round": "Clinical service round",
+        "held_out": "Evaluation service round"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "west-stairs",
+      "kind": "stairs",
+      "stops": [
+        {
+          "floor_id": "ground",
+          "access_id": "stair-west"
+        },
+        {
+          "floor_id": "first",
+          "access_id": "stair-west"
+        },
+        {
+          "floor_id": "second",
+          "access_id": "stair-west"
+        }
+      ]
+    },
+    {
+      "id": "bed-elevator",
+      "kind": "elevator",
+      "stops": [
+        {
+          "floor_id": "ground",
+          "access_id": "lift-west"
+        },
+        {
+          "floor_id": "first",
+          "access_id": "lift-west"
+        },
+        {
+          "floor_id": "second",
+          "access_id": "lift-west"
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "units": "metres",
+    "source": "fictional-procedural",
+    "geometry_revision": "meridian-2026-10-19.1",
+    "notes": "Shared local origin; 4.2 m storeys; physical wall height 3.2 m. Rooms/corridors define walkable regions. Access cores align vertically. Routes remain on one known floor. No clinical building-code or real-hospital claim."
+  }
+}

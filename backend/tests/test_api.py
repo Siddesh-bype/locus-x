@@ -9,8 +9,16 @@ client = TestClient(app)
 @pytest.fixture(autouse=True)
 def clear_sessions():
     sessions.clear()
+    from backend.locus_x.main import environments as catalog
+    from backend.locus_x.main import layout_jobs
+
+    snapshot = dict(catalog)
+    layout_jobs.clear()
     yield
     sessions.clear()
+    layout_jobs.clear()
+    catalog.clear()
+    catalog.update(snapshot)
 
 
 def test_health_and_environment_coordinates():
@@ -104,3 +112,108 @@ def test_benchmark_job_lifecycle_and_actual_output():
     assert job["progress"] == 1
     assert len(job["result"]["rows"]) == 2
     assert job["result"]["rows"][0]["rmse"] < 1e-5
+
+
+def test_layout_sites_endpoint_reports_legality():
+    response = client.get("/api/v1/layouts/sites", params={"environment_id": "hospital_floor_01"})
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["floor_id"] == "hospital_floor_01"
+    assert payload["source"] == "derived"
+    assert payload["policy"]["min_anchor_separation"] == 4.0
+    legal = [s for s in payload["sites"] if s["legal"]]
+    assert len(legal) >= 8
+    assert all("reason" in s for s in payload["sites"])
+
+
+def test_layout_sites_unknown_environment_rejected():
+    assert (
+        client.get("/api/v1/layouts/sites", params={"environment_id": "missing"}).status_code == 404
+    )
+
+
+def test_layout_optimize_job_lifecycle():
+    import time
+
+    response = client.post(
+        "/api/v1/layouts/optimize",
+        json={
+            "environment_id": "hospital_floor_01",
+            "budgets": [3],
+            "with_locus_estimator": False,
+            "development_steps": 4,
+            "validation_steps": 4,
+            "held_out_steps": 4,
+        },
+    )
+    assert response.status_code == 202
+    job_id = response.json()["id"]
+    # Single-flight guard: a second job while running is refused.
+    assert (
+        client.post(
+            "/api/v1/layouts/optimize",
+            json={"environment_id": "hospital_floor_01", "budgets": [4]},
+        ).status_code
+        in (202, 409)
+    )
+    deadline = time.monotonic() + 60
+    while time.monotonic() < deadline:
+        job = client.get(f"/api/v1/layouts/optimize/{job_id}").json()
+        if job["status"] in ("complete", "failed"):
+            break
+        time.sleep(0.05)
+    assert job["status"] == "complete", job.get("error")
+    assert job["progress"] == 1.0
+    result = job["result"]
+    assert result["optimizer_protocol"]
+    assert "3" in result["optimization"]
+    selected = result["optimization"]["3"]["selected"]
+    assert selected["budget"] == 3
+    assert len(selected["anchors"]) == 3
+    # Comparison reports manual/grid/optimized rows at equal budget on held-out.
+    rows = result["comparisons"]["3/baseline"]["rows"]
+    pooled = [r for r in rows if r["scenario"] == "pooled"]
+    assert {r["layout"] for r in pooled} == {"manual", "grid", "optimized"}
+    assert all(r["budget"] == 3 for r in pooled)
+
+
+def test_layout_optimize_validation_errors():
+    assert (
+        client.post(
+            "/api/v1/layouts/optimize", json={"environment_id": "missing", "budgets": [3]}
+        ).status_code
+        == 404
+    )
+    assert (
+        client.post(
+            "/api/v1/layouts/optimize", json={"environment_id": "hospital_floor_01", "budgets": [0]}
+        ).status_code
+        == 422
+    )
+    assert (
+        client.post(
+            "/api/v1/layouts/optimize",
+            json={"environment_id": "hospital_floor_01", "budgets": [3, 3]},
+        ).status_code
+        == 422
+    )
+    assert client.get("/api/v1/layouts/optimize/missing").status_code == 404
+
+
+def test_environment_registration_round_trip():
+    base = client.get("/api/v1/environments").json()["environments"][0]
+    duplicate = client.post("/api/v1/environments", json={"environment": base})
+    assert duplicate.status_code == 409
+    invalid = client.post("/api/v1/environments", json={"environment": {"id": "x"}})
+    assert invalid.status_code == 422
+    # A valid but new environment registers and is immediately usable.
+    variant = dict(base)
+    variant["id"] = "hospital_floor_01_probe"
+    variant["name"] = "Probe floor"
+    created = client.post("/api/v1/environments", json={"environment": variant})
+    assert created.status_code == 201
+    assert created.json()["id"] == "hospital_floor_01_probe"
+    sites = client.get(
+        "/api/v1/layouts/sites", params={"environment_id": "hospital_floor_01_probe"}
+    )
+    assert sites.status_code == 200
