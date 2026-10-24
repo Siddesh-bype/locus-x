@@ -1,0 +1,312 @@
+{
+  "scope": "validation seeds 11,22; phase2 validation layouts/variants",
+  "training_data": "v1 train split; 80/20 grouped calibration split",
+  "seeds": [
+    20261021,
+    20261022,
+    20261023,
+    20261024,
+    20261025
+  ],
+  "variants": [
+    {
+      "variant": "full",
+      "feature_count": 24,
+      "features": [
+        "observed_range_norm",
+        "predicted_range_norm",
+        "residual_m",
+        "residual_norm",
+        "abs_residual_norm",
+        "instant_reliability",
+        "anchor_x_norm",
+        "anchor_y_norm",
+        "relative_dx_norm",
+        "relative_dy_norm",
+        "bearing_sin",
+        "bearing_cos",
+        "available_fraction",
+        "condition_log",
+        "wall_count_scaled",
+        "frame_wall_mean_scaled",
+        "consensus_median_norm",
+        "consensus_mad_norm",
+        "observed_to_predicted_delta",
+        "residual_sign",
+        "previous_residual_norm",
+        "residual_delta_norm",
+        "position_delta_norm",
+        "time_delta_s"
+      ],
+      "seeds": [
+        20261021,
+        20261022,
+        20261023,
+        20261024,
+        20261025
+      ],
+      "training_runs": 1152,
+      "calibration_runs": 288
+    },
+    {
+      "variant": "drop_map",
+      "feature_count": 22,
+      "features": [
+        "observed_range_norm",
+        "predicted_range_norm",
+        "residual_m",
+        "residual_norm",
+        "abs_residual_norm",
+        "instant_reliability",
+        "anchor_x_norm",
+        "anchor_y_norm",
+        "relative_dx_norm",
+        "relative_dy_norm",
+        "bearing_sin",
+        "bearing_cos",
+        "available_fraction",
+        "condition_log",
+        "consensus_median_norm",
+        "consensus_mad_norm",
+        "observed_to_predicted_delta",
+        "residual_sign",
+        "previous_residual_norm",
+        "residual_delta_norm",
+        "position_delta_norm",
+        "time_delta_s"
+      ],
+      "seeds": [
+        20261021,
+        20261022,
+        20261023,
+        20261024,
+        20261025
+      ],
+      "training_runs": 1152,
+      "calibration_runs": 288
+    },
+    {
+      "variant": "drop_temporal",
+      "feature_count": 20,
+      "features": [
+        "observed_range_norm",
+        "predicted_range_norm",
+        "residual_m",
+        "residual_norm",
+        "abs_residual_norm",
+        "instant_reliability",
+        "anchor_x_norm",
+        "anchor_y_norm",
+        "relative_dx_norm",
+        "relative_dy_norm",
+        "bearing_sin",
+        "bearing_cos",
+        "available_fraction",
+        "condition_log",
+        "wall_count_scaled",
+        "frame_wall_mean_scaled",
+        "consensus_median_norm",
+        "consensus_mad_norm",
+        "observed_to_predicted_delta",
+        "residual_sign"
+      ],
+      "seeds": [
+        20261021,
+        20261022,
+        20261023,
+        20261024,
+        20261025
+      ],
+      "training_runs": 1152,
+      "calibration_runs": 288
+    },
+    {
+      "variant": "drop_residual",
+      "feature_count": 14,
+      "features": [
+        "anchor_x_norm",
+        "anchor_y_norm",
+        "relative_dx_norm",
+        "relative_dy_norm",
+        "bearing_sin",
+        "bearing_cos",
+        "available_fraction",
+        "condition_log",
+        "wall_count_scaled",
+        "frame_wall_mean_scaled",
+        "previous_residual_norm",
+        "residual_delta_norm",
+        "position_delta_norm",
+        "time_delta_s"
+      ],
+      "seeds": [
+        20261021,
+        20261022,
+        20261023,
+        20261024,
+        20261025
+      ],
+      "training_runs": 1152,
+      "calibration_runs": 288
+    },
+    {
+      "variant": "drop_geometry",
+      "feature_count": 16,
+      "features": [
+        "observed_range_norm",
+        "predicted_range_norm",
+        "residual_m",
+        "residual_norm",
+        "abs_residual_norm",
+        "instant_reliability",
+        "wall_count_scaled",
+        "frame_wall_mean_scaled",
+        "consensus_median_norm",
+        "consensus_mad_norm",
+        "observed_to_predicted_delta",
+        "residual_sign",
+        "previous_residual_norm",
+        "residual_delta_norm",
+        "position_delta_norm",
+        "time_delta_s"
+      ],
+      "seeds": [
+        20261021,
+        20261022,
+        20261023,
+        20261024,
+        20261025
+      ],
+      "training_runs": 1152,
+      "calibration_runs": 288
+    },
+    {
+      "variant": "residual_only",
+      "feature_count": 10,
+      "features": [
+        "observed_range_norm",
+        "predicted_range_norm",
+        "residual_m",
+        "residual_norm",
+        "abs_residual_norm",
+        "instant_reliability",
+        "consensus_median_norm",
+        "consensus_mad_norm",
+        "observed_to_predicted_delta",
+        "residual_sign"
+      ],
+      "seeds": [
+        20261021,
+        20261022,
+        20261023,
+        20261024,
+        20261025
+      ],
+      "training_runs": 1152,
+      "calibration_runs": 288
+    },
+    {
+      "variant": "geometry_only",
+      "feature_count": 8,
+      "features": [
+        "anchor_x_norm",
+        "anchor_y_norm",
+        "relative_dx_norm",
+        "relative_dy_norm",
+        "bearing_sin",
+        "bearing_cos",
+        "available_fraction",
+        "condition_log"
+      ],
+      "seeds": [
+        20261021,
+        20261022,
+        20261023,
+        20261024,
+        20261025
+      ],
+      "training_runs": 1152,
+      "calibration_runs": 288
+    },
+    {
+      "variant": "map_only",
+      "feature_count": 2,
+      "features": [
+        "wall_count_scaled",
+        "frame_wall_mean_scaled"
+      ],
+      "seeds": [
+        20261021,
+        20261022,
+        20261023,
+        20261024,
+        20261025
+      ],
+      "training_runs": 1152,
+      "calibration_runs": 288
+    },
+    {
+      "variant": "temporal_only",
+      "feature_count": 4,
+      "features": [
+        "previous_residual_norm",
+        "residual_delta_norm",
+        "position_delta_norm",
+        "time_delta_s"
+      ],
+      "seeds": [
+        20261021,
+        20261022,
+        20261023,
+        20261024,
+        20261025
+      ],
+      "training_runs": 1152,
+      "calibration_runs": 288
+    },
+    {
+      "variant": "wall_count_only",
+      "feature_count": 1,
+      "features": [
+        "wall_count_scaled"
+      ],
+      "seeds": [
+        20261021,
+        20261022,
+        20261023,
+        20261024,
+        20261025
+      ],
+      "training_runs": 1152,
+      "calibration_runs": 288
+    },
+    {
+      "variant": "majority_class",
+      "feature_count": 0,
+      "features": [],
+      "seeds": [],
+      "training_runs": 1152,
+      "calibration_runs": 288
+    },
+    {
+      "variant": "residual_threshold",
+      "feature_count": 1,
+      "threshold": 1.3009024858474731,
+      "note": "threshold chosen on validation by F1; diagnostic baseline only"
+    }
+  ],
+  "v1_frozen_reference": {
+    "samples": 129300,
+    "positives": 49200,
+    "precision": 0.9753110631714279,
+    "recall": 0.9097154471544715,
+    "f1": 0.9413719489751922,
+    "roc_auc": 0.9931286795976574,
+    "average_precision": 0.989469019956386,
+    "brier": 0.03339274797102874,
+    "ece": 0.03225163265999654,
+    "mean_predicted_nlos": 0.3482588081752702,
+    "true_nlos_rate": 0.3805104408352668
+  },
+  "elapsed_seconds": 891.7754419000012
+}

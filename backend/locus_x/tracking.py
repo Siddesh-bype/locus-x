@@ -8,6 +8,7 @@ from .schemas import Ellipse, Estimate, Tracking
 
 CHI2_95_2D = 5.991464547107979
 MAX_COAST_SECONDS = 3.0
+DEFAULT_GATE_CHI2 = 13.82  # 99.9% 2-D innovation gate
 
 
 def covariance_ellipse(covariance: np.ndarray) -> Ellipse:
@@ -29,7 +30,9 @@ class MotionTracker:
         self.timestamp = None
         self.last_update = None
 
-    def update(self, estimate: Estimate, timestamp: float) -> Tracking:
+    def update(
+        self, estimate: Estimate, timestamp: float, gate: float = DEFAULT_GATE_CHI2
+    ) -> Tracking:
         start = perf_counter()
         dt = 0 if self.timestamp is None else max(0, timestamp - self.timestamp)
         self.timestamp = timestamp
@@ -62,7 +65,7 @@ class MotionTracker:
                 innovation = measurement - observation @ self.state
                 innovation_cov = observation @ self.covariance @ observation.T + measurement_cov
                 distance = float(innovation @ np.linalg.solve(innovation_cov, innovation))
-                if distance < 13.82:  # 99.9% 2-D innovation gate; no fault-label input.
+                if distance < gate:  # no fault-label input; gate comes from the policy
                     gain = np.linalg.solve(innovation_cov, observation @ self.covariance).T
                     self.state += gain @ innovation
                     complement = np.eye(4) - gain @ observation

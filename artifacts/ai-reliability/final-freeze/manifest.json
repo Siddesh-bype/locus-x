@@ -1,0 +1,200 @@
+{
+  "status": "frozen_unrun",
+  "phase": "5",
+  "attempt": 2,
+  "created_at": "2026-10-22T00:00:00Z",
+  "freeze_commit": "5aef613",
+  "preregistration_commit": "9cb0d2c",
+  "invalidated_attempt": {
+    "status": "invalid_preserved_not_analyzed",
+    "freeze_commit": "b87bef3",
+    "result_path": "artifacts/ai-reliability/final-test-invalid-mask",
+    "reason": "The final evaluator passed the selected anchor subset as disabled anchors, leaving the complement available. Counts 3-5 were actually 5-3 available and counts 6-8 had fewer than three anchors. The frozen classifier rows also used p(LOS) as p(NLOS). Both defects were fixed before the valid run; the invalid result directory and the original manifest are preserved."
+  },
+  "final_test_output": "artifacts/ai-reliability/final-test",
+  "policy": {
+    "path": "models/ai-reliability-v2/policy-v2.json",
+    "policy_id": "hard_t005_f005_min3",
+    "policy_sha256": "4c38a30b7bfb19f19b9d67bd05b79c2183e4cf4ff62020d7cbb17e15d2abfca8",
+    "selection_rule": "no >+0.5% relative regression with a bootstrap interval entirely above zero in any scenario x anchor-count slice or anchor count; then largest mean paired improvement over the current policy on solvable mixed-fault, majority-NLOS and all-NLOS frames; then lowest fallback rate; then hard before soft and fixed grid order"
+  },
+  "feature_schema": {
+    "v1": {
+      "version": "1.0.0",
+      "names": [
+        "observed_range_norm",
+        "predicted_range_norm",
+        "residual_m",
+        "residual_norm",
+        "abs_residual_norm",
+        "instant_reliability",
+        "anchor_x_norm",
+        "anchor_y_norm",
+        "relative_dx_norm",
+        "relative_dy_norm",
+        "bearing_sin",
+        "bearing_cos",
+        "available_fraction",
+        "condition_log",
+        "wall_count_scaled",
+        "frame_wall_mean_scaled",
+        "consensus_median_norm",
+        "consensus_mad_norm",
+        "observed_to_predicted_delta",
+        "residual_sign",
+        "previous_residual_norm",
+        "residual_delta_norm",
+        "position_delta_norm",
+        "time_delta_s"
+      ],
+      "sha256": "732a618a3467321f847dd240f4ffd4b39a2d0f7b74a9140d572303f14066ac10"
+    },
+    "v2": {
+      "version": "2.0.0",
+      "names": [
+        "observed_range_norm",
+        "predicted_range_norm",
+        "residual_m",
+        "residual_norm",
+        "abs_residual_norm",
+        "instant_reliability",
+        "anchor_x_norm",
+        "anchor_y_norm",
+        "relative_dx_norm",
+        "relative_dy_norm",
+        "bearing_sin",
+        "bearing_cos",
+        "available_fraction",
+        "condition_log",
+        "wall_count_scaled",
+        "frame_wall_mean_scaled",
+        "consensus_median_norm",
+        "consensus_mad_norm",
+        "observed_to_predicted_delta",
+        "residual_sign",
+        "previous_residual_norm",
+        "residual_delta_norm",
+        "position_delta_norm",
+        "time_delta_s",
+        "range_window_mean_norm",
+        "range_window_variance_norm",
+        "range_last_diff_norm",
+        "range_rate_norm",
+        "implied_speed_ratio",
+        "pair_violation_count_norm",
+        "pair_violation_magnitude_norm",
+        "tracker_range_residual_norm",
+        "tracker_prediction_available",
+        "tracker_state_age_norm",
+        "reception_rate",
+        "reception_miss_streak_norm",
+        "reception_last_frame",
+        "available_anchor_count_norm",
+        "has_previous_observation",
+        "frames_since_last_observation_norm",
+        "previous_residual_missing"
+      ],
+      "sha256": "72d6dc1674ff80686616565f566ed0fb3010d8a34a179130302025c5410064f1"
+    }
+  },
+  "test_seed_manifest": {
+    "path": "configs/ai/final-test-seeds-v2.json",
+    "sha256": "f7e4c0fe7fc81cf5a09198a94640686759edd6071378ee657a6692c2b0906942",
+    "fresh_seeds": [
+      8001,
+      8009,
+      8017,
+      8023,
+      8039,
+      8053,
+      8069,
+      8081
+    ]
+  },
+  "models": {
+    "v1": {
+      "path": "models/ai-reliability-v1",
+      "files": {
+        "config.json": "45001e5436ae460666869d3cfdb199e877277993f2fc537044388c62aef76fe4",
+        "metrics.json": "bb34dc292cd532c0bbf2cb19541d3cce43a50631a7b2b4469bf69d8d88d23f31",
+        "weights.npz": "663d22559f3602771c174a4fb85cf6f980cb0932e3fbc06cf25dc3cf556c90cb"
+      }
+    },
+    "v2": {
+      "path": "models/ai-reliability-v2",
+      "files": {
+        "config.json": "3ae963edce33f18f3d3765c55858eac5f41285b5ebc1db6040bc023cfec88a98",
+        "policy-v2.json": "ff818fd2f2bf77428e2509d9536b3840c912a790278ef3fea35723e037a2e0a7",
+        "promotion.json": "b3374945edf11d967744ca8f648defa026f2fc434de695d40622af9629abc2e8",
+        "seed_20261021.npz": "29130abab89b917daa3ac5924c3cea5aebc151f02d50a244339e1d2f06d706a6",
+        "seed_20261022.npz": "cd9a0ba748ac68f9a1600462a58b6ac3ba74fa6543caf6f14ac656e01cc9515e",
+        "seed_20261023.npz": "e403a7da6fcc446b7dc45af66e8ff9bd3bea79e7082694d603da50735358be61",
+        "seed_20261024.npz": "b34ae54f933ab673bb0d2563364b45742ca1ca87f8e16f7fca7b2e4045240556",
+        "seed_20261025.npz": "eab83f5032e74c2bfaa725c0dce3fd978320e7a3e772d36b72b68329b86db63e",
+        "selection.json": "c5d38f6bc3f3b28af30a880689c910842d0c5aec8115127277a2537cb10e34f7"
+      }
+    }
+  },
+  "code": {
+    "backend/locus_x/ai_final.py": "ce38ea449b9810029d82863e5060c3fdc2f53527be7e6979ffc1859c7effb92e",
+    "backend/locus_x/policy_v2.py": "bbc8ec2c42986740e773878a563c2c471f578fa69956413e8936769bf3fda0f5",
+    "backend/locus_x/reliability.py": "c7c14fcaed32883794c4908af8bdcb0fc9a9edea66b0a6440c2c085cb4a59155",
+    "backend/locus_x/reliability_v2.py": "18669348b86709317800bff9c58ccec3e1a87164dddb122d7eab54e5732ba823",
+    "backend/tests/test_phase4_engineering.py": "fb4039642e22dee91ee061464136f2e5d6fbc4feb3b1c0ce6c282636dc7d45dc"
+  },
+  "protocol": {
+    "route": "held_out",
+    "dt": 0.5,
+    "steps": 120,
+    "seeds": [
+      8001,
+      8009,
+      8017,
+      8023,
+      8039,
+      8053,
+      8069,
+      8081
+    ],
+    "layouts": [
+      "hospital_floor_01",
+      "ground",
+      "first",
+      "second"
+    ],
+    "variants": "all base_variants() and mixed_variants() from backend.locus_x.ai_evaluation",
+    "anchor_counts": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "methods": [
+      "baseline",
+      "stat",
+      "v1",
+      "v2"
+    ],
+    "bootstrap_resamples": 2000
+  },
+  "pre_freeze_checks": {
+    "pytest": "107 passed",
+    "ruff": "All checks passed",
+    "typecheck": "pass",
+    "lint": "pass",
+    "vitest": "24 passed",
+    "build": "pass",
+    "reference_ai_off": "56/56 baseline/proposed rows matched artifacts/ai-reliability/reference-existing/metrics.csv"
+  },
+  "commands": [
+    ".\\\\.venv\\\\Scripts\\\\python.exe -m pytest -q",
+    ".\\\\.venv\\\\Scripts\\\\python.exe -m ruff check backend\\\\locus_x backend\\\\tests",
+    "npm run typecheck",
+    "npm run lint",
+    "npm test -- --run",
+    "npm run build",
+    ".\\\\.venv\\\\Scripts\\\\python.exe -m backend.locus_x.ai_final --workers 18"
+  ]
+}

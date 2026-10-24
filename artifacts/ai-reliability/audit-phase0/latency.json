@@ -1,0 +1,41 @@
+{
+  "environment_id": "hospital_floor_01",
+  "scenario": "nlos",
+  "seed": 404,
+  "route": "held_out",
+  "timestamp": 10.0,
+  "frame_index": 20,
+  "adapter_only": {
+    "mean_ms": 0.6693576666695359,
+    "median_ms": 0.5441499998823929,
+    "p95_ms": 1.3407700001721425,
+    "min_ms": 0.34989999994650134,
+    "max_ms": 3.6429000001589884,
+    "iterations": 300
+  },
+  "preliminary_plus_adapter": {
+    "mean_ms": 2.550065999995089,
+    "median_ms": 2.3318000000926986,
+    "p95_ms": 4.1514149999216,
+    "min_ms": 1.3483999998697982,
+    "max_ms": 13.05739999997968,
+    "iterations": 300
+  },
+  "preliminary_solve_only": {
+    "mean_ms": 1.675546666667742,
+    "median_ms": 1.4543000000912798,
+    "p95_ms": 3.160464999950819,
+    "min_ms": 0.8315000000038708,
+    "max_ms": 5.162899999959336,
+    "iterations": 300
+  },
+  "preliminary_plus_adapter_plus_ai_solve": {
+    "mean_ms": 19.00656933334176,
+    "median_ms": 20.501149999972768,
+    "p95_ms": 24.03137500007233,
+    "min_ms": 5.111299999953189,
+    "max_ms": 29.55100000008315,
+    "iterations": 300
+  },
+  "note": "The saved 0.386 ms benchmark times adapter_only. It excludes the preliminary solve and the weighted robust solve. Timings are machine-dependent."
+}

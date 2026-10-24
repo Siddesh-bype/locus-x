@@ -1,0 +1,12 @@
+{
+  "scope": "validation seeds and counts from configs/ai/reliability-dataset-v2.json",
+  "comparison": "AI-assisted LOCUS-X versus statistical LOCUS-X on identical frames",
+  "policy": {
+    "floor": 0.05,
+    "threshold": 0.05,
+    "ambiguous": "predicted_los < 3"
+  },
+  "tolerance_percent": 0.5,
+  "rows": 429,
+  "elapsed_seconds": 524.8723113000015
+}

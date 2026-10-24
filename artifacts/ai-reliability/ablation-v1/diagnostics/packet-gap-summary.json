@@ -1,0 +1,52 @@
+{
+  "diagnostic_only": true,
+  "note": "Truth is used only to score; no feature or calibrator was changed.",
+  "buckets": "frames since the same anchor's previous observation: 0=first/no prior, 1=adjacent, 2-3, 4+",
+  "buckets_table": [
+    {
+      "gap_bucket": "0",
+      "frames": 3188,
+      "nlos_frames": 1152,
+      "mean_predicted_nlos": 0.3531296802817798,
+      "true_nlos_rate": 0.3613550815558344,
+      "mean_predicted_nlos_when_true_nlos": 0.8419776724320845,
+      "false_los_rate_among_nlos": 0.109375
+    },
+    {
+      "gap_bucket": "1",
+      "frames": 111298,
+      "nlos_frames": 41562,
+      "mean_predicted_nlos": 0.34558884667104844,
+      "true_nlos_rate": 0.37342989092346673,
+      "mean_predicted_nlos_when_true_nlos": 0.8970735306398443,
+      "false_los_rate_among_nlos": 0.07656031952264088
+    },
+    {
+      "gap_bucket": "2-3",
+      "frames": 12250,
+      "nlos_frames": 5597,
+      "mean_predicted_nlos": 0.38163045733107914,
+      "true_nlos_rate": 0.4568979591836735,
+      "mean_predicted_nlos_when_true_nlos": 0.8020736618466152,
+      "false_los_rate_among_nlos": 0.1731284616758978
+    },
+    {
+      "gap_bucket": "4+",
+      "frames": 2564,
+      "nlos_frames": 889,
+      "mean_predicted_nlos": 0.2986606541435523,
+      "true_nlos_rate": 0.3467238689547582,
+      "mean_predicted_nlos_when_true_nlos": 0.7840554586020255,
+      "false_los_rate_among_nlos": 0.1856017997750281
+    }
+  ],
+  "first_observation_frames": 3188,
+  "post_gap_frames": 126112,
+  "zero_previous_residual_after_gap": 21068,
+  "zero_previous_residual_after_gap_rate": 0.16705785333671658,
+  "over_trust_flag": {
+    "definition": "true NLOS with predicted p(NLOS) < 0.5",
+    "fraction_of_nlos_missed_after_gap": 0.08982683982683982,
+    "mean_predicted_nlos_on_true_nlos_after_gap": 0.883916118641898
+  }
+}

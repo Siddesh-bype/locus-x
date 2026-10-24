@@ -1,0 +1,805 @@
+source,model,inspection,threshold,recall,precision,predicted_positive_rate
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.0,1.0,0.41745627891509113,1.0
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.005,0.92490243598849,0.7589171886508835,0.5087594997994894
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.01,0.9048419572841694,0.7812024314633789,0.4835263451324837
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.015,0.8914897823205957,0.794140590350067,0.4686298770527881
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.02,0.8811044319321701,0.8032501505193753,0.45791784446248496
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.025,0.8724514376505561,0.8100900940099585,0.44959237668600044
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.03,0.8652306025172614,0.8153216492085549,0.4430103727540371
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.035,0.8588942501299633,0.8198872198318642,0.43731721750017116
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.04,0.8533281592068943,0.8239668334702546,0.43233196236269916
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.045,0.8481838084011217,0.8274409860515083,0.42792134117117736
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.05,0.8431741801328189,0.8307521613167584,0.423698392981152
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.055,0.8387239432700967,0.8335314979938557,0.4200568031768699
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.06,0.8346339427575653,0.8360529010188844,0.41674776748598874
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.065,0.8305454066204412,0.8384549769899311,0.41351820244720705
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.07,0.8267526743155875,0.8405421017683964,0.41060774264224026
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.075,0.8232938196035936,0.8425258917693321,0.40792713641565354
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.08,0.8199814024323275,0.8443670711423888,0.40539996967888964
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.085,0.8169062140770408,0.8462190737678807,0.4029956767965258
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.09,0.8137138756891716,0.8477771658120337,0.4006830808204306
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.095,0.8106489379617359,0.8493317561212858,0.3984432310566418
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.1,0.8077245802733989,0.8506753484699401,0.3963788280401804
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.105,0.804816330714542,0.8519787376198101,0.3943474359099756
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.11,0.8019622630457545,0.853209694205039,0.39238206555228433
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.115,0.7992780629242112,0.8545035545932609,0.3904766038400219
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.12,0.7968164478645746,0.8556817270449925,0.3887380304971684
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.125,0.7943006509148686,0.8567619649344496,0.38702207572452785
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.13,0.7918507508584901,0.8578796652520525,0.3853256829585579
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.135,0.7894125658053699,0.8590295804430932,0.3836250110036288
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.14,0.7871296045454212,0.8600083837853751,0.3820802237893563
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.145,0.7847499945085922,0.8608462378718756,0.38055438726904606
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.15,0.7824362813650908,0.861787044339822,0.37901815843269204
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.155,0.7800361700725598,0.862680475816443,0.3774642015277927
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.16,0.7778264275829752,0.8635666022852163,0.3760086659689551
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.165,0.7755244294427319,0.8643694895004684,0.37454762859574137
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.17,0.7734669819955043,0.8653048452838101,0.37315016774420723
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.175,0.7714007482958332,0.8660878257624209,0.3718168947270611
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.18,0.7693213352174963,0.8668730343641818,0.37047873120824737
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.185,0.7674147184372185,0.8676768613322383,0.3692182044034077
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.19,0.7654846716504243,0.8683932487208452,0.3679857979831571
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.195,0.7637259567862817,0.8691211417258539,0.366832862215006
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.2,0.7617505143618618,0.8697777852090892,0.3656077915472569
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.205,0.759870256338915,0.8704369093269725,0.3644291806453506
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.21,0.7579431383029354,0.8710992328898074,0.3632285624859398
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.215,0.7560687377816177,0.8717987683901437,0.3620395592679897
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.22,0.7541870153832636,0.8722476734044085,0.36095264527235205
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.225,0.7523960842601609,0.8727957151811756,0.3598693991529651
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.23,0.7506007600108364,0.8735071574642127,0.35871829732293936
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.235,0.748963588305498,0.8742045592450598,0.3576503340212639
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.24,0.7471858365610607,0.8746860766307302,0.35660498928980133
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.245,0.7454227285706964,0.8752282473014378,0.35554313911521046
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.25,0.7438177731243182,0.8757620689655172,0.3545613709054275
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.255,0.7421220264026885,0.8763431749248652,0.35351847142479875
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.26,0.7403428102828441,0.8767999694766105,0.35248718688563074
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.265,0.7386148473022544,0.8773538958215197,0.35144245346687664
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.27,0.7368400243086317,0.8777526968753925,0.3504386779995892
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.275,0.7350549506871582,0.8782905845320437,0.3493756051995814
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.28,0.7334163146064125,0.8787990447664819,0.34839505961521533
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.285,0.7319197229401729,0.8793077666025709,0.34748298105419656
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.29,0.730442168154228,0.8799010744569944,0.3465476726102564
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.295,0.7288049964488896,0.8803717553660064,0.3455860777198525
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.3,0.7271780753714022,0.8808152941259942,0.344640988272577
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.305,0.7256741618281263,0.8813040864743354,0.34373746808947664
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.31,0.724152675779963,0.8817897811364358,0.3428278347792917
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.315,0.7226077597252831,0.8821989809600429,0.34193776347577737
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.32,0.7210818805508981,0.8826921594602201,0.3410250736020501
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.325,0.719614576392804,0.883144003723692,0.3401570095560403
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.33,0.7180916259692335,0.8836682104049159,0.3392357613043946
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.335,0.7165598892932192,0.8840438582069733,0.33836830857109323
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.34,0.7151394451481582,0.8843844904301151,0.33756748892301375
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.345,0.7136516397343623,0.8849227461654534,0.3366603008636626
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.35,0.7122268024630795,0.8853632696452496,0.33582096851495025
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.355,0.7106818864083997,0.8856838347744519,0.33497124385019417
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.36,0.7091926166191965,0.8861404073746075,0.33409706667709976
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.365,0.7078073174839101,0.8866011339519749,0.3332711832079735
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.37,0.7062506864259721,0.8869354450143351,0.33241290016529895
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.375,0.7048317066563184,0.8873760847481688,0.33158029225637964
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.38,0.7033936900063701,0.8877079567841685,0.3307800839210086
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.385,0.7019498158547925,0.888114647793382,0.32994992126292316
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.39,0.7005835535998008,0.8884749596542804,0.3291741654358904
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.395,0.6990562100500084,0.8888919922911488,0.3283024335136298
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.4,0.6975669402608052,0.8892551924462647,0.3274692142920021
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.405,0.6961567467435952,0.8895614831170532,0.32669468109038624
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.41,0.6946176881905445,0.8898877753556032,0.3258529034908401
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.415,0.6930522708801629,0.8902321346949293,0.3249927865100402
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.42,0.6915512860877014,0.8905403774495754,0.32417668404424926
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.425,0.690060551923091,0.8908937257889792,0.3233495779497061
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.43,0.688676717163212,0.8913365679845343,0.32254081123641665
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.435,0.6872167348821544,0.8916320082382245,0.32175038390438093
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.44,0.6857245363421367,0.8920569062015415,0.32089882530149944
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.445,0.6843070209478902,0.892494537731669,0.3200784436467493
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.45,0.6828323949127598,0.8927452102841761,0.3192990199434658
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.455,0.6813431251235567,0.893123616728444,0.3184676346599634
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.46,0.6799007153473865,0.8934589798310045,0.31767415076438543
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.465,0.6785432393448384,0.8938768738702764,0.3168916704975596
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.47,0.6771315814522211,0.8942581418735979,0.3160975752892732
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.475,0.6756159529056869,0.8946441729687803,0.31525396375160164
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.48,0.6741091106115964,0.8950369805803345,0.3144127974647639
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.485,0.6727897083696377,0.8953934123672563,0.31367249777482176
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.49,0.6713912298556858,0.8957597828996341,0.3128924627588298
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.495,0.6699868938401049,0.8961271709133358,0.31210998249200406
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.5,0.6685737715720802,0.8965339156287003,0.3113103854693414
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.505,0.6671342905467246,0.8968419892200056,0.3105334070168918
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.51,0.6656757726410742,0.8972056321571383,0.30972891949256154
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.515,0.6641865028518711,0.8975207331142117,0.3089274885317736
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.52,0.6628378131017668,0.897830213566967,0.30819391328162443
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.525,0.6612650739143486,0.898153046895822,0.30735213568207825
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.53,0.6597230866104835,0.8984747378455672,0.30652564090024353
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.535,0.6581195955395125,0.8987357466533882,0.3056918103659073
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.54,0.6566010382421638,0.8989937064044703,0.3048989377830378
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.545,0.655155699715179,0.8993499053201626,0.30410728782558516
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.55,0.6537030393111578,0.8997813051146385,0.3032875174835435
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.555,0.6522591651595803,0.9001216549929069,0.3025032032785923
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.56,0.6507098559786787,0.9004820971530126,0.30166387092988
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.565,0.6492454805713993,0.9007702137947708,0.3008887264155557
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.57,0.6476961713904976,0.9010646490080796,0.30007262394976475
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.575,0.6460487490573084,0.9013453464496951,0.2992161748452156
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.58,0.6443588598373079,0.901692018598475,0.2983187677891998
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.585,0.6427978356531481,0.9019991821620922,0.29749471825819895
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.59,0.6411972733329916,0.9023230701701964,0.29664743884427663
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.595,0.6394912759835112,0.9027145579851249,0.2957298584688817
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.6,0.6378350673978781,0.9029543037557449,0.29488563561850173
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.605,0.6361481069286923,0.903330179557293,0.2939833380608183
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.61,0.6345270433528339,0.903657097095761,0.29312811158168606
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.615,0.6328825497704591,0.90407348292936,0.2922337610892125
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.62,0.6312746655732664,0.9043816844499083,0.2913919834896664
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.625,0.6296711745022954,0.9046884665070462,0.2905532624536625
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.63,0.6280662190559172,0.9050636651008892,0.28969253416015417
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.635,0.626393902340804,0.9053533217771175,0.28882874930310354
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.64,0.6246293299750324,0.9057744047328332,0.28788121460499416
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.645,0.622876472612519,0.9060338639350582,0.28699114330147985
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.65,0.6212334434055514,0.9064726219118722,0.28609557018358944
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.655,0.6195450185609583,0.9068418570754919,0.28520183100382435
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.66,0.6177204068034882,0.9071519353472098,0.2842646886217588
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.665,0.615958763188531,0.907488311985312,0.2833489421844893
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.67,0.6142937683504544,0.9078341412742382,0.2824753763241033
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.675,0.6126053435058612,0.9081789269161049,0.28159202946038203
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.68,0.6107968398778711,0.9084857989196724,0.2806658907070687
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.685,0.6091215944119435,0.9088704232553363,0.2797776533416798
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.69,0.607295518279066,0.9092210585395478,0.2788313412689874
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.695,0.6054870146510759,0.9094644322198492,0.2779265984604701
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.7,0.6037502654180426,0.909863705377635,0.27700779545965826
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.705,0.6019739780490126,0.9102360844784751,0.2760798227682196
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.71,0.6000893268998441,0.9105679495155986,0.27511517131427343
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.715,0.59819149637201,0.9110466322167977,0.2741010035309422
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.72,0.5963024520966195,0.9114484475163843,0.27311495613220005
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.725,0.5943372603000505,0.9117814226309889,0.2721154598538718
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.73,0.5925668304326497,0.9121452561819534,0.27119665685306
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.735,0.5906631424031865,0.9125554856721402,0.2702038850145248
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.74,0.5886598768460283,0.9129366396940428,0.2691750457261906
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.745,0.5865599625119896,0.9132806033922574,0.26811380686430814
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.75,0.584492264436911,0.9136232852725138,0.2670684621328456
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.755,0.5823952788536869,0.9141096539011395,0.2659687105703303
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.76,0.5802280032509134,0.9146328232662605,0.2648273897436399
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.765,0.5780285113891798,0.9151455855997885,0.26367567660090574
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.77,0.5759300614305484,0.9156039166934391,0.26258692866714267
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.775,0.5735914539051231,0.9158689481338764,0.26144499652774383
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.78,0.571185485110963,0.9163230930784898,0.26021931454728625
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.785,0.5689567057410838,0.9168117870812155,0.25906576746642673
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.79,0.5664980194322616,0.9173045185522422,0.25780768591242087
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.795,0.564146232528171,0.9177813936091901,0.2566040111894678
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.8,0.5617417281094181,0.9181590146434402,0.2554052269681824
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.805,0.5592962211792615,0.9185811038317604,0.25417648842418256
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.81,0.5568067829868866,0.9190702823427609,0.2529104598049668
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.815,0.5543949566910973,0.9195970744906956,0.2516707176322147
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.82,0.5518996609970932,0.9200011717148047,0.25042791889592037
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.825,0.5493326109081325,0.9205103981350837,0.24912521151419711
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.83,0.5466176589030364,0.9209280408164272,0.24778154618100726
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.835,0.5436713355835902,0.92129425135614,0.24634801787967409
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.84,0.5408494841737628,0.9218700079872204,0.2449163235164663
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.845,0.5378606939675055,0.9225206896984767,0.24339109830886452
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.85,0.5348309012498444,0.9229781706620572,0.24190010661293634
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.855,0.5314672309393236,0.9234157102111539,0.24026484511781218
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.86,0.5283129663120437,0.9240811747439276,0.23866687369790393
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.865,0.5249580822539667,0.924678929136133,0.23699799000381458
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.87,0.5215299794255255,0.9251096172228919,0.23534072125118594
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.875,0.5181267709790082,0.9258670002171916,0.23361376284979313
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.88,0.514503906221399,0.9263965279938406,0.23184768043505902
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.885,0.5108034295672038,0.9271259149793482,0.22999907080468315
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.89,0.5065289177533553,0.9277041868598417,0.22793222253738787
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.895,0.502288086573874,0.9282648466084998,0.2258873815275971
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.9,0.49824494607437564,0.9287732333889288,0.2239464636782441
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.905,0.49372149044128955,0.9295160743381277,0.22173595692446132
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.91,0.48891101722837665,0.9302228388973404,0.2194086894433631
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.915,0.48403464712213623,0.9309124090674823,0.21705941470476042
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.92,0.4790645569898299,0.931771769376903,0.2146325032521836
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.925,0.47330077538677817,0.9326557937140021,0.211849196490576
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.93,0.467403735621664,0.9333654998976518,0.20905060691125696
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.935,0.46146715772055324,0.9345407203990487,0.20613586791733096
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.94,0.45462413144233654,0.935717213608854,0.2028237756629075
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.945,0.44770349326753406,0.9368191721132898,0.19950129109244027
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.95,0.4402263924379654,0.9380868425569094,0.19590432711587555
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.955,0.4318882388689164,0.9393871830806472,0.19192773794735865
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.96,0.42272271319475463,0.9408541871728516,0.1875617425835542
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.965,0.412274394663816,0.9422474497309165,0.18265534678547327
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.97,0.40026651632412485,0.944126668324629,0.17698236485098642
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.975,0.38615286614876587,0.9460289443284471,0.1703985269808977
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.98,0.36918807705543394,0.9483672448361602,0.16251075910366886
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.985,0.3483324425049606,0.9515487053119612,0.1528177847983646
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.99,0.3188604230580552,0.9556212887907767,0.13929187981103103
+final_test_inspected,v1,post-hoc diagnostic on inspected data,0.995,0.2741208256148546,0.9618186862874054,0.11897612457085847
+final_test_inspected,v1,post-hoc diagnostic on inspected data,1.0,0.00048177950899492596,1.0,0.00020112188108256144
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.0,1.0,0.41745627891509113,1.0
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.005,0.9505128974863997,0.7603695651155272,0.5218483162002758
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.01,0.9341558241870886,0.7837213930837236,0.49758653742700926
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.015,0.9227307672594947,0.7970297906357832,0.4832940463032698
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.02,0.9138610454176033,0.8065776072874284,0.4729824235370064
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.025,0.9061979689113101,0.8141972612256068,0.4646270014378075
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.03,0.8994296257788646,0.8200984587612141,0.45783837381038545
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.035,0.8935252641367141,0.8250279550177736,0.4521152642338051
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.04,0.8880675369937837,0.8296391957076683,0.4468561410029441
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.045,0.8831120906155502,0.8335116278426917,0.442298193448684
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.05,0.8784524480695871,0.8370687898906852,0.4380948072653293
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.055,0.8740973956083381,0.8401486884200658,0.43432484179227104
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.06,0.8698419206747842,0.8431695687784161,0.4306618560431929
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.065,0.8657548489130673,0.8459043367529439,0.4272525650681247
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.07,0.8618493597018532,0.848327255430474,0.4241104177466524
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.075,0.858315821844088,0.8507820800891815,0.4211528868631344
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.08,0.8547237089700316,0.8529837288353563,0.41830783751797257
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.085,0.8513146430218851,0.854974248560949,0.41566941186826944
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.09,0.848169164647049,0.8571475081837178,0.41308355911149364
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.095,0.8449753618837725,0.8591992018821287,0.41054538874597757
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.1,0.842027574188919,0.8610404818165754,0.4082382945842585
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.105,0.8390666071154002,0.8629632139764298,0.40589635559815723
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.11,0.8362608638350527,0.8646850494445345,0.40373353123563416
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.115,0.8334126536678943,0.8664063451467544,0.40155909193165035
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.12,0.8306244828924343,0.8680961971693031,0.39943661420788545
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.125,0.8277660220974249,0.8697289121868735,0.397314747796829
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.13,0.8250086032055177,0.8714373660096952,0.39521488864327703
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.135,0.8223595480937493,0.8729696329055876,0.3932544087872534
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.14,0.8196768123476135,0.8744198471255192,0.39132143800311037
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.145,0.8170350791128814,0.8758225439841267,0.38943553829751854
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.15,0.8145558915483574,0.8773088090795677,0.38759609835776954
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.155,0.8121089202427935,0.8786185502984829,0.38585569107679063
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.16,0.809669270814266,0.8801232052465696,0.3840388697072546
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.165,0.8071520094891527,0.8814699908845213,0.38225994972564287
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.17,0.804690394429516,0.8827826293704496,0.3805274895098739
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.175,0.8021555605995153,0.8840437035004761,0.3787876935416035
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.18,0.7997510561807625,0.8853745841736322,0.3770845763358405
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.185,0.7972381879818711,0.8867515485763522,0.3753160486702726
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.19,0.7947560716665324,0.8880509339860982,0.37360009389763205
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.195,0.7922446678430483,0.8893732934192767,0.37186579974373773
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.2,0.7899221684471031,0.890863719614407,0.37015534678547324
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.205,0.7875938115495288,0.8923228539147257,0.3684607879576287
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.21,0.7852493465224745,0.8934554742652633,0.36689827267481095
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.215,0.7828506996053508,0.8947319973087596,0.36525567542718534
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.22,0.7806043477305842,0.8959704583196069,0.36370416377311987
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.225,0.7783345658493012,0.8969850899916464,0.3622364019601131
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.23,0.7761277521105311,0.8980854052606875,0.36076680620898094
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.235,0.7739853708896812,0.8991670834651777,0.35933816840931543
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.24,0.7717536627689875,0.9001270721817816,0.35791992292569375
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.245,0.7696859646939089,0.9012172100017317,0.3565291865139526
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.25,0.767385430929073,0.9021384721854008,0.3551005487142871
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.255,0.7651698309378592,0.9031502568463554,0.3536786353544147
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.26,0.7629966978334566,0.9042801704987227,0.3522334921116208
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.265,0.7608997122502325,0.9052102895728008,0.3509044982834339
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.27,0.7587895472883428,0.9062331666025394,0.3495363804419057
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.275,0.7566793823264533,0.9071828481038215,0.3481994395485089
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.28,0.7545457873580471,0.9081020493045617,0.34686616653136276
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.285,0.752637706202362,0.908897188593094,0.34568633300403956
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.29,0.7505802587551345,0.9096313806499243,0.34446309627441585
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.295,0.7484862019227249,0.9104705989230323,0.3431854527137394
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.3,0.7465385826310433,0.9113319425599883,0.3419689404239087
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.305,0.7446217152229145,0.9123025776367985,0.3407279756257397
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.31,0.7425715896527234,0.9131707088678716,0.33946683750819157
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.315,0.7405082847038666,0.9139315819151859,0.3382417668404425
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.32,0.7385167341499667,0.9147453861152678,0.3370319789904048
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.325,0.736427070443779,0.9155530876784154,0.335781844501609
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.33,0.7345658493011268,0.9164475835697725,0.33460629016324495
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.335,0.7326035862553725,0.9171579842778365,0.3334539657078023
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.34,0.7304978144197046,0.9179311283917814,0.33221544616046716
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.345,0.7285882688886123,0.9186674076932593,0.33108146108627823
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.35,0.7267372983738111,0.9194538983572116,0.3299578683281331
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.355,0.7248672909787153,0.9202318607794255,0.32883060769373723
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.36,0.7226765853694253,0.9209416462948103,0.3275841410811921
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.365,0.7206191379221978,0.9217289019419803,0.3263725192930291
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.37,0.7187491305271019,0.9225441326837484,0.32523792290613174
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.375,0.71672097058802,0.9232554015868045,0.3240703156329776
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.38,0.7147382062865636,0.9238783340494682,0.32295589256545937
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.385,0.7128052307489549,0.9246017726010431,0.32183046586918884
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.39,0.710882505839197,0.9253118834999571,0.3207160428016706
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.395,0.7089744246835119,0.9259291842456557,0.31964196637291054
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.4,0.7069023334822115,0.926668253559952,0.3184535744676689
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.405,0.7048566010382422,0.9273796404047566,0.31728841244534867
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.41,0.7029089817465606,0.9279961333977768,0.31620149844971096
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.415,0.7010492249793157,0.9286576116264543,0.31514025958782854
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.42,0.6991557875777035,0.9293203959085556,0.3140649605336515
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.425,0.6970441582404066,0.9299201169039977,0.31291447001633427
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.43,0.6951595070912379,0.9306238151902655,0.31183244652236425
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.435,0.6931401334045996,0.9312411958668776,0.3107204687056798
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.44,0.6911441897244778,0.9318283675649209,0.30963049814649984
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.445,0.6890867422772502,0.9325101461682361,0.30848306419272487
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.45,0.6870556535873537,0.9331307353590479,0.3073692524379151
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.455,0.6850436017777517,0.9336979192655057,0.3062829497549859
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.46,0.6830608374762954,0.9342287363481416,0.3052229335185203
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.465,0.6810224269093624,0.9347676648295324,0.3041366308355911
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.47,0.6788990825688074,0.9353387402655046,0.3030032570741107
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.475,0.6768767801313544,0.9358036838631569,0.3019505765901466
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.48,0.6749028020823419,0.9363579476885694,0.300891782979098
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.485,0.6727589564860847,0.9370846608548082,0.29970339107385635
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.49,0.6706092533881985,0.9376035215232635,0.2985804096284197
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.495,0.6684449065362397,0.938215653267726,0.29742258335860094
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.5,0.66631863344487,0.9386305642481264,0.29634545036629856
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.505,0.6642787585025297,0.9391492656588367,0.2952750418137893
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.51,0.6620411928802068,0.9396684853208626,0.294117826856679
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.515,0.6597289441121126,0.9401795552439146,0.29293126888956267
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.52,0.6575938847682992,0.940745287485388,0.29180767613141756
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.525,0.6553592478967908,0.941295120791846,0.2906461819853481
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.53,0.6532329748054211,0.9417371606629779,0.28956721505492033
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.535,0.6510744854550913,0.9422457037135936,0.28845462592552745
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.54,0.6488691360917285,0.9428044358956901,0.2873071919717525
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.545,0.6467370054987297,0.9433616069616779,0.28619399152965114
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.55,0.6444335429830791,0.9439090567858867,0.2850092675006602
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.555,0.6421022573346903,0.9444201539134199,0.2838245434716693
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.56,0.6398676204631819,0.9450067476383266,0.28266121538747446
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.565,0.637530477313164,0.945495453429962,0.28148321579827656
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.57,0.6352416585515863,0.9459426455612566,0.2803400610334608
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.575,0.6328986578999393,0.9464243873490955,0.27916389538238834
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.58,0.6303052490536474,0.9468756530825496,0.2778874744471288
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.585,0.6278538846218616,0.9473465581927695,0.2766691282191727
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.59,0.6253468739245993,0.9478845509290397,0.27540799010162464
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.595,0.6229086888714791,0.9484646188972726,0.27416641399074715
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.6,0.6201322330992773,0.9490639994442042,0.27277200970275534
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.605,0.6174143523433667,0.9496462670531715,0.2714100049883117
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.61,0.6147096509661216,0.9501364852446549,0.27008162247283324
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.615,0.6120767039838333,0.9505592220468573,0.2688052015375737
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.62,0.6093573588525154,0.9510619770394462,0.2674694832695938
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.625,0.6066673012293432,0.9515282920062106,0.26615821750995217
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.63,0.6041705411599317,0.9520248286683435,0.2649245884642847
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.635,0.6017689654919935,0.9525265402623894,0.2637325286827923
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.64,0.5992531685422875,0.9530287151540557,0.2624915638846233
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.645,0.5967300497155451,0.9534793392297253,0.26126282534062345
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.65,0.5940473139694092,0.9538910116983128,0.25997601208932014
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.655,0.591284037575873,0.9544316723278423,0.2586201205019611
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.66,0.5885310118101876,0.9548630662608667,0.2572996850516926
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.665,0.5858219173067207,0.9553728363455734,0.25597863828871564
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.67,0.5830513190361482,0.9559477077105917,0.2546147996361467
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.675,0.5803905489211214,0.956395839868729,0.2533340995119279
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.68,0.5778015332010514,0.9568884609881435,0.25207418401979675
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.685,0.5750075049239624,0.9573341395149257,0.2507384657518168
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.69,0.5722061547698368,0.9577911175059012,0.24939785698216924
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.695,0.5694018758648968,0.9582788066984584,0.2480493011473117
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.7,0.5663047218785008,0.9587632699812075,0.24657542620722034
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.705,0.5634989785981535,0.9591613927600209,0.24525193419340957
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.71,0.5606727340621042,0.9596297577334316,0.24390276704584357
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.715,0.5576766219788105,0.9601110295952865,0.2424777971224288
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.72,0.5545955761218946,0.9605385965446227,0.2410308199415096
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.725,0.551505744012535,0.9609977034957897,0.23957345044454662
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.73,0.5484876662981322,0.9614203868742043,0.23815765021175872
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.735,0.5454388367001765,0.9620398327345423,0.23668133002083352
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.74,0.5423006802023767,0.9625735584620823,0.23518911569948844
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.745,0.5390278011671072,0.9630724631614199,0.23364860767417522
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.75,0.5357695658859105,0.9636830086104036,0.2320891489548998
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.755,0.5323927161967242,0.9641100300453199,0.23052418842124825
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.76,0.5291666971744876,0.9646582078435874,0.22899712927552107
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.765,0.5260651500618698,0.9652242836223921,0.22752142039730436
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.77,0.5226209391039487,0.9657185997364426,0.2259161132248946
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.775,0.5190449343593724,0.966269651955586,0.22424233902913762
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.78,0.5152683101839988,0.9667076021945838,0.22250987881336867
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.785,0.5113247472121953,0.9672947681601852,0.2206728841244535
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.79,0.5075290861565271,0.9678143587165955,0.21891719402576315
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.795,0.5035620931782072,0.9682937474481536,0.2170985387181017
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.8,0.4992729376102858,0.9687534629187112,0.21514722855270493
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.805,0.49457815005454797,0.969361250233199,0.2129905173172664
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.81,0.4906711964679265,0.9699102953393522,0.2111883674527333
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.815,0.48638643402622694,0.9704692142946885,0.20922360840775048
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.82,0.4819171602832102,0.9710021774921663,0.2071873257758781
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.825,0.4777715135052022,0.9715065866266467,0.205298369506744
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.83,0.4733476353998111,0.9719956097487633,0.20329509776112833
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.835,0.46904237170240964,0.9724627472887799,0.20134928941010768
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.84,0.4647356436296009,0.9729031269160024,0.19941020549888008
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.845,0.46039816367323927,0.9732931714474996,0.19746989896223555
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.85,0.4559947868235501,0.9737177021673123,0.19549597022662585
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.855,0.45155040746245706,0.9742132383837937,0.1934920871683017
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.86,0.4471045637259568,0.9746972836132509,0.19149187198622836
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.865,0.4424654224356956,0.975180978753756,0.18941096352663855
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.87,0.4379507530550532,0.9755898653740136,0.18739974471581294
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.875,0.4332061767354679,0.9760338376873181,0.18528521405725798
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.88,0.42850113855187916,0.9767248573049835,0.18314317432682245
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.885,0.42370823784385364,0.9772890011754056,0.18099013096763467
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.89,0.41865028518711056,0.9778028592927013,0.17873560969884292
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.895,0.4134356443617886,0.9782574046097767,0.1764272929117069
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.9,0.4082078241578011,0.9789983107336895,0.17406456929351813
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.905,0.4029302151899661,0.9795688053144602,0.17171407192949853
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.91,0.39718986359343084,0.9801395579100282,0.1691691771241894
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.915,0.3910687743910029,0.9807777765535883,0.1664537260732206
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.92,0.38490521830176383,0.9812995837300031,0.16374316552391943
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.925,0.37848978964247276,0.9818867695159801,0.16091767818542826
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.93,0.3722046903944295,0.9824022324776018,0.15816249180840972
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.935,0.3650658602839424,0.9830362776025237,0.15502890286485588
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.94,0.35754482819215533,0.9836278230322367,0.15174370836960455
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.945,0.3495127290832278,0.9843608873711691,0.14822438110701397
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.95,0.34066790162326016,0.9849987297823694,0.1443798354835239
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.955,0.3312841840134137,0.9857773439712758,0.1402919874020677
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.96,0.32121367433755316,0.9865078793984313,0.13592660335097173
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.965,0.3101503181355572,0.987352570975712,0.13113268909124698
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.97,0.29780270470137726,0.9884659129572563,0.12577025401265662
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.975,0.2834049656970061,0.9894831024080986,0.11956665264722856
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.98,0.26605211712074506,0.9905677351114698,0.11212269779633995
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.985,0.24516719506212611,0.9918246929816766,0.103190196500357
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.99,0.21722251916501314,0.9934767466780968,0.09127632312522618
+final_test_inspected,v2,post-hoc diagnostic on inspected data,0.995,0.17350212700527906,0.9952874171517855,0.07277249875292208
+final_test_inspected,v2,post-hoc diagnostic on inspected data,1.0,0.0,1.0,0.0
+validation,v1,validation selection data,0.0,1.0,0.39068901926558985,1.0
+validation,v1,validation selection data,0.005,0.9802348140120655,0.7582080245581216,0.5050948627977819
+validation,v1,validation selection data,0.01,0.9730017038189759,0.7825139103609926,0.4857946630410894
+validation,v1,validation selection data,0.015,0.9682268766370098,0.7965498895877213,0.47489255074241077
+validation,v1,validation selection data,0.02,0.9642640948941535,0.8063127406692255,0.4672224244336526
+validation,v1,validation selection data,0.025,0.9608210222323277,0.8139336511859437,0.4611951137770974
+validation,v1,validation selection data,0.03,0.957857794602703,0.8202306854947298,0.45624301673560763
+validation,v1,validation selection data,0.035,0.955166233083617,0.8252092565238799,0.4522161571611592
+validation,v1,validation selection data,0.04,0.9527876781701515,0.8293503866424884,0.4488376560112459
+validation,v1,validation selection data,0.045,0.9506778364747188,0.8332515907452724,0.4457469936992713
+validation,v1,validation selection data,0.05,0.9485739005642978,0.8366117841925974,0.44297416545484014
+validation,v1,validation selection data,0.055,0.9465910332466168,0.8396596455798323,0.4404436063726019
+validation,v1,validation selection data,0.06,0.9446716531178115,0.8422967708981955,0.43817435188672876
+validation,v1,validation selection data,0.065,0.9430652795946269,0.8448930623107641,0.43608506877848463
+validation,v1,validation selection data,0.07,0.9413570312799903,0.8473787176808636,0.43401828209244414
+validation,v1,validation selection data,0.075,0.9397801866818642,0.8495044562899218,0.43220703168938324
+validation,v1,validation selection data,0.08,0.9381501900186328,0.8515325041510485,0.43042981433529703
+validation,v1,validation selection data,0.085,0.9365364342641834,0.853468133429491,0.42871489476577473
+validation,v1,validation selection data,0.09,0.9351160929688677,0.8552335041488593,0.42718110023655853
+validation,v1,validation selection data,0.095,0.9337119925823341,0.8569963086029607,0.4256623033221447
+validation,v1,validation selection data,0.1,0.9323521855833882,0.8586198644665136,0.4242386835785924
+validation,v1,validation selection data,0.105,0.9309717083369015,0.8601355102642136,0.42286409449881723
+validation,v1,validation selection data,0.11,0.9295941839829205,0.8616460908728871,0.4214981578891203
+validation,v1,validation selection data,0.115,0.9282210889676983,0.8630296075029102,0.42020086420871144
+validation,v1,validation selection data,0.12,0.9269439629589165,0.8644350173968957,0.41894048773397
+validation,v1,validation selection data,0.125,0.9256727427351462,0.8657420448833728,0.41773433340505267
+validation,v1,validation selection data,0.13,0.9245550729216805,0.8669605439313744,0.4166435453438463
+validation,v1,validation selection data,0.135,0.9234004919518914,0.8681447118381035,0.4155556414393326
+validation,v1,validation selection data,0.14,0.9222400051970908,0.8693767171524567,0.4144452411126154
+validation,v1,validation selection data,0.145,0.9210027432371379,0.8705403432775625,0.4133359944485752
+validation,v1,validation selection data,0.15,0.919908696563719,0.8715642402615297,0.4123599958237411
+validation,v1,validation selection data,0.155,0.9187437804701596,0.872676199344792,0.41131304694426485
+validation,v1,validation selection data,0.16,0.9177589908194572,0.8736374011254968,0.4104201120321826
+validation,v1,validation selection data,0.165,0.9165852160483802,0.8746627404845265,0.40941469500908223
+validation,v1,validation selection data,0.17,0.9154202999548208,0.8755964847120562,0.40845830864975896
+validation,v1,validation selection data,0.175,0.9143764524540013,0.8765166858441711,0.4075642200749996
+validation,v1,validation selection data,0.18,0.9134123330508399,0.8774067644689517,0.4067214694893716
+validation,v1,validation selection data,0.185,0.9124762661264842,0.8783175559196922,0.405883333554452
+validation,v1,validation selection data,0.19,0.9114014132543533,0.8791909029277214,0.4050025121004794
+validation,v1,validation selection data,0.195,0.9103693773235573,0.8799913798393852,0.4041759127923309
+validation,v1,validation selection data,0.2,0.9094200223829252,0.8809029386695041,0.40333662319473423
+validation,v1,validation selection data,0.205,0.9083879864521291,0.8816116972572373,0.402555016730993
+validation,v1,validation selection data,0.21,0.9074637310977969,0.8823494788825405,0.4018091738102421
+validation,v1,validation selection data,0.215,0.9064848472321062,0.8830914038812273,0.4010385271419334
+validation,v1,validation selection data,0.22,0.9056654195617317,0.8837434789937516,0.40038036258464277
+validation,v1,validation selection data,0.225,0.9046629125559942,0.8843897763947185,0.3996449026279859
+validation,v1,validation selection data,0.23,0.903737180755409,0.8851162097950838,0.3989082890086519
+validation,v1,validation selection data,0.235,0.9027966844922944,0.8857974793568014,0.3981866730041203
+validation,v1,validation selection data,0.24,0.9019122931867911,0.8864373133505339,0.39750947301265743
+validation,v1,validation selection data,0.245,0.9009968965099764,0.8871390732712878,0.3967918948274957
+validation,v1,validation selection data,0.25,0.9001582750383138,0.8878117896496539,0.39612219364343404
+validation,v1,validation selection data,0.255,0.8992871717490868,0.8884054504243011,0.39547441205023737
+validation,v1,validation selection data,0.26,0.8984101626748482,0.8890030081712977,0.39482316946900947
+validation,v1,validation selection data,0.265,0.8975139597993215,0.8896277802331606,0.3941523146222706
+validation,v1,validation selection data,0.27,0.8967432548552935,0.890251392103377,0.3935379892467102
+validation,v1,validation selection data,0.275,0.8959223507386661,0.8908531966245617,0.39291212724437863
+validation,v1,validation selection data,0.28,0.8951294991008443,0.8915386085907975,0.39226261515716637
+validation,v1,validation selection data,0.285,0.8942805425054112,0.8920862249767294,0.39165002027562157
+validation,v1,validation selection data,0.29,0.8933754809523669,0.8927072375846293,0.39098147275423695
+validation,v1,validation selection data,0.295,0.8925575297282453,0.8932723565222531,0.3903763766800934
+validation,v1,validation selection data,0.3,0.8915978396638428,0.893832083349985,0.3897124438094172
+validation,v1,validation selection data,0.305,0.8906780136482692,0.8944337527318231,0.3890485109387411
+validation,v1,validation selection data,0.31,0.8899176438280118,0.8949878612845508,0.38847571741955655
+validation,v1,validation selection data,0.315,0.8890642578938199,0.8955098471655659,0.38787696649013703
+validation,v1,validation selection data,0.32,0.8881857723733283,0.8960281452662748,0.38726956309063926
+validation,v1,validation selection data,0.325,0.887422449660565,0.8965922058549319,0.3866933085834234
+validation,v1,validation selection data,0.33,0.8865469170325793,0.8970430713932508,0.38611763090754603
+validation,v1,validation selection data,0.335,0.8857142013459284,0.8974957024944233,0.38556041183450246
+validation,v1,validation selection data,0.34,0.8847766579753197,0.897922641469854,0.3849691597124842
+validation,v1,validation selection data,0.345,0.8840310526175915,0.8984826112531662,0.38440501866337795
+validation,v1,validation selection data,0.35,0.883131896849559,0.8989716968654939,0.3838051140712814
+validation,v1,validation selection data,0.355,0.8822489819903087,0.8995289714899043,0.38318386671965826
+validation,v1,validation selection data,0.36,0.8814413658899575,0.900042815963721,0.382614534188505
+validation,v1,validation selection data,0.365,0.8806691844996767,0.9005944283477549,0.3820452016573518
+validation,v1,validation selection data,0.37,0.8798851915393724,0.9010838141549031,0.38149778871706364
+validation,v1,validation selection data,0.375,0.8791174394878504,0.9016294891965517,0.380934224499296
+validation,v1,validation selection data,0.38,0.878274388677429,0.9021049119667581,0.3803683529561741
+validation,v1,validation selection data,0.385,0.8774106676194666,0.9025481518381382,0.3798076728950992
+validation,v1,validation selection data,0.39,0.876554328792769,0.9029549854828677,0.37926602826819655
+validation,v1,validation selection data,0.395,0.875782147402488,0.9034043920663181,0.37874341907546627
+validation,v1,validation selection data,0.4,0.8748711800644321,0.9038288473799653,0.37817177921895884
+validation,v1,validation selection data,0.405,0.874044370162793,0.9043085077944197,0.3776139833145767
+validation,v1,validation selection data,0.41,0.8732913825738001,0.9047691888799488,0.3770965656038934
+validation,v1,validation selection data,0.415,0.8724114206070557,0.9051992358705759,0.37653761603683417
+validation,v1,validation selection data,0.42,0.8715166941777819,0.9056305031229431,0.3759723213250508
+validation,v1,validation selection data,0.425,0.8706249206410139,0.9060243777647007,0.3754243315534241
+validation,v1,validation selection data,0.43,0.8697833462768455,0.906524726437291,0.37485442219093235
+validation,v1,validation selection data,0.435,0.8689004314175951,0.907064526321468,0.3742510566108044
+validation,v1,validation selection data,0.44,0.8680647628384384,0.9075952219968447,0.37367249477823433
+validation,v1,validation selection data,0.445,0.8672010417804761,0.9080701092577677,0.3731054695724353
+validation,v1,validation selection data,0.45,0.8664170488201718,0.908442974817677,0.37261516293466407
+validation,v1,validation selection data,0.455,0.8655990975960502,0.9089051533957283,0.3720740951391
+validation,v1,validation selection data,0.46,0.8648106752969872,0.9093277279614496,0.3715624457418022
+validation,v1,validation selection data,0.465,0.8639262839914839,0.909764978792741,0.3710040730060815
+validation,v1,validation selection data,0.47,0.8630684687185333,0.9102159855127301,0.370452045415085
+validation,v1,validation selection data,0.475,0.8621678365042478,0.910691282473558,0.36987232991983776
+validation,v1,validation selection data,0.48,0.86131149767755,0.9110868516115127,0.36934452924506045
+validation,v1,validation selection data,0.485,0.8604876406684168,0.9115322174501934,0.3688109602568976
+validation,v1,validation selection data,0.49,0.8595692910990961,0.9119043404847196,0.36826700830464076
+validation,v1,validation selection data,0.495,0.8586465121910167,0.9123587291427424,0.3676884464720707
+validation,v1,validation selection data,0.5,0.8578078907193541,0.9127606928243196,0.367167567773356
+validation,v1,validation selection data,0.505,0.8568673944562396,0.91316730234256,0.36660169623023414
+validation,v1,validation selection data,0.51,0.855949044886919,0.9135743326294558,0.3660456308198677
+validation,v1,validation selection data,0.515,0.8550498891188864,0.9140074461856054,0.36548783491548553
+validation,v1,validation selection data,0.52,0.8540739581457016,0.9143943776852528,0.3649161950589781
+validation,v1,validation selection data,0.525,0.8531880903939454,0.9147719267696156,0.36438724072152373
+validation,v1,validation selection data,0.53,0.8521737718181845,0.9151142031779654,0.3638179081903705
+validation,v1,validation selection data,0.535,0.8512377048938288,0.9154908331030891,0.3632687647560667
+validation,v1,validation selection data,0.54,0.8503857954058899,0.9158689471374325,0.3627553848647532
+validation,v1,validation selection data,0.545,0.8495456974879744,0.9162346099706371,0.3622523879375338
+validation,v1,validation selection data,0.55,0.8486243950261478,0.9167313946311144,0.36166344314086973
+validation,v1,validation selection data,0.555,0.8476174586816516,0.9171166306695464,0.3610825739829454
+validation,v1,validation selection data,0.56,0.8466681037410195,0.9175332124782597,0.3605143951144693
+validation,v1,validation selection data,0.565,0.8456596909502704,0.9178914203938122,0.3599444857519775
+validation,v1,validation selection data,0.57,0.8447059066708794,0.9183101530460743,0.3593745763894857
+validation,v1,validation selection data,0.575,0.843763933961512,0.9186264077182988,0.3588502367027398
+validation,v1,validation selection data,0.58,0.8428618253009735,0.9190314359906434,0.35830859207583715
+validation,v1,validation selection data,0.585,0.8418991823440651,0.9193982683284694,0.3577565644848406
+validation,v1,validation selection data,0.59,0.8409335864946509,0.919803109042579,0.35718896244770304
+validation,v1,validation selection data,0.595,0.8399000741176019,0.9201378105590062,0.35662020674788836
+validation,v1,validation selection data,0.6,0.8388739439718176,0.9205487930344503,0.35602549363783875
+validation,v1,validation selection data,0.605,0.8379777410962909,0.921027734819361,0.3554601989260554
+validation,v1,validation selection data,0.61,0.8369545638430125,0.921417843489116,0.3548758687800998
+validation,v1,validation selection data,0.615,0.8358782345246286,0.921845181880353,0.3542551982598152
+validation,v1,validation selection data,0.62,0.8348329105775563,0.9221744001904908,0.353685865728662
+validation,v1,validation selection data,0.625,0.8337432932428961,0.9225491093016873,0.3530807696545184
+validation,v1,validation selection data,0.63,0.8326551523544888,0.9229086172220068,0.35248259555643746
+validation,v1,validation selection data,0.635,0.8315330532022642,0.9232709949442954,0.35186942384355413
+validation,v1,validation selection data,0.64,0.83044638876011,0.9237362456889473,0.35123260204579004
+validation,v1,validation selection data,0.645,0.8293493891941852,0.9241506162155759,0.35061135469416693
+validation,v1,validation selection data,0.65,0.8282272900419606,0.924622254162333,0.3499583816189233
+validation,v1,validation selection data,0.655,0.8270121747758017,0.9250405019099066,0.34928694994084597
+validation,v1,validation selection data,0.66,0.8257970595096427,0.9254037061548643,0.34863686102229513
+validation,v1,validation selection data,0.665,0.8246838190349357,0.92583199901874,0.34800580753791654
+validation,v1,validation selection data,0.67,0.8234524628599945,0.9261751430630607,0.3473574491133814
+validation,v1,validation selection data,0.675,0.822290499658941,0.9265345641899254,0.34673274077372696
+validation,v1,validation selection data,0.68,0.820972033155077,0.9269488069855485,0.3460220845646279
+validation,v1,validation selection data,0.685,0.819637325742431,0.927355674382631,0.3453079673674975
+validation,v1,validation selection data,0.69,0.8184354984925484,0.9277921904028654,0.34463941984611296
+validation,v1,validation selection data,0.695,0.8171170319886845,0.9282893986460646,0.3438999220700862
+validation,v1,validation selection data,0.7,0.8158576233349377,0.9286499349621369,0.3432365660307486
+validation,v1,validation selection data,0.705,0.8145391568310739,0.929133818484355,0.3425034133994459
+validation,v1,validation selection data,0.71,0.8132398841284981,0.9295491557745694,0.3418042938171179
+validation,v1,validation selection data,0.715,0.8118564539895055,0.930047528034775,0.3410399922935333
+validation,v1,validation selection data,0.72,0.810408060215384,0.9304625096624581,0.3402797285893186
+validation,v1,validation selection data,0.725,0.8090836879265084,0.9308433567122525,0.3395846468263605
+validation,v1,validation selection data,0.73,0.8077032106800216,0.9312878986486717,0.33884341855631805
+validation,v1,validation selection data,0.735,0.8063005867397409,0.9317453601176563,0.3380889231654889
+validation,v1,validation selection data,0.74,0.8047975644542612,0.9322081435737116,0.3372911654242681
+validation,v1,validation selection data,0.745,0.8032783012599992,0.932683043903108,0.33648302471895336
+validation,v1,validation selection data,0.75,0.8017487029419668,0.9331289598086404,0.33568180598970127
+validation,v1,validation selection data,0.755,0.8002368219789695,0.9335976794499029,0.33488058726044917
+validation,v1,validation selection data,0.76,0.7986614538270963,0.9340121418902119,0.33407302338647293
+validation,v1,validation selection data,0.765,0.7968587129522724,0.9344936429416134,0.3331472090880931
+validation,v1,validation selection data,0.77,0.7951209357125772,0.9349551998861118,0.33225658150136506
+validation,v1,validation selection data,0.775,0.7934156402904465,0.9352882103442094,0.3314259443738467
+validation,v1,validation selection data,0.78,0.7915346477642174,0.9357875352376963,0.33046378970113793
+validation,v1,validation selection data,0.785,0.7898825044071921,0.9362120257594848,0.3296245001035412
+validation,v1,validation selection data,0.79,0.7880915751023916,0.9366956216548215,0.3287073382752397
+validation,v1,validation selection data,0.795,0.7863316511689025,0.9371644556593166,0.32780921188111045
+validation,v1,validation selection data,0.8,0.784397506577568,0.937621223432324,0.32684359622037035
+validation,v1,validation selection data,0.805,0.7823969219048519,0.9380425546980103,0.3258635597761664
+validation,v1,validation selection data,0.81,0.7803328500432599,0.9385733896159016,0.3248200718847214
+validation,v1,validation selection data,0.815,0.7781979087615274,0.9390957456285701,0.3237512034143801
+validation,v1,validation selection data,0.82,0.7761988005350641,0.9395307359214522,0.322770013307499
+validation,v1,validation selection data,0.825,0.7740801001621138,0.9401720437049111,0.32166941911353714
+validation,v1,validation selection data,0.83,0.7718019435938474,0.9407097482409257,0.320539406521309
+validation,v1,validation selection data,0.835,0.7692816498401008,0.9412338524514647,0.31931479358955794
+validation,v1,validation selection data,0.84,0.7669783936855347,0.9417553172203247,0.3181824736719756
+validation,v1,validation selection data,0.845,0.764500916873123,0.9423538554214674,0.31695324608951614
+validation,v1,validation selection data,0.85,0.7619510941943181,0.9429795149439864,0.31568652447005063
+validation,v1,validation selection data,0.855,0.7590956471411571,0.943477973641038,0.3143373159691718
+validation,v1,validation selection data,0.86,0.7562269120717199,0.9440058978021472,0.3129742635161677
+validation,v1,validation selection data,0.865,0.7533877059273412,0.9446174294875117,0.3115973671110383
+validation,v1,validation selection data,0.87,0.7504407192064987,0.9452375019061895,0.3101749010301631
+validation,v1,validation selection data,0.875,0.7473519936453753,0.9459985273175125,0.3086497589710252
+validation,v1,validation selection data,0.88,0.7439532143711373,0.9466091553463172,0.30704789834385954
+validation,v1,validation selection data,0.885,0.740719797077227,0.9473554015522028,0.3054725719582674
+validation,v1,validation selection data,0.89,0.7373195413567359,0.9480280580524523,0.3038545600536222
+validation,v1,validation selection data,0.895,0.7336697662195003,0.9487511407940308,0.3021200282185891
+validation,v1,validation selection data,0.9,0.7295563869588455,0.9493900716850698,0.3002239836087607
+validation,v1,validation selection data,0.905,0.7253189862129449,0.9500620791286488,0.2982691022023997
+validation,v1,validation selection data,0.91,0.7208778358841403,0.9509056206909984,0.2961798190941556
+validation,v1,validation selection data,0.915,0.7161295847347269,0.9516387572716482,0.2940022807911126
+validation,v1,validation selection data,0.92,0.7109900753282878,0.9524633645114906,0.2916395796283937
+validation,v1,validation selection data,0.925,0.7056453398926918,0.9533911829243966,0.2891655500173338
+validation,v1,validation selection data,0.93,0.6999373986788759,0.9543815641929503,0.2865288539688015
+validation,v1,validation selection data,0.935,0.6936565963189242,0.9553668019619167,0.2836648863728788
+validation,v1,validation selection data,0.94,0.6869018547117829,0.9563315545835012,0.2806192169053114
+validation,v1,validation selection data,0.945,0.6791770879164686,0.9574543812142392,0.27713803977713547
+validation,v1,validation selection data,0.95,0.6709621409651825,0.9585505014817706,0.2734728534519606
+validation,v1,validation selection data,0.955,0.6617476399006647,0.9597186385876256,0.2693888875749953
+validation,v1,validation selection data,0.96,0.6514760033190512,0.9610229515051988,0.2648474944465563
+validation,v1,validation selection data,0.965,0.6396127576767823,0.9625285507336538,0.25961794153122186
+validation,v1,validation selection data,0.97,0.6252129773719848,0.9641312168155697,0.2533512458691666
+validation,v1,validation selection data,0.975,0.6085247053751502,0.9661596236207515,0.24607105754527117
+validation,v1,validation selection data,0.98,0.5878795574204713,0.9684301669455578,0.23716535850932938
+validation,v1,validation selection data,0.985,0.5613064777602901,0.9711148916169837,0.22581908607996382
+validation,v1,validation selection data,0.99,0.5232865103011655,0.9740856172289832,0.20988123619570503
+validation,v1,validation selection data,0.995,0.4599809243144122,0.9786242229488835,0.1836348334601401
+validation,v1,validation selection data,1.0,0.00736894324835893,0.9952143569292123,0.0028928091628504468
+validation,v2,validation selection data,0.0,1.0,0.39068901926558985,1.0
+validation,v2,validation selection data,0.005,0.9898538613498853,0.7538206562803583,0.5130199485581812
+validation,v2,validation selection data,0.01,0.9863620659617128,0.7811314312840761,0.4933367327926885
+validation,v2,validation selection data,0.015,0.98413115567354,0.7971779912981288,0.4823129090815749
+validation,v2,validation selection data,0.02,0.9823254619062102,0.8086603942597875,0.4745920216150239
+validation,v2,validation selection data,0.025,0.9807530466468429,0.8173529353860692,0.4687931361685363
+validation,v2,validation selection data,0.03,0.9792249247750634,0.8242519070498082,0.4641450292424647
+validation,v2,validation selection data,0.035,0.9778813586848998,0.8302487784209853,0.46016027835573076
+validation,v2,validation selection data,0.04,0.9767297306076167,0.8354056170126787,0.4567812003744789
+validation,v2,validation selection data,0.045,0.9756046785628862,0.8401972390098886,0.4536530440254983
+validation,v2,validation selection data,0.05,0.974556401723308,0.8441805590193182,0.4510273077723985
+validation,v2,validation selection data,0.055,0.9736454343852521,0.8479167631009139,0.4486201905966109
+validation,v2,validation selection data,0.06,0.9725661521743624,0.8513852178801998,0.4462972907962522
+validation,v2,validation selection data,0.065,0.9715592158298662,0.8545816758937836,0.44416762949430927
+validation,v2,validation selection data,0.07,0.9704548340326767,0.8575269799190081,0.44213891367661334
+validation,v2,validation selection data,0.075,0.9694862852907565,0.8601882200057116,0.4403311242615838
+validation,v2,validation selection data,0.08,0.9685428361351361,0.8628109130462803,0.4385654435342687
+validation,v2,validation selection data,0.085,0.9675860989632394,0.865185850171295,0.4369295498581283
+validation,v2,validation selection data,0.09,0.966683990302701,0.8674380029517987,0.43538883335284945
+validation,v2,validation selection data,0.095,0.9658143634597269,0.8695249931876035,0.4339531001511875
+validation,v2,validation selection data,0.1,0.9648679614116007,0.8715599756205881,0.4325156364555099
+validation,v2,validation selection data,0.105,0.963992428783615,0.8734168071273778,0.4312044988229757
+validation,v2,validation selection data,0.11,0.9631124668168705,0.8753103018885141,0.4298789404069776
+validation,v2,validation selection data,0.115,0.9621424416286974,0.8771452107455037,0.428547613677594
+validation,v2,validation selection data,0.12,0.9613112023882995,0.8789167328117322,0.4273143482757646
+validation,v2,validation selection data,0.125,0.9604430519915783,0.8807195117328178,0.42605454863236175
+validation,v2,validation selection data,0.13,0.959580807379869,0.8824605257619557,0.4248322430259649
+validation,v2,validation selection data,0.135,0.958771714833265,0.8841028992314552,0.4236855023249187
+validation,v2,validation selection data,0.14,0.9579478578241316,0.8858421179821226,0.42249030779143393
+validation,v2,validation selection data,0.145,0.957109236352469,0.8875702215461542,0.4212985742459805
+validation,v2,validation selection data,0.15,0.9562248450469658,0.8891093023479296,0.420180675111862
+validation,v2,validation selection data,0.155,0.9553803177902915,0.8905503380089401,0.4191302652443544
+validation,v2,validation selection data,0.16,0.9544250570646476,0.8920083621385548,0.41802678689369976
+validation,v2,validation selection data,0.165,0.9534816079090273,0.8934839363958477,0.41692388537438374
+validation,v2,validation selection data,0.17,0.9525440645384186,0.8948636468925417,0.41587174501286045
+validation,v2,validation selection data,0.175,0.9516493381091448,0.8962470625860367,0.4148397937481866
+validation,v2,validation selection data,0.18,0.9508446749012995,0.897626063128434,0.4138522584965814
+validation,v2,validation selection data,0.185,0.9499189431007143,0.8989812471792521,0.4128260755452931
+validation,v2,validation selection data,0.19,0.9489976406388878,0.9002149844889041,0.411860459884553
+validation,v2,validation selection data,0.195,0.9481117728871316,0.9014882126427181,0.4108948442238129
+validation,v2,validation selection data,0.2,0.9471668472852582,0.9028356547450669,0.40987269909189444
+validation,v2,validation selection data,0.205,0.9463105084585606,0.9040423488192009,0.4089555372635929
+validation,v2,validation selection data,0.21,0.9453463890553992,0.9051704638630181,0.40802972296521306
+validation,v2,validation selection data,0.215,0.9444221337010669,0.9064293012097363,0.4070646841358115
+validation,v2,validation selection data,0.22,0.9435539833043458,0.9074941601641544,0.4062132810801051
+validation,v2,validation selection data,0.225,0.9425869110086785,0.9086543456756737,0.405278814311647
+validation,v2,validation selection data,0.23,0.9415740688791706,0.9096991016127606,0.4043783805921635
+validation,v2,validation selection data,0.235,0.9407206829449788,0.9106724790966912,0.4035800460196042
+validation,v2,validation selection data,0.24,0.9397860924668759,0.9116362271847107,0.40275286988011716
+validation,v2,validation selection data,0.245,0.938811637939944,0.9125835285202535,0.40191761810189036
+validation,v2,validation selection data,0.25,0.9377751726703892,0.9136346767395763,0.4010119929003599
+validation,v2,validation selection data,0.255,0.9367549483096167,0.9146431475213211,0.4001340556030801
+validation,v2,validation selection data,0.26,0.9358528396490783,0.9155851190605161,0.39933745152453637
+validation,v2,validation selection data,0.265,0.9349108669397108,0.9165037161404245,0.39853565596394575
+validation,v2,validation selection data,0.27,0.93395708266032,0.9175102220198044,0.39769232854697917
+validation,v2,validation selection data,0.275,0.9329737694558705,0.9183824736979027,0.39689630129977405
+validation,v2,validation selection data,0.28,0.932073137241585,0.9192634767160789,0.39613315343886657
+validation,v2,validation selection data,0.285,0.9310957298221473,0.9202022412887411,0.3953140529381193
+validation,v2,validation selection data,0.29,0.930211338516644,0.921009430335244,0.3945924369335877
+validation,v2,validation selection data,0.295,0.9292708422535294,0.9218017252742424,0.39385466965157656
+validation,v2,validation selection data,0.3,0.9283613513617264,0.9226332231363727,0.39311459504421126
+validation,v2,validation selection data,0.305,0.9273115980758952,0.9235114815854983,0.3922966482061411
+validation,v2,validation selection data,0.31,0.9262810385913521,0.9242913548235017,0.3915300393572022
+validation,v2,validation selection data,0.315,0.9253257778657084,0.9251208941740522,0.39077554396637304
+validation,v2,validation selection data,0.32,0.9243705171400646,0.9258961291715593,0.39004527549176315
+validation,v2,validation selection data,0.325,0.9234403560007205,0.9267090721322601,0.38931096919778335
+validation,v2,validation selection data,0.33,0.9224762365975592,0.9275171053158973,0.388565703108371
+validation,v2,validation selection data,0.335,0.9215741279370208,0.9282443656264174,0.3878815811408455
+validation,v2,validation selection data,0.34,0.9205332333287072,0.9289019666269368,0.3871691944377308
+validation,v2,validation selection data,0.345,0.9195410614467402,0.9296542644499309,0.38643892596312085
+validation,v2,validation selection data,0.35,0.91857251270482,0.9304277732580398,0.3857109648138652
+validation,v2,validation selection data,0.355,0.9175316180965064,0.9311238135193246,0.3849858878213023
+validation,v2,validation selection data,0.36,0.9163504610941647,0.9318071605409065,0.3842083191769309
+validation,v2,validation selection data,0.365,0.9153774830134859,0.9325202188159453,0.3835068922692487
+validation,v2,validation selection data,0.37,0.9142967243563432,0.933357951376852,0.3827102881907051
+validation,v2,validation selection data,0.375,0.9132381123929946,0.934034206051747,0.38199040268018913
+validation,v2,validation selection data,0.38,0.9121086310095053,0.93475494520293,0.3812237938312503
+validation,v2,validation selection data,0.385,0.911085453756227,0.9353835333208025,0.3805402486950633
+validation,v2,validation selection data,0.39,0.9101021405517775,0.936116510752035,0.3798318998113185
+validation,v2,validation selection data,0.395,0.9089638004907707,0.9366853453063262,0.3791264350842664
+validation,v2,validation selection data,0.4,0.9077944550584525,0.9373571708431093,0.3783673250427288
+validation,v2,validation selection data,0.405,0.9067461782188743,0.9380151025470275,0.37766532130370806
+validation,v2,validation selection data,0.41,0.9056565608842141,0.9385895519304951,0.37698062250484393
+validation,v2,validation selection data,0.415,0.9045536555332776,0.9391782098685946,0.37628554074188586
+validation,v2,validation selection data,0.42,0.903534907618758,0.9398132861967237,0.3756077639190844
+validation,v2,validation selection data,0.425,0.9023995204502571,0.9404043512378256,0.3748999918666781
+validation,v2,validation selection data,0.43,0.9012154105554095,0.9410657379270791,0.3741449196445104
+validation,v2,validation selection data,0.435,0.9001065994194614,0.9417154791033341,0.3734267646280101
+validation,v2,validation selection data,0.44,0.8988634316744968,0.9423625235667252,0.3726549642970243
+validation,v2,validation selection data,0.445,0.8978284428511949,0.9430159402152759,0.371967958172806
+validation,v2,validation selection data,0.45,0.8966576209726237,0.9436299987414289,0.37124115068622743
+validation,v2,validation selection data,0.455,0.8954705581852703,0.9442028816290311,0.3705247261637428
+validation,v2,validation selection data,0.46,0.8942347726715705,0.9447500885215268,0.36979907233984133
+validation,v2,validation selection data,0.465,0.8929310706302358,0.9454004301935871,0.369005929249329
+validation,v2,validation selection data,0.47,0.8916982380090418,0.9459627942090911,0.36827739126873477
+validation,v2,validation selection data,0.475,0.8904491644790654,0.9465249789697038,0.36754308497475496
+validation,v2,validation selection data,0.48,0.8892000909490891,0.9470417574123141,0.36682723728360894
+validation,v2,validation selection data,0.485,0.8880322219630239,0.9475770432349573,0.36613850066537496
+validation,v2,validation selection data,0.49,0.8869293166120874,0.9481478792432103,0.36546360799926625
+validation,v2,validation selection data,0.495,0.8856979604371462,0.9487317769040743,0.3647316090306407
+validation,v2,validation selection data,0.5,0.8844857980634931,0.9492333264142303,0.36403998825571393
+validation,v2,validation selection data,0.505,0.8832662534585753,0.9497137704512044,0.36335413579417275
+validation,v2,validation selection data,0.51,0.8821987828177091,0.9502767263589809,0.362700009056252
+validation,v2,validation selection data,0.515,0.880884745652604,0.950801358412869,0.3619599344488867
+validation,v2,validation selection data,0.52,0.8795278915461641,0.9512848683832312,0.3612187061788443
+validation,v2,validation selection data,0.525,0.8782817709086936,0.9518218416185045,0.3605034353190368
+validation,v2,validation selection data,0.53,0.8770135035774292,0.9522880448374705,0.359806623062063
+validation,v2,validation selection data,0.535,0.875603497405884,0.9527900994966526,0.3590388605504471
+validation,v2,validation selection data,0.54,0.874205302804362,0.9532826290656525,0.358280327340248
+validation,v2,validation selection data,0.545,0.8728115375415989,0.9537820888249976,0.3575217941300489
+validation,v2,validation selection data,0.55,0.8714044842625593,0.9542444349591919,0.3567724902212667
+validation,v2,validation selection data,0.555,0.8700077661072904,0.9547927759179983,0.3559960752395725
+validation,v2,validation selection data,0.56,0.8686612471246209,0.9554483744194355,0.3552012016550445
+validation,v2,validation selection data,0.565,0.8672172826892582,0.9559559266311867,0.354422479347996
+validation,v2,validation selection data,0.57,0.8658545227978066,0.9565164205152462,0.3536581778244114
+validation,v2,validation selection data,0.575,0.8644312286099849,0.9571171448048349,0.3528552286011436
+validation,v2,validation selection data,0.58,0.862950353018299,0.9575641403715718,0.35208631242685057
+validation,v2,validation selection data,0.585,0.8613085447850442,0.9580134431866888,0.3512516374799623
+validation,v2,validation selection data,0.59,0.8597671348969883,0.9585215984303423,0.35043715162992345
+validation,v2,validation selection data,0.595,0.858256730380244,0.9590145543453514,0.3496417012140569
+validation,v2,validation selection data,0.6,0.8566636448733357,0.9595774168047604,0.3487879908329964
+validation,v2,validation selection data,0.605,0.855038077548863,0.9601017929822525,0.3479360109459515
+validation,v2,validation selection data,0.61,0.8535291494783716,0.9605828330444868,0.34714805933748616
+validation,v2,validation selection data,0.615,0.8518961999226342,0.9611294529972049,0.3462868501490244
+validation,v2,validation selection data,0.62,0.8501835222692389,0.9617138896543661,0.3453806481161554
+validation,v2,validation selection data,0.625,0.8486111070098715,0.962135034969015,0.34459096601367434
+validation,v2,validation selection data,0.63,0.8469146702652584,0.9625786812593029,0.3437436007773379
+validation,v2,validation selection data,0.635,0.8452049455043688,0.963019100265459,0.3428927745529701
+validation,v2,validation selection data,0.64,0.8435129380985144,0.9635079458505003,0.34203271902718546
+validation,v2,validation selection data,0.645,0.841882941435283,0.9639512926582287,0.34121477218911533
+validation,v2,validation selection data,0.65,0.8400639596516768,0.9644348166567507,0.34030683966223063
+validation,v2,validation selection data,0.655,0.8381933022492182,0.9648778415126408,0.3393931388219604
+validation,v2,validation selection data,0.66,0.836538205999687,0.9654552518309245,0.3385203930067276
+validation,v2,validation selection data,0.665,0.8347133184310691,0.9658936369414128,0.33762861175732245
+validation,v2,validation selection data,0.67,0.8327880325172523,0.9663966473746792,0.3366745327233534
+validation,v2,validation selection data,0.675,0.8310591139550747,0.9667838623743381,0.3358410114391423
+validation,v2,validation selection data,0.68,0.8292032210151454,0.9672031205600475,0.3349457692017058
+validation,v2,validation selection data,0.685,0.8274004801403214,0.9676466880893467,0.3340643709163946
+validation,v2,validation selection data,0.69,0.8253541256337645,0.9680935442419792,0.33308433447219066
+validation,v2,validation selection data,0.695,0.8234893740163177,0.9685564844110874,0.3321729409572747
+validation,v2,validation selection data,0.7,0.8214312079397373,0.9689777748363286,0.33119867282645626
+validation,v2,validation selection data,0.705,0.8192165385603468,0.9693603193598826,0.3301753740318607
+validation,v2,validation selection data,0.71,0.8171244142199492,0.9698006217209826,0.3291826472982085
+validation,v2,validation selection data,0.715,0.8150381956645633,0.9702932532763372,0.3281754997810925
+validation,v2,validation selection data,0.72,0.8127777564513319,0.9707622964117685,0.3271072081420897
+validation,v2,validation selection data,0.725,0.8107535486385689,0.9711893034319924,0.3261490912887508
+validation,v2,validation selection data,0.73,0.8084960623178434,0.9715815639454732,0.32510964121667574
+validation,v2,validation selection data,0.735,0.8062046177333007,0.971975193489359,0.3240569240238139
+validation,v2,validation selection data,0.74,0.8038452566211233,0.972273613680684,0.3230093983129991
+validation,v2,validation selection data,0.745,0.8014785132776812,0.9728107667356612,0.32188053938344807
+validation,v2,validation selection data,0.75,0.7991486810905623,0.9733213930562973,0.3207764842014549
+validation,v2,validation selection data,0.755,0.7966977803107034,0.9737947686988158,0.3196372423078099
+validation,v2,validation selection data,0.76,0.7940209832541466,0.9742361606770843,0.31841897452078294
+validation,v2,validation selection data,0.765,0.7913338510738194,0.9746664411723522,0.3172012835650945
+validation,v2,validation selection data,0.77,0.7887279234374031,0.9750847392659033,0.3160210866464122
+validation,v2,validation selection data,0.775,0.7860496499345935,0.9754539291668957,0.3148287762696202
+validation,v2,validation selection data,0.78,0.7833078892429078,0.9758652974209842,0.3135983950244836
+validation,v2,validation selection data,0.785,0.7806517624338921,0.9762842492628064,0.3124008931656446
+validation,v2,validation selection data,0.79,0.7779690595923237,0.976678492387424,0.31120166081279
+validation,v2,validation selection data,0.795,0.7747105427121137,0.9771373768599043,0.3097526604903412
+validation,v2,validation selection data,0.8,0.7715553770696085,0.9775358455624457,0.30836538112111783
+validation,v2,validation selection data,0.805,0.7683928291958387,0.9778348123277298,0.30700752015016075
+validation,v2,validation selection data,0.81,0.7651461238856522,0.978183932215035,0.30560120534676505
+validation,v2,validation selection data,0.815,0.7618595545266366,0.9785667281736964,0.30416950996447295
+validation,v2,validation selection data,0.82,0.758450440128628,0.9790337735205383,0.3026639801708459
+validation,v2,validation selection data,0.825,0.7550029381280433,0.9793994112475843,0.3011757553173755
+validation,v2,validation selection data,0.83,0.7514550377822596,0.9798697773277014,0.29961658020926285
+validation,v2,validation selection data,0.835,0.7478554618176234,0.980324759526989,0.2980429843176864
+validation,v2,validation selection data,0.84,0.7442706503155165,0.9807334255514116,0.29649073118563646
+validation,v2,validation selection data,0.845,0.7405470528656345,0.9810680817520875,0.294906752329966
+validation,v2,validation selection data,0.85,0.7366211822791014,0.9814457447373546,0.29323048046012684
+validation,v2,validation selection data,0.855,0.7326569240899924,0.9818812118238103,0.29152305969800574
+validation,v2,validation selection data,0.86,0.7286631369758246,0.9822722278835743,0.2898185230925774
+validation,v2,validation selection data,0.865,0.7244523122624767,0.9827119696377965,0.2880147714969177
+validation,v2,validation selection data,0.87,0.720095319370089,0.9830924593336156,0.2861717953702363
+validation,v2,validation selection data,0.875,0.7154710897059214,0.9834219161902674,0.28423883355474044
+validation,v2,validation selection data,0.88,0.7106165344262972,0.9837567373668623,0.2822141555564144
+validation,v2,validation selection data,0.885,0.7056335283226685,0.9841502891125644,0.2801231419541546
+validation,v2,validation selection data,0.89,0.7004777780074471,0.9845909600298842,0.27795194879583573
+validation,v2,validation selection data,0.895,0.695341221493514,0.9849030166779944,0.2758263253132627
+validation,v2,validation selection data,0.9,0.6899226637452717,0.985330305349789,0.27355822449006667
+validation,v2,validation selection data,0.905,0.6839578208834464,0.9857241650796353,0.2710847717103453
+validation,v2,validation selection data,0.91,0.677833521826305,0.9860436945334582,0.26857036390558653
+validation,v2,validation selection data,0.915,0.6717151285541753,0.9864677630937022,0.26603172918460855
+validation,v2,validation selection data,0.92,0.6650135390121393,0.9869492145644662,0.263249094807422
+validation,v2,validation selection data,0.925,0.6576445957637804,0.9874152351690642,0.26020919365324013
+validation,v2,validation selection data,0.93,0.6497928545907143,0.9878013471263026,0.25700201141087753
+validation,v2,validation selection data,0.935,0.6415469022681167,0.9882597234825999,0.2536229334296257
+validation,v2,validation selection data,0.94,0.6329820375548869,0.9886473435521846,0.250138872144757
+validation,v2,validation selection data,0.945,0.623851693926786,0.9890615600326772,0.2464275393124978
+validation,v2,validation selection data,0.95,0.6134309362736269,0.9895938282279021,0.2421809069980601
+validation,v2,validation selection data,0.955,0.6020002893834656,0.9901431537536881,0.23753626106001988
+validation,v2,validation selection data,0.96,0.5890754788853422,0.9907525589387791,0.2322934410238987
+validation,v2,validation selection data,0.965,0.5746446932092331,0.9912894648369449,0.22648013479394719
+validation,v2,validation selection data,0.97,0.5575873096491668,0.9918739116846006,0.21962795532325916
+validation,v2,validation selection data,0.975,0.537706960853504,0.9926381404831408,0.21163422663357193
+validation,v2,validation selection data,0.98,0.512529122902339,0.9934407275870062,0.20156159779973454
+validation,v2,validation selection data,0.985,0.48091250284215903,0.9943311557482142,0.1889584098836589
+validation,v2,validation selection data,0.99,0.43648032930657227,0.9953034098254686,0.17133275150278984
+validation,v2,validation selection data,0.995,0.3640266823366829,0.9969995713673382,0.14264923636183247
+validation,v2,validation selection data,1.0,0.00022737272295076644,1.0,8.883202613738161e-05

@@ -2,6 +2,8 @@
 
 Audit date: 19 October 2026. Working branch: `feat/locus-x-v3-foundation`.
 
+This audit records the pre-AI V3 foundation. The implemented LOS/NLOS reliability branch is documented separately in [ai-reliability.md](ai-reliability.md); the inference row below describes the audited baseline only.
+
 ## Existing implementation
 
 The source tree is a small, working React 19 / TypeScript / R3F application backed by Python/FastAPI, NumPy and SciPy. No rewrite is needed. The initial working tree was clean on `main`.

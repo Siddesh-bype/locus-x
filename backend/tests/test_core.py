@@ -38,6 +38,8 @@ def stable_frame(frame):
         data.pop(key)
     for key in ("baseline", "robust", "tracking"):
         data[key].pop("runtime_ms")
+    for key in ("ai", "ai_tracking", "ai_metadata"):
+        data.pop(key, None)
     return data
 
 

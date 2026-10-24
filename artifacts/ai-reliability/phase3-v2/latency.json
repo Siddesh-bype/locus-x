@@ -1,0 +1,236 @@
+{
+  "scope": "one validation run per layout and anchor count",
+  "runs": 24,
+  "rows": [
+    {
+      "variant": "g0_full",
+      "family": "control",
+      "n_features": 24,
+      "features": {
+        "mean_ms": 2.617943611176088,
+        "median_ms": 2.402450001682155,
+        "p95_ms": 4.0429699987726035,
+        "frames": 2880
+      },
+      "model_inference": {
+        "mean_ms": 0.5187497569371166,
+        "median_ms": 0.5171999982849229,
+        "p95_ms": 0.808960003632819,
+        "frames": 2880
+      },
+      "total": {
+        "mean_ms": 10.228324618103418,
+        "median_ms": 9.698950001620688,
+        "p95_ms": 13.276240005507118,
+        "frames": 2880
+      }
+    },
+    {
+      "variant": "g0_mapfree",
+      "family": "control",
+      "n_features": 22,
+      "features": {
+        "mean_ms": 2.593438298640649,
+        "median_ms": 2.3992999995243736,
+        "p95_ms": 4.261450001285991,
+        "frames": 2880
+      },
+      "model_inference": {
+        "mean_ms": 0.5222068749718447,
+        "median_ms": 0.5069999970146455,
+        "p95_ms": 0.8360299991181818,
+        "frames": 2880
+      },
+      "total": {
+        "mean_ms": 10.206844930669629,
+        "median_ms": 9.80830000116839,
+        "p95_ms": 13.941115004490712,
+        "frames": 2880
+      }
+    },
+    {
+      "variant": "g2",
+      "family": "mapfree",
+      "n_features": 27,
+      "features": {
+        "mean_ms": 2.528917013821936,
+        "median_ms": 2.352100003918167,
+        "p95_ms": 4.0284349986905,
+        "frames": 2880
+      },
+      "model_inference": {
+        "mean_ms": 0.4969193056467702,
+        "median_ms": 0.5097000030218624,
+        "p95_ms": 0.7432299986248835,
+        "frames": 2880
+      },
+      "total": {
+        "mean_ms": 9.739651423516685,
+        "median_ms": 9.382200001709862,
+        "p95_ms": 12.903015003757895,
+        "frames": 2880
+      }
+    },
+    {
+      "variant": "g3",
+      "family": "mapfree",
+      "n_features": 24,
+      "features": {
+        "mean_ms": 2.671222986042368,
+        "median_ms": 2.505599997675745,
+        "p95_ms": 4.224139997677412,
+        "frames": 2880
+      },
+      "model_inference": {
+        "mean_ms": 0.5380623958672004,
+        "median_ms": 0.5249499990895856,
+        "p95_ms": 0.7929849976790128,
+        "frames": 2880
+      },
+      "total": {
+        "mean_ms": 10.315115069518773,
+        "median_ms": 9.900150002067676,
+        "p95_ms": 13.284694997855695,
+        "frames": 2880
+      }
+    },
+    {
+      "variant": "g4",
+      "family": "mapfree",
+      "n_features": 25,
+      "features": {
+        "mean_ms": 2.610882395818711,
+        "median_ms": 2.485649994923733,
+        "p95_ms": 3.9289300035306938,
+        "frames": 2880
+      },
+      "model_inference": {
+        "mean_ms": 0.5210216666329062,
+        "median_ms": 0.5239499987510499,
+        "p95_ms": 0.7440850036800829,
+        "frames": 2880
+      },
+      "total": {
+        "mean_ms": 9.980423645816295,
+        "median_ms": 9.664750003139488,
+        "p95_ms": 12.36678000059328,
+        "frames": 2880
+      }
+    },
+    {
+      "variant": "g5",
+      "family": "mapfree",
+      "n_features": 26,
+      "features": {
+        "mean_ms": 2.7204488194456644,
+        "median_ms": 2.5302000030933414,
+        "p95_ms": 4.282955000962829,
+        "frames": 2880
+      },
+      "model_inference": {
+        "mean_ms": 0.5541148610695422,
+        "median_ms": 0.5320000018400606,
+        "p95_ms": 0.8762499997828852,
+        "frames": 2880
+      },
+      "total": {
+        "mean_ms": 10.580061909831784,
+        "median_ms": 10.066299997561146,
+        "p95_ms": 14.15889500094635,
+        "frames": 2880
+      }
+    },
+    {
+      "variant": "g1",
+      "family": "mapfree",
+      "n_features": 25,
+      "features": {
+        "mean_ms": 2.6051175693383914,
+        "median_ms": 2.445949998218566,
+        "p95_ms": 4.242455005442025,
+        "frames": 2880
+      },
+      "model_inference": {
+        "mean_ms": 0.571989826448771,
+        "median_ms": 0.5140499997651204,
+        "p95_ms": 0.7982000024640001,
+        "frames": 2880
+      },
+      "total": {
+        "mean_ms": 10.172481493160982,
+        "median_ms": 9.727050000947202,
+        "p95_ms": 13.110230000893347,
+        "frames": 2880
+      }
+    },
+    {
+      "variant": "g1_g5",
+      "family": "mapfree",
+      "n_features": 29,
+      "features": {
+        "mean_ms": 2.670791423575894,
+        "median_ms": 2.543449998483993,
+        "p95_ms": 4.285980002168799,
+        "frames": 2880
+      },
+      "model_inference": {
+        "mean_ms": 0.5561011805992975,
+        "median_ms": 0.5285500010359101,
+        "p95_ms": 0.7838949950382806,
+        "frames": 2880
+      },
+      "total": {
+        "mean_ms": 10.474857569450554,
+        "median_ms": 10.121749997779261,
+        "p95_ms": 13.430859997606598,
+        "frames": 2880
+      }
+    },
+    {
+      "variant": "all_mapfree",
+      "family": "mapfree",
+      "n_features": 39,
+      "features": {
+        "mean_ms": 2.7040782639864522,
+        "median_ms": 2.4574999988544732,
+        "p95_ms": 4.646845004390336,
+        "frames": 2880
+      },
+      "model_inference": {
+        "mean_ms": 0.5438526735664103,
+        "median_ms": 0.5164499998500105,
+        "p95_ms": 0.8791149994067375,
+        "frames": 2880
+      },
+      "total": {
+        "mean_ms": 10.874791319439383,
+        "median_ms": 10.093150001921458,
+        "p95_ms": 14.923120002640639,
+        "frames": 2880
+      }
+    },
+    {
+      "variant": "v1",
+      "family": "control",
+      "n_features": 24,
+      "features": {
+        "mean_ms": 2.3814912500635423,
+        "median_ms": 2.2376000015356112,
+        "p95_ms": 3.940939999665714,
+        "frames": 2880
+      },
+      "model_inference": {
+        "mean_ms": 0.14664628466410554,
+        "median_ms": 0.12819999756175093,
+        "p95_ms": 0.24071499938145272,
+        "frames": 2880
+      },
+      "total": {
+        "mean_ms": 9.064891631997954,
+        "median_ms": 8.810799998173025,
+        "p95_ms": 12.076079998951172,
+        "frames": 2880
+      }
+    }
+  ]
+}

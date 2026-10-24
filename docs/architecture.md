@@ -11,10 +11,11 @@ V3 adds a compositional building model around the existing engine. Read the [V3 
 | `environment.py` | Typed loading, geometry validation, segment intersection, route interpolation |
 | `simulation.py` | Seeded range generation; observations and simulator-only labels returned separately |
 | `schemas.py` | Strict Pydantic API contracts; extra fields and nonfinite inputs rejected |
-| `estimators.py` | Validity/geometry checks, baseline, Huber robust solve and reliability diagnostics |
+| `estimators.py` | Validity/geometry checks, baseline, Huber robust solve, optional multiplicative AI weights and reliability diagnostics |
+| `reliability.py` | Inference-safe 24-feature LOS/NLOS adapter, calibrated probability, ambiguity fallback and weight policy |
 | `tracking.py` | Constant-velocity Kalman state, covariance, innovation gate, outage handling, ellipse |
 | `evaluation.py` | Ground-truth error and covariance coverage; no feedback into estimation |
-| `session.py` | Authoritative settings, time, frame, trust and filter state; reproducible reset |
+| `session.py` | Authoritative settings, time, frame, trust, AI and filter state; reproducible reset |
 | `benchmark.py` | Independent experiment loop and metrics/CSV/JSON export |
 | `main.py` | FastAPI, per-session locks, revisions, bounded session/job stores |
 | `src/useSession.ts` | Serial HTTP requests, same-session reconnect and actual-frame history |
@@ -26,7 +27,7 @@ V3 adds a compositional building model around the existing engine. Read the [V3 
 
 ## Truth boundary
 
-The estimator's only observation type is `Measurement(anchor_id, anchor_position, timestamp, observed_range)`. Simulator-only `FaultLabel` contains true range, applied bias and intersected-wall IDs. These are separate lists; `solve()` receives the **same measurement list** for both methods. The tracker receives only a robust result and timestamp. Neither module imports simulation or evaluation. Evaluation runs afterward and cannot affect the current or next estimate.
+The estimator's only observation type is `Measurement(anchor_id, anchor_position, timestamp, observed_range)`. Simulator-only `FaultLabel` contains true range, applied bias and intersected-wall IDs. These are separate lists; all three methods receive the **same measurement list** and the AI adapter receives no truth, label, bias or fault flag. The tracker receives only a robust result and timestamp. The estimator, reliability and tracking modules do not import simulation or evaluation. Evaluation runs afterward and cannot affect the current or next estimate.
 
 The browser can inspect truth and fault labels because this is a synthetic experiment. Its signal rays visualize simulator geometry, not inferred radio paths. There is no claim that a real radio exposes these labels.
 

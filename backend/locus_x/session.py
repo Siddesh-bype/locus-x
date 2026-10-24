@@ -1,16 +1,29 @@
 from copy import deepcopy
 from hashlib import sha256
+from pathlib import Path
 from threading import RLock
 from time import monotonic
 from uuid import uuid4
 
+import numpy as np
+
+from .ai_policy import candidate_from_policy, load_policy_file, run_v2_policy
 from .building import Building, parse_anchor_key
 from .environment import floor_elevation, resolve_floor, route_position
 from .estimators import solve
 from .evaluation import evaluate
+from .reliability import FeatureHistory, load_default_model
+from .reliability_v2 import FeatureHistoryV2, ReliabilityV2Model
 from .schemas import PRESETS, Controls, Environment, Event, Frame, Settings
 from .simulation import generate_measurements
-from .tracking import MotionTracker
+from .tracking import DEFAULT_GATE_CHI2, MotionTracker
+
+AI_MODEL = load_default_model()
+_V2_MODEL_DIR = Path(__file__).resolve().parents[2] / "models" / "ai-reliability-v2"
+_V2_POLICY_PATH = _V2_MODEL_DIR / "policy-v2.json"
+_V2_MODEL = ReliabilityV2Model.load(_V2_MODEL_DIR) if _V2_MODEL_DIR.exists() else None
+_V2_POLICY = load_policy_file(_V2_POLICY_PATH) if _V2_POLICY_PATH.exists() else None
+_V2_CANDIDATE = candidate_from_policy(_V2_POLICY) if _V2_POLICY else None
 
 
 class SimulationSession:
@@ -30,6 +43,10 @@ class SimulationSession:
         self.timestamp = 0.0
         self.tracker = MotionTracker()
         self.trust = {}
+        self.ai_tracker = MotionTracker()
+        self.ai_features = FeatureHistory()
+        self.v2_features = FeatureHistoryV2()
+        self.ai_model = AI_MODEL
         self.events = [Event(timestamp=0, message=f"Session initialized · seed {settings.seed}")]
         self.lock = RLock()
         self.touched = monotonic()
@@ -54,17 +71,57 @@ class SimulationSession:
             raise ValueError("Unknown anchor ID")
 
     def compute(self):
-        self.before_frame = deepcopy((self.tracker, self.trust))
+        self.before_frame = deepcopy(
+            (self.tracker, self.trust, self.ai_tracker, self.ai_features, self.v2_features)
+        )
         truth = route_position(
             self.environment.routes[self.settings.route], self.timestamp, self.settings.speed
         )
         measurements, labels = generate_measurements(
             self.environment, self.settings, truth, self.timestamp, self.frame_index
         )
-        # Explicitly identical immutable-by-convention observations for the two estimators.
+        # Explicitly identical immutable-by-convention observations for every method.
         baseline = solve(measurements)
+        trust_before = dict(self.trust)
         robust = solve(measurements, robust=True, trust=self.trust)
+        # Same inputs the benchmark gives v2: the statistical fix and the *pre-update*
+        # statistical tracker state.
+        stat_state = None if self.tracker.state is None else np.array(self.tracker.state)
+        stat_timestamp = self.tracker.timestamp
         tracking = self.tracker.update(robust, self.timestamp)
+        gate = DEFAULT_GATE_CHI2
+        if _V2_MODEL is not None and _V2_MODEL.available and _V2_CANDIDATE is not None:
+            _, bias_by_anchor = self.ai_model.predict_full(
+                measurements, self.environment, robust, self.ai_features
+            )
+            result = run_v2_policy(
+                v2_model=_V2_MODEL,
+                policy=_V2_POLICY,
+                candidate=_V2_CANDIDATE,
+                measurements=measurements,
+                environment=self.environment,
+                stat_fix=robust,
+                v2_history=self.v2_features,
+                tracker_state=stat_state,
+                tracker_timestamp=stat_timestamp,
+                bias_by_anchor=bias_by_anchor,
+            )
+            ai, ai_metadata, gate = result.estimate, result.metadata, result.gate
+        else:
+            ai_output = self.ai_model.predict(
+                measurements, self.environment, baseline, self.ai_features
+            )
+            ai_metadata = ai_output.metadata
+            if ai_output.weights is not None:
+                ai = solve(
+                    measurements,
+                    robust=True,
+                    trust=trust_before,
+                    ai_weights=dict(ai_output.weights),
+                )
+            else:
+                ai = robust
+        ai_tracking = self.ai_tracker.update(ai, self.timestamp, gate=gate)
         previous = getattr(self, "frame", None)
         if previous and previous.tracking.status != tracking.status:
             self.events.append(
@@ -111,7 +168,10 @@ class SimulationSession:
             baseline=baseline,
             robust=robust,
             tracking=tracking,
-            evaluation=evaluate(truth, baseline, tracking, labels),
+            ai=ai,
+            ai_tracking=ai_tracking,
+            ai_metadata=ai_metadata,
+            evaluation=evaluate(truth, baseline, tracking, labels, ai, ai_tracking),
             events=self.events,
         )
 
@@ -156,6 +216,9 @@ class SimulationSession:
         self.revision += 1
         self.tracker = MotionTracker()
         self.trust = {}
+        self.ai_tracker = MotionTracker()
+        self.ai_features = FeatureHistory()
+        self.v2_features = FeatureHistoryV2()
         self.events = [
             Event(
                 timestamp=0,
@@ -181,8 +244,14 @@ class SimulationSession:
         if restart:
             return self.restart()
         self.revision += 1
-        # Recompute this timestamp without double-counting filter or trust history.
-        self.tracker, self.trust = deepcopy(self.before_frame)
+        # Recompute this timestamp without double-counting filter, trust, or feature history.
+        (
+            self.tracker,
+            self.trust,
+            self.ai_tracker,
+            self.ai_features,
+            self.v2_features,
+        ) = deepcopy(self.before_frame)
         self.events.append(
             Event(timestamp=self.timestamp, message="Controls updated · " + ", ".join(updates))
         )

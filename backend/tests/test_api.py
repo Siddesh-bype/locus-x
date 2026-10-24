@@ -94,6 +94,22 @@ def test_unknown_environment_and_extra_truth_rejected():
     assert client.get("/api/v1/benchmarks/missing").status_code == 404
 
 
+def test_ai_metadata_exposes_version_and_fallback():
+    frame = client.post("/api/v1/sessions", json={"settings": {"scenario": "clean"}}).json()
+    metadata = frame["ai_metadata"]
+    assert metadata["model_version"] == "ai-reliability-v2"
+    assert metadata["status"] in ("active", "fallback")
+    path = f"/api/v1/sessions/{frame['session_id']}"
+    frame = client.patch(
+        f"{path}/controls", json={"expected_revision": frame["revision"], "dropout": 1}
+    ).json()
+    frame = client.post(
+        f"{path}/advance", json={"expected_revision": frame["revision"], "dt": 1}
+    ).json()
+    assert frame["ai_metadata"]["status"] == "fallback"
+    assert frame["ai_metadata"]["model_version"] == "ai-reliability-v2"
+
+
 def test_scenario_only_initialization_uses_preset():
     frame = client.post("/api/v1/sessions", json={"settings": {"scenario": "clean"}}).json()
     assert frame["settings"]["noise_std"] == frame["settings"]["nlos_bias"] == 0
@@ -122,8 +138,26 @@ def test_benchmark_job_lifecycle_and_actual_output():
         time.sleep(0.02)
     assert job["status"] == "complete"
     assert job["progress"] == 1
-    assert len(job["result"]["rows"]) == 2
+    assert len(job["result"]["rows"]) == 3
+    assert {row["method"] for row in job["result"]["rows"]} == {
+        "baseline",
+        "proposed",
+        "ai",
+    }
     assert job["result"]["rows"][0]["rmse"] < 1e-5
+
+
+def test_ai_metadata_reports_the_weights_actually_applied():
+    frame = client.post("/api/v1/sessions", json={"settings": {"scenario": "nlos"}}).json()
+    path = f"/api/v1/sessions/{frame['session_id']}"
+    weights = []
+    for _ in range(12):
+        frame = client.post(
+            f"{path}/advance", json={"expected_revision": frame["revision"], "dt": 0.5}
+        ).json()
+        weights += [p["weight"] for p in frame["ai_metadata"]["predictions"]]
+    assert weights and min(weights) < 1.0
+    assert all(0.0 <= w <= 1.0 for w in weights)
 
 
 def test_layout_sites_endpoint_reports_legality():

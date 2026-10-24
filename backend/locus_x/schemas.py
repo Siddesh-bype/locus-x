@@ -79,7 +79,7 @@ class Settings(StrictModel):
     # "this ID on every floor" meaning.
     disabled_anchor_keys: list[str] = Field(default_factory=list, max_length=32)
     walls_enabled: bool = True
-    route: str = "asset_round"
+    route: str = "held_out"
     speed: float = Field(default=1.2, ge=0.2, le=3)
     seed: int = Field(default=12, ge=0, le=2**31 - 1)
 
@@ -186,6 +186,24 @@ class Tracking(StrictModel):
     runtime_ms: float
 
 
+class AIPrediction(StrictModel):
+    anchor_id: str
+    p_los: float = Field(ge=0, le=1)
+    weight: float = Field(ge=0, le=1)
+
+
+class AIMetadata(StrictModel):
+    status: Literal["active", "fallback"]
+    reason: str
+    model_version: str
+    feature_version: str
+    ambiguous: bool = False
+    n_predicted_los: int = 0
+    n_predicted_nlos: int = 0
+    predictions: list[AIPrediction] = Field(default_factory=list)
+    runtime_ms: float = 0
+
+
 class FloorState(StrictModel):
     """The reported storey, with where it came from and whether it is trusted.
 
@@ -221,6 +239,8 @@ class Evaluation(StrictModel):
     baseline_error: float | None
     proposed_error: float | None
     covered_95: bool | None
+    ai_error: float | None = None
+    ai_covered_95: bool | None = None
     has_nlos: bool
     has_dropout: bool
     # Device elevation of the truth target. Legacy 2D sessions leave it null because
@@ -257,6 +277,9 @@ class Frame(StrictModel):
     baseline: Estimate
     robust: Estimate
     tracking: Tracking
+    ai: Estimate | None = None
+    ai_tracking: Tracking | None = None
+    ai_metadata: AIMetadata | None = None
     evaluation: Evaluation
     events: list[Event]
     # Additive, null for every legacy frame: no existing key or value changes.

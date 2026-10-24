@@ -30,6 +30,13 @@ MULTIFLOOR_ONLY = {
 }
 """Frame fields added for multi-floor frames; all null on a legacy frame."""
 
+AI_KEYS = {
+    "ai",
+    "ai_tracking",
+    "ai_metadata",
+}
+"""Frame fields added for AI localization."""
+
 LEGACY_KEYS = {
     "session_id",
     "environment_id",
@@ -250,7 +257,7 @@ def test_legacy_payload_keeps_its_keys_and_values():
     response = client.post("/api/v1/sessions", json={})
     assert response.status_code == 201
     frame = response.json()
-    assert set(frame) == LEGACY_KEYS | MULTIFLOOR_ONLY
+    assert set(frame) == LEGACY_KEYS | MULTIFLOOR_ONLY | AI_KEYS
     for key in LEGACY_KEYS:
         assert key in frame
     # The multi-floor fields are additive and null; no legacy value changes meaning.

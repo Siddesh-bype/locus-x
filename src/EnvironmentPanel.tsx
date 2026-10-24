@@ -53,7 +53,7 @@ export default function EnvironmentPanel(props: Props) {
       {([
         ['Architecture', ['rooms', 'corridors', 'walls', 'labels', 'access']],
         ['Infrastructure', ['anchors', 'candidates']],
-        ['Experiment overlays', ['route', 'truth', 'baseline', 'proposed', 'uncertainty', 'signals']],
+        ['Experiment overlays', ['route', 'truth', 'baseline', 'proposed', 'ai', 'uncertainty', 'signals']],
       ] as [string, SceneLayer[]][]).map(([title, keys]) => <fieldset key={title}><legend>{title}</legend>{keys.map(key => <label className="layer-option" key={key}>
         <input type="checkbox" checked={layers[key] && availability(key)} disabled={!availability(key)} onChange={event => props.setLayer(key, event.target.checked)} />
         <span>{LAYER_NAMES[key]}{key === 'candidates' && <small>{floor.candidate_anchors.length} configured sites · no optimizer</small>}{!availability(key) && key !== 'candidates' && <small>Not declared in this configuration</small>}</span>

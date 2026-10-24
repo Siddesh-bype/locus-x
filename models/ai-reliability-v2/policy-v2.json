@@ -1,0 +1,69 @@
+{
+  "policy_version": "2.3.0",
+  "policy_id": "hard_t025_f008_active_majority_rc",
+  "mode": "hard",
+  "floor": 0.08,
+  "threshold": 0.25,
+  "fallback_min_predicted_los": 0,
+  "fallback_min_predicted_los_when_4plus": 0,
+  "ai_weight_rule": "1 if p_los >= threshold else floor + (1-floor)*p_los/threshold; majority-NLOS keeps predicted-NLOS anchors at the floor weight instead of falling back",
+  "final_weight": "ai_weight (replaces the statistical weight; additive coupling)",
+  "selection_rule": "no >+0.5% relative regression with a bootstrap interval entirely above zero in any scenario x anchor-count slice or anchor count; then largest mean paired improvement over the current policy on solvable mixed-fault, majority-NLOS and all-NLOS frames; then lowest fallback rate; then hard before soft and fixed grid order",
+  "validation": {
+    "path": "artifacts\\ai-reliability\\phase4-final\\policy\\selection.json",
+    "score": 0.0,
+    "fallback_rate": 0.6897615131578947,
+    "changed_rate": 0.14219435307017544,
+    "selected_by_anchor_count": {
+      "3": {
+        "frames": 72960,
+        "fallback_rate": 0.8665981359649123,
+        "changed_rate": 0.0,
+        "active_rate": 0.13340186403508772
+      },
+      "4": {
+        "frames": 72960,
+        "fallback_rate": 0.6942297149122807,
+        "changed_rate": 0.05202850877192983,
+        "active_rate": 0.3057702850877193
+      },
+      "5": {
+        "frames": 72960,
+        "fallback_rate": 0.7297423245614035,
+        "changed_rate": 0.09473684210526316,
+        "active_rate": 0.27025767543859647
+      },
+      "6": {
+        "frames": 72960,
+        "fallback_rate": 0.6209429824561403,
+        "changed_rate": 0.140625,
+        "active_rate": 0.3790570175438597
+      },
+      "7": {
+        "frames": 72960,
+        "fallback_rate": 0.6162417763157895,
+        "changed_rate": 0.2705455043859649,
+        "active_rate": 0.38375822368421053
+      },
+      "8": {
+        "frames": 72960,
+        "fallback_rate": 0.6108141447368421,
+        "changed_rate": 0.29523026315789475,
+        "active_rate": 0.3891858552631579
+      }
+    }
+  },
+  "range_correction": {
+    "enabled": true,
+    "source": "v1 bias head (learned, per anchor)",
+    "min_p_nlos": 0.25,
+    "scale": 1.0,
+    "formula": "observed_range - scale*p_nlos*predicted_bias, applied only when p_nlos > min_p_nlos"
+  },
+  "ablation_evidence": {
+    "path": "artifacts/ai-reliability/ablation-v3/summary.json",
+    "seeds": "validation 11,22",
+    "finding": "anchor-count scaling had no effect (<=0.002 m); the tighter NLOS gate regressed RMSE by +0.066 m [+0.025,+0.107]; both removed."
+  },
+  "policy_sha256": "cda0e29824a1f9cf00dc86c9dc96392f2883ac88a75c8122ef4317584f74a5b1"
+}

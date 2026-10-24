@@ -1,0 +1,16 @@
+{
+  "version": "phase2-ablation-v1",
+  "train": {
+    "samples": 362705,
+    "runs": 1920,
+    "nlos_samples": 100224,
+    "file": "artifacts\\ai-reliability\\ablation-v1\\dataset\\train.npz"
+  },
+  "validation": {
+    "samples": 129300,
+    "runs": 864,
+    "nlos_samples": 49200,
+    "file": "artifacts\\ai-reliability\\ablation-v1\\dataset\\validation.npz"
+  },
+  "note": "Training seeds 1-4, validation seeds 11/22. Reserved v2 test seeds were not touched."
+}

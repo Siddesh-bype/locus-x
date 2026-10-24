@@ -33,9 +33,10 @@ def summarize(records: list[dict], method: str) -> dict:
         for r in records
         if r["has_dropout"] and r[f"{method}_error"] is not None
     ]
+    coverage_key = {"proposed": "covered_95", "ai": "ai_covered_95"}.get(method)
     coverage = (
-        [r["covered_95"] for r in records if r["covered_95"] is not None]
-        if method == "proposed"
+        [r[coverage_key] for r in records if r[coverage_key] is not None]
+        if coverage_key is not None
         else []
     )
     return {
@@ -92,8 +93,26 @@ def run_benchmark(
                         {
                             "baseline_updated": frame.baseline.position is not None,
                             "proposed_updated": frame.tracking.updated,
+                            "ai_updated": (
+                                frame.ai_tracking.updated
+                                if frame.ai_tracking is not None
+                                else False
+                            ),
                             "baseline_runtime": frame.baseline.runtime_ms,
                             "proposed_runtime": frame.robust.runtime_ms + frame.tracking.runtime_ms,
+                            "ai_runtime": (
+                                (frame.ai.runtime_ms if frame.ai is not None else 0.0)
+                                + (
+                                    frame.ai_tracking.runtime_ms
+                                    if frame.ai_tracking is not None
+                                    else 0.0
+                                )
+                                + (
+                                    frame.ai_metadata.runtime_ms
+                                    if frame.ai_metadata is not None
+                                    else 0.0
+                                )
+                            ),
                         }
                     )
                     records.append(record)
@@ -102,6 +121,7 @@ def run_benchmark(
                             "t": frame.timestamp,
                             "baseline": record["baseline_error"],
                             "proposed": record["proposed_error"],
+                            "ai": record["ai_error"],
                         }
                     )
                     completed += 1
@@ -109,7 +129,7 @@ def run_benchmark(
                         progress(completed / total)
                 if seed_index == 0:
                     traces[key] = trace
-            for method in ("baseline", "proposed"):
+            for method in ("baseline", "proposed", "ai"):
                 rows.append(
                     {
                         "scenario": scenario,
@@ -124,7 +144,7 @@ def run_benchmark(
                 ]
                 if values
                 else []
-                for method in ("baseline", "proposed")
+                for method in ("baseline", "proposed", "ai")
                 if (
                     values := sorted(
                         r[f"{method}_error"] for r in records if r[f"{method}_error"] is not None

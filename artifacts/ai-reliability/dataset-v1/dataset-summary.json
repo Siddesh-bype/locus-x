@@ -1,0 +1,31 @@
+{
+  "dataset_version": "1.0.0",
+  "config_path": "configs\\ai\\reliability-dataset-v1.json",
+  "config_sha256": "8f4103cb436fcf28e3edfa71958f9d541baab525ec2c5b1b3ac9e21a4cf62c1d",
+  "splits": {
+    "train": {
+      "samples": 272027,
+      "los_samples": 196136,
+      "nlos_samples": 75891,
+      "runs": 1440,
+      "file": "artifacts\\ai-reliability\\dataset-v1\\train.npz",
+      "file_sha256": "faae65e390be3dfee0d1d76b2fa6ef6b539935b791cf1ebefdf191b18beb0e60"
+    },
+    "validation": {
+      "samples": 31596,
+      "los_samples": 25270,
+      "nlos_samples": 6326,
+      "runs": 168,
+      "file": "artifacts\\ai-reliability\\dataset-v1\\validation.npz",
+      "file_sha256": "7d336b4a75adff149a8690f85141438bac0dce306aa93852b57a4e39f0387070"
+    },
+    "test": {
+      "samples": 63776,
+      "los_samples": 51308,
+      "nlos_samples": 12468,
+      "runs": 336,
+      "file": "artifacts\\ai-reliability\\dataset-v1\\test.npz",
+      "file_sha256": "c6972361fe45e82a7bf1b3192d387d64fbbd36d10bc2ae139bc0cb353e825b2c"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "promoted": true,
+  "selected": "g5",
+  "directory": "models\\ai-reliability-v2",
+  "checkpoints": 5,
+  "n_features": 26
+}

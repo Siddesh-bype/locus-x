@@ -3,18 +3,18 @@ import type { Building, EnvironmentDefinition, Floor, FloorState, Frame, Point, 
 
 export type ViewMode = 'floor' | 'building' | 'exploded';
 export type CameraAngle = 'perspective' | 'plan';
-export type SceneLayer = 'rooms' | 'corridors' | 'walls' | 'labels' | 'anchors' | 'route' | 'access' | 'candidates' | 'truth' | 'baseline' | 'proposed' | 'uncertainty' | 'signals';
+export type SceneLayer = 'rooms' | 'corridors' | 'walls' | 'labels' | 'anchors' | 'route' | 'access' | 'candidates' | 'truth' | 'baseline' | 'proposed' | 'ai' | 'uncertainty' | 'signals';
 export type SceneLayers = Record<SceneLayer, boolean>;
 export const DEFAULT_LAYERS: SceneLayers = {
   rooms: true, corridors: true, walls: true, labels: true, anchors: true, route: true,
-  access: true, candidates: false, truth: true, baseline: true, proposed: true,
+  access: true, candidates: false, truth: true, baseline: true, proposed: true, ai: true,
   uncertainty: true, signals: false,
 };
 export const LAYER_NAMES: Record<SceneLayer, string> = {
   rooms: 'Room zones & equipment', corridors: 'Corridors', walls: 'Walls & door openings',
   labels: 'Room labels', anchors: 'Installed anchors', route: 'Planned target route',
   access: 'Stairs & elevators', candidates: 'Candidate anchor sites', truth: 'Ground truth',
-  baseline: 'Baseline trajectory', proposed: 'LOCUS-X trajectory', uncertainty: 'Nominal 95% ellipse',
+  baseline: 'Baseline trajectory', proposed: 'LOCUS-X trajectory', ai: 'LOCUS-X + AI trajectory', uncertainty: 'Nominal 95% ellipse',
   signals: 'Simulated signal paths',
 };
 export const EXPLODE_GAP = 5.5;
@@ -124,11 +124,14 @@ export function recordFrame(history: Sample[], previous: Frame | null, frame: Fr
   const sample: Sample = {
     t: frame.timestamp, baseline: frame.evaluation.baseline_error, proposed: frame.evaluation.proposed_error,
     truth: frame.evaluation.ground_truth, basePosition: frame.baseline.position, proposedPosition: frame.tracking.position,
+    ai: frame.evaluation.ai_error, aiPosition: frame.ai_tracking?.position ?? null,
     truthElevation: frame.evaluation.ground_truth_elevation ?? null, proposedElevation: frame.elevation_estimate ?? null,
     environment_id: frame.environment_id, floor_id: frame.floor_id, frame_index: frame.frame_index,
     baselineUpdated: frame.baseline.position !== null, proposedUpdated: frame.tracking.updated,
+    aiUpdated: frame.ai_tracking?.updated ?? false,
     baselineRuntime: frame.baseline.runtime_ms, proposedRuntime: frame.robust.runtime_ms + frame.tracking.runtime_ms,
-    covered95: frame.evaluation.covered_95,
+    aiRuntime: (frame.ai?.runtime_ms ?? 0) + (frame.ai_tracking?.runtime_ms ?? 0) + (frame.ai_metadata?.runtime_ms ?? 0),
+    covered95: frame.evaluation.covered_95, aiCovered95: frame.evaluation.ai_covered_95,
   };
   return appendSample(previous && settingsKey(previous) === settingsKey(frame) ? history : [], sample);
 }
@@ -139,11 +142,14 @@ function quantile(sorted: number[], fraction: number): number | null {
   return sorted[lower] * (1 - weight) + sorted[Math.ceil(index)] * weight;
 }
 
-export function windowMetrics(samples: Sample[], method: 'baseline' | 'proposed') {
+export function windowMetrics(samples: Sample[], method: 'baseline' | 'proposed' | 'ai') {
   const errors = samples.flatMap(sample => sample[method] == null ? [] : [sample[method]!]).sort((a, b) => a - b);
   const runtimes = samples.flatMap(s => s[`${method}Runtime`] == null ? [] : [s[`${method}Runtime`]!]);
   const updates = samples.flatMap(s => s[`${method}Updated`] == null ? [] : [s[`${method}Updated`]!]);
-  const coverage = method === 'proposed' ? samples.flatMap(s => s.covered95 == null ? [] : [s.covered95]) : [];
+  const coverage = samples.flatMap(s => {
+    const value = method === 'ai' ? s.aiCovered95 : method === 'proposed' ? s.covered95 : null;
+    return value == null ? [] : [value];
+  });
   return {
     count: samples.length, valid: errors.length,
     rmse: errors.length ? Math.sqrt(errors.reduce((sum, error) => sum + error ** 2, 0) / errors.length) : null,
@@ -157,7 +163,7 @@ export function windowMetrics(samples: Sample[], method: 'baseline' | 'proposed'
 }
 
 /** Never connect across a missing estimate or another floor. */
-export function trajectorySegments(samples: Sample[], key: 'truth' | 'basePosition' | 'proposedPosition', floorId: string) {
+export function trajectorySegments(samples: Sample[], key: 'truth' | 'basePosition' | 'proposedPosition' | 'aiPosition', floorId: string) {
   const segments: Point[][] = [[]];
   for (const sample of samples) {
     const position = sample.floor_id === floorId ? sample[key] : undefined;

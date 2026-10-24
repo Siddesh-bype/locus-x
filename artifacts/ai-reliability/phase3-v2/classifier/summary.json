@@ -1,0 +1,61 @@
+{
+  "scope": "validation seeds and counts from configs/ai/reliability-dataset-v2.json",
+  "label_rule": "available los/nlos only",
+  "variants": [
+    {
+      "name": "g0_full",
+      "family": "control",
+      "n_features": 24
+    },
+    {
+      "name": "g0_mapfree",
+      "family": "control",
+      "n_features": 22
+    },
+    {
+      "name": "g2",
+      "family": "mapfree",
+      "n_features": 27
+    },
+    {
+      "name": "g3",
+      "family": "mapfree",
+      "n_features": 24
+    },
+    {
+      "name": "g4",
+      "family": "mapfree",
+      "n_features": 25
+    },
+    {
+      "name": "g5",
+      "family": "mapfree",
+      "n_features": 26
+    },
+    {
+      "name": "g1",
+      "family": "mapfree",
+      "n_features": 25
+    },
+    {
+      "name": "g1_g5",
+      "family": "mapfree",
+      "n_features": 29
+    },
+    {
+      "name": "all_mapfree",
+      "family": "mapfree",
+      "n_features": 39
+    },
+    {
+      "name": "all_map",
+      "family": "comparison",
+      "n_features": 41
+    }
+  ],
+  "samples": 1733609,
+  "frames": 437760,
+  "runs": 3648,
+  "elapsed_seconds": 14.660061999995378,
+  "train_samples": 362705
+}

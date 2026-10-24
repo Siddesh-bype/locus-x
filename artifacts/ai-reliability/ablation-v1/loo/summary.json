@@ -1,0 +1,13 @@
+{
+  "scope": "phase2 train seeds 1-4; validation seeds 11,22; all validation variants and counts",
+  "reference": "model trained on all four layouts, evaluated on each layout",
+  "loo": "model trained on the other three layouts, evaluated on held-out layout",
+  "seeds": [
+    20261021,
+    20261022,
+    20261023,
+    20261024,
+    20261025
+  ],
+  "elapsed_seconds": 749.6984133999977
+}

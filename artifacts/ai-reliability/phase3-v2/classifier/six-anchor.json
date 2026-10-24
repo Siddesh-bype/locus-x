@@ -1,0 +1,189 @@
+{
+  "g0_full": {
+    "samples": 326024,
+    "anchor_misclassification_rate": 0.07477363629671435,
+    "frame_nlos_count_distribution": {
+      "0": 175536,
+      "1": 336,
+      "2": 3565,
+      "3": 18683,
+      "4": 40697,
+      "5": 46185,
+      "6": 41022,
+      "7": 0,
+      "8": 0
+    },
+    "mean_n_nlos": 2.1573871862194194,
+    "mean_n_available": 5.292910951341006
+  },
+  "g0_mapfree": {
+    "samples": 326024,
+    "anchor_misclassification_rate": 0.0740436286899124,
+    "frame_nlos_count_distribution": {
+      "0": 175536,
+      "1": 336,
+      "2": 3565,
+      "3": 18683,
+      "4": 40697,
+      "5": 46185,
+      "6": 41022,
+      "7": 0,
+      "8": 0
+    },
+    "mean_n_nlos": 2.1573871862194194,
+    "mean_n_available": 5.292910951341006
+  },
+  "g2": {
+    "samples": 326024,
+    "anchor_misclassification_rate": 0.06552891811645768,
+    "frame_nlos_count_distribution": {
+      "0": 175536,
+      "1": 336,
+      "2": 3565,
+      "3": 18683,
+      "4": 40697,
+      "5": 46185,
+      "6": 41022,
+      "7": 0,
+      "8": 0
+    },
+    "mean_n_nlos": 2.1573871862194194,
+    "mean_n_available": 5.292910951341006
+  },
+  "g3": {
+    "samples": 326024,
+    "anchor_misclassification_rate": 0.07334122641277943,
+    "frame_nlos_count_distribution": {
+      "0": 175536,
+      "1": 336,
+      "2": 3565,
+      "3": 18683,
+      "4": 40697,
+      "5": 46185,
+      "6": 41022,
+      "7": 0,
+      "8": 0
+    },
+    "mean_n_nlos": 2.1573871862194194,
+    "mean_n_available": 5.292910951341006
+  },
+  "g4": {
+    "samples": 326024,
+    "anchor_misclassification_rate": 0.07239957794518195,
+    "frame_nlos_count_distribution": {
+      "0": 175536,
+      "1": 336,
+      "2": 3565,
+      "3": 18683,
+      "4": 40697,
+      "5": 46185,
+      "6": 41022,
+      "7": 0,
+      "8": 0
+    },
+    "mean_n_nlos": 2.1573871862194194,
+    "mean_n_available": 5.292910951341006
+  },
+  "g5": {
+    "samples": 326024,
+    "anchor_misclassification_rate": 0.058734939759036146,
+    "frame_nlos_count_distribution": {
+      "0": 175536,
+      "1": 336,
+      "2": 3565,
+      "3": 18683,
+      "4": 40697,
+      "5": 46185,
+      "6": 41022,
+      "7": 0,
+      "8": 0
+    },
+    "mean_n_nlos": 2.1573871862194194,
+    "mean_n_available": 5.292910951341006
+  },
+  "g1": {
+    "samples": 326024,
+    "anchor_misclassification_rate": 0.06737540794542733,
+    "frame_nlos_count_distribution": {
+      "0": 175536,
+      "1": 336,
+      "2": 3565,
+      "3": 18683,
+      "4": 40697,
+      "5": 46185,
+      "6": 41022,
+      "7": 0,
+      "8": 0
+    },
+    "mean_n_nlos": 2.1573871862194194,
+    "mean_n_available": 5.292910951341006
+  },
+  "g1_g5": {
+    "samples": 326024,
+    "anchor_misclassification_rate": 0.05574436237822982,
+    "frame_nlos_count_distribution": {
+      "0": 175536,
+      "1": 336,
+      "2": 3565,
+      "3": 18683,
+      "4": 40697,
+      "5": 46185,
+      "6": 41022,
+      "7": 0,
+      "8": 0
+    },
+    "mean_n_nlos": 2.1573871862194194,
+    "mean_n_available": 5.292910951341006
+  },
+  "all_mapfree": {
+    "samples": 326024,
+    "anchor_misclassification_rate": 0.051272298971854834,
+    "frame_nlos_count_distribution": {
+      "0": 175536,
+      "1": 336,
+      "2": 3565,
+      "3": 18683,
+      "4": 40697,
+      "5": 46185,
+      "6": 41022,
+      "7": 0,
+      "8": 0
+    },
+    "mean_n_nlos": 2.1573871862194194,
+    "mean_n_available": 5.292910951341006
+  },
+  "all_map": {
+    "samples": 326024,
+    "anchor_misclassification_rate": 0.055854783696905747,
+    "frame_nlos_count_distribution": {
+      "0": 175536,
+      "1": 336,
+      "2": 3565,
+      "3": 18683,
+      "4": 40697,
+      "5": 46185,
+      "6": 41022,
+      "7": 0,
+      "8": 0
+    },
+    "mean_n_nlos": 2.1573871862194194,
+    "mean_n_available": 5.292910951341006
+  },
+  "v1": {
+    "samples": 326024,
+    "anchor_misclassification_rate": 0.08649056511177092,
+    "frame_nlos_count_distribution": {
+      "0": 175536,
+      "1": 336,
+      "2": 3565,
+      "3": 18683,
+      "4": 40697,
+      "5": 46185,
+      "6": 41022,
+      "7": 0,
+      "8": 0
+    },
+    "mean_n_nlos": 2.1573871862194194,
+    "mean_n_available": 5.292910951341006
+  }
+}

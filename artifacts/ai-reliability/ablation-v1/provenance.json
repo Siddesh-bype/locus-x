@@ -1,0 +1,42 @@
+{
+  "version": "phase2-ablation-v1",
+  "generated_at": "2026-10-21T12:54:19.235625+00:00",
+  "code_commit": "74d245b20310a9b312fbdd0c03d3177c46073fe8",
+  "baseline_commit": "72086c3e81e80777d9ddc9a95d178fd8c53c0440",
+  "reserved_test_seed_commit": "1c24eb4b3b4e59b7dd9a0f57822218e12fb7c90f",
+  "reserved_test_seeds_evaluated": false,
+  "validation_seeds": [
+    11,
+    22
+  ],
+  "training_seeds": [
+    20261021,
+    20261022,
+    20261023,
+    20261024,
+    20261025
+  ],
+  "datasets": {
+    "train": {
+      "file": "artifacts/ai-reliability/ablation-v1/dataset/train.npz",
+      "sha256": "fe4d2606180f73c7f2662717a25bf69751a8c326e48e48bc7610f3499fd71ba0",
+      "samples": 362705,
+      "runs": 1920,
+      "nlos_samples": 100224
+    },
+    "validation": {
+      "file": "artifacts/ai-reliability/ablation-v1/dataset/validation.npz",
+      "sha256": "7716b79aa6a1daf458caee96b049d08ee66080c5ab4e7f0e7b0bf7be001380fa",
+      "samples": 129300,
+      "runs": 864,
+      "nlos_samples": 49200
+    }
+  },
+  "source_sha256": {
+    "backend/locus_x/ai_ablation.py": "6f81d7b02bb89a55a3df5beb1a91caf26815b34f9970b19c8c20c49c8493b2ac",
+    "backend/locus_x/ai_ablation_diagnostics.py": "dfcb8033b8f4f5ae20c8a5ac6c7357e50ad3662775dacd2f559d344c5d6ccbce",
+    "backend/tests/test_ablation.py": "e076cc401454670d1f0b5e078d742bcdd5105675fee57c6d22ccb9d1f4242aba"
+  },
+  "model_checkpoints": 52,
+  "note": "Artifacts were generated from the working tree that became code commit 74d245b; no code changed after generation. No reserved v2 seed was evaluated."
+}

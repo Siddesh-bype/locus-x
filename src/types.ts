@@ -59,6 +59,20 @@ export interface Estimate {
   reliability: Record<string, number>; covariance: number[][] | null; runtime_ms: number;
   condition_number: number | null;
 }
+export interface AIPrediction {
+  anchor_id: string; p_los: number; p_nlos: number; weight: number;
+}
+export interface AIMetadata {
+  status: 'active' | 'fallback' | 'unavailable' | string; reason: string;
+  model_version: string; feature_version: string; ambiguous: boolean;
+  n_predicted_los: number; n_predicted_nlos: number;
+  predictions: AIPrediction[]; runtime_ms: number;
+}
+export interface Tracking {
+  position: Point | null; velocity: Point | null; covariance: number[][] | null;
+  ellipse: { major: number; minor: number; angle: number; level: number } | null;
+  status: string; reason: string; updated: boolean; outage_seconds: number; runtime_ms: number;
+}
 export interface Frame {
   environment_id: string; environment_version: string; environment_sha256: string;
   floor_id: string | null; floor_elevation: number | null; localization_mode: LocalizationMode;
@@ -66,26 +80,25 @@ export interface Frame {
   measurements: { anchor_id: string; anchor_position: Point; timestamp: number; observed_range: number }[];
   simulator_labels: { anchor_id: string; available: boolean; kind: 'los' | 'nlos' | 'disabled' | 'outage' | 'packet_loss'; intersected_walls: string[]; true_range: number; injected_bias: number }[];
   baseline: Estimate; robust: Estimate;
-  tracking: {
-    position: Point | null; velocity: Point | null; covariance: number[][] | null;
-    ellipse: { major: number; minor: number; angle: number; level: number } | null;
-    status: string; reason: string; updated: boolean; outage_seconds: number; runtime_ms: number;
-  };
-  evaluation: { ground_truth: Point; baseline_error: number | null; proposed_error: number | null; covered_95: boolean | null; has_nlos: boolean; has_dropout: boolean; ground_truth_elevation?: number | null };
+  tracking: Tracking;
+  ai?: Estimate | null; ai_tracking?: Tracking | null; ai_metadata?: AIMetadata | null;
+  evaluation: { ground_truth: Point; baseline_error: number | null; proposed_error: number | null; covered_95: boolean | null; ai_error?: number | null; ai_covered_95?: boolean | null; has_nlos: boolean; has_dropout: boolean; ground_truth_elevation?: number | null };
   events: { timestamp: number; message: string; level: string }[];
   floor_state?: FloorState | null; transition?: TransitionState | null;
   elevation_estimate?: number | null; floor_probabilities?: Record<string, number> | null;
 }
 export interface Sample {
-  t: number; baseline: number | null; proposed: number | null;
-  truth?: Point; basePosition?: Point | null; proposedPosition?: Point | null;
+  t: number; baseline: number | null; proposed: number | null; ai?: number | null;
+  truth?: Point; basePosition?: Point | null; proposedPosition?: Point | null; aiPosition?: Point | null;
   truthElevation?: number | null; proposedElevation?: number | null;
   floor_id?: string | null; environment_id?: string; frame_index?: number;
-  baselineUpdated?: boolean; proposedUpdated?: boolean;
-  baselineRuntime?: number; proposedRuntime?: number; covered95?: boolean | null;
+  baselineUpdated?: boolean; proposedUpdated?: boolean; aiUpdated?: boolean;
+  baselineRuntime?: number; proposedRuntime?: number; aiRuntime?: number;
+  covered95?: boolean | null; aiCovered95?: boolean | null;
 }
+export type Method = 'baseline' | 'proposed' | 'ai';
 export interface BenchmarkRow {
-  scenario: Scenario; anchors: number; seeds: string; method: 'baseline' | 'proposed'; frames: number; valid_frames: number;
+  scenario: Scenario; anchors: number; seeds: string; method: Method; frames: number; valid_frames: number;
   rmse: number | null; median: number | null; p95: number | null; valid_rate: number; update_rate: number;
   nlos_rmse: number | null; dropout_rmse: number | null; latency_ms: number; coverage_95: number | null;
 }
@@ -93,7 +106,7 @@ export interface BenchmarkResult {
   config: { scenarios: Scenario[]; anchor_counts: number[]; seeds: number[]; steps: number; dt: number; route: string; environment_id?: string; floor_id?: string };
   result_version?: string; environment_version?: string; floor_id?: string;
   environment_id: string; environment_sha256: string; rows: BenchmarkRow[];
-  traces: Record<string, Sample[]>; distributions: Record<string, { baseline: number[]; proposed: number[] }>;
+  traces: Record<string, Sample[]>; distributions: Record<string, { baseline: number[]; proposed: number[]; ai?: number[] }>;
   elapsed_seconds: number; notes: string;
 }
 export interface BenchmarkJob { id: string; status: string; progress: number; result: BenchmarkResult | null; error: string | null }

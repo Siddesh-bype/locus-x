@@ -4,7 +4,7 @@
 
 Built by Epoch_12, Vishwakarma Institute of Technology, Pune, for CODE APEX 3.0, Problem Statement 2. A fictional three-floor hospital shares its configuration with the range simulator, statistical localization engine and evaluation pipeline. The original single-floor environment, estimators and reference results remain available. Runs locally with React/TypeScript/Three.js and Python/FastAPI; no credentials or external services.
 
-V3 implements **2D localization on a manually selected, known floor**. Building height is configured, not estimated. The trained AI reliability model, anchor optimizer and integrated floor transitions are subsequent phases. See the [audit](docs/v3-audit.md), [coordinate/configuration contract](docs/v3-contract.md), [team handoff](docs/v3-handoff.md), and [executed checks and limitations](docs/v3-status.md).
+V3 implements **2D localization on a manually selected, known floor**. Building height is configured, not estimated. A trained LOS/NLOS reliability model now feeds a third method, but anchor optimization and integrated floor transitions remain subsequent phases. The Phase 4-6 final test is complete; the v2 candidate improved classification and beat v1 but **did not beat statistical LOCUS-X overall**, so the live runtime remains v1. See the [final report](docs/ai-reliability-final.md), [AI reliability report](docs/ai-reliability.md), [recall diagnosis](docs/ai-reliability-recall-diagnosis.md), [audit](docs/v3-audit.md), [coordinate/configuration contract](docs/v3-contract.md), [team handoff](docs/v3-handoff.md), and [executed checks and limitations](docs/v3-status.md).
 
 Multi-floor positioning is implemented on the local branch `feat/multifloor-positioning`: continuous 3D ranges, a vertical estimate, inferred and route-assisted storey state, multi-floor API sessions and a versioned two-mode protocol. Its limits are explicit: the slab/NLOS model is **synthetic** with no real-radio or calibration claim; coplanar anchors on a single storey **cannot name a floor**; floor probabilities are **likelihood scores, not calibrated posteriors**; and route-assisted floor identity is **configuration, not inference**. Executed evidence, the browser-pass gap and the explicit non-implemented list are in the [multi-floor status](docs/multifloor-status.md).
 
@@ -49,10 +49,10 @@ For a single-server demo, run `npm.cmd run build`, then start/restart the backen
 1. The browser opens **Meridian Hospital**, a fictional 42 × 28 m building with Ground, First and Second floors at 0, 4.2 and 8.4 m. The environment menu also loads the original 30 × 20 m reference floor.
 2. Inspect **Floor**, **Building** or **Exploded** views. **Plan** isolates the selected floor. Drag to orbit, right-drag to pan, scroll or use buttons to zoom, and use Fit/Expand for inspection. Floor selection pauses and starts a fresh 2D run; building/view switches only change presentation.
 3. Choose a scenario and press **Run experiment**. Adjust noise, NLOS bias, packet loss, wall range bias and individual anchors. Sliders commit on release. Routes and route names come from the selected floor configuration.
-4. Compare the dark ground-truth cart, amber baseline and teal LOCUS-X estimate. **Scene layers** controls room zones/equipment, corridors, labels, walls/doors, access cores, anchors, configured candidate sites, the planned route, trajectories, simulated signals and the nominal ellipse. Geometry visibility is independent of the **Wall range bias** simulation setting.
-5. The live comparison shows current error, window RMSE/median/P95, valid/fresh-update rates, measured latency and empirical ellipse coverage. Missing estimates stay missing; baseline coverage is unavailable. **Diagnostics** adds residuals, velocity, geometry condition, events and API-replayable **Scenario JSON**. **Export CSV** saves actual samples, floor identity, errors, update flags, runtime, coverage and positions.
+4. Compare the dark ground-truth cart, amber baseline, teal LOCUS-X estimate and violet LOCUS-X + AI estimate. **Scene layers** controls room zones/equipment, corridors, labels, walls/doors, access cores, anchors, configured candidate sites, the planned route, trajectories, simulated signals and the nominal ellipse. Geometry visibility is independent of the **Wall range bias** simulation setting.
+5. The live comparison shows current error and window RMSE/median/P95, valid/fresh-update rates, measured latency and empirical ellipse coverage for all three methods. Missing estimates stay missing; baseline coverage is unavailable. **Diagnostics** adds residuals, velocity, geometry condition, AI per-anchor p(LOS), events and API-replayable **Scenario JSON**. **Export CSV** saves actual samples, floor identity, errors, update flags, runtime, coverage and positions for every method.
 6. **Reset restores the settings captured when the session was created**, clears tracking/history, and returns the target to t=0. For a normal browser session these are: wall-obstruction scenario, seed **12**, `asset_round` route, speed **1.2 m/s**, all **8 anchors enabled**, walls enabled, noise σ **0.15 m**, NLOS bias **2.5 m**, and **0%** packet loss. Sessions created with custom API settings restore those custom initial values. Changing route, speed, or seed restarts time with the edited settings; it does not change the saved reset values. Selecting wall obstruction or combined stress also enables wall propagation.
-7. Open **Benchmarks**, choose the reference environment or a V3 floor, and run a selected scenario or the full protocol. Both methods consume identical observations. These experiments are independent of the live session. Export metrics CSV or the complete versioned JSON result. The protocol still uses named A1–A8 subsets.
+7. Open **Benchmarks**, choose the reference environment or a V3 floor, and run a selected scenario or the full protocol. All three methods consume identical observations. These experiments are independent of the live session. Export metrics CSV or the complete versioned JSON result. The protocol still uses named A1–A8 subsets.
 
 The browser requests fixed 0.2-second simulation steps in a serial HTTP loop. Simulation time is independent of wall-clock rendering time. Pausing lets an already in-flight frame finish. Reloading reconnects to the same session and floor where possible, with a fresh plot window. History retains at most 600 samples and clears on configuration changes. Fault edits retain tracker history, so this window is diagnostic; use Benchmarks for controlled runs from initialization. No telemetry is fabricated in the frontend.
 
@@ -63,10 +63,11 @@ The browser requests fixed 0.2-second simulation steps in a serial HTTP loop. Si
 - Geometry-aware nonlinear least-squares baseline; Huber loss and smoothed residual consistency weights.
 - Constant-velocity Kalman filter, innovation rejection, prediction-only status, growing outage uncertainty, three-second timeout and reacquisition.
 - Interactive Three.js/React scene: floor/building/exploded modes, orbit/pan, plan, fit/zoom/expand, geometry and experiment layers. Geometry is instanced; rendering idles when nothing changes. DPR is capped at 1.5.
+- Trained MLP LOS/NLOS classifier with Platt calibration, run-level train/validation/test splits, inference-safe features, validation-only weight policy and optional map geometry. It acts as a reliability adapter; the statistical robust estimator remains the fallback.
 - Pydantic API, revision-safe controls/reset, serial client updates, bounded in-memory sessions and background benchmark worker.
 - Independent CLI benchmark, error curves/CDF, CSV/JSON exports, schema/topology/floor/session/UI-contract tests and documentation. CLI outputs use unique directories by default and refuse to overwrite existing result files.
 
-No learned classifier is claimed or implemented. This is a robust statistical estimator with a deterministic fallback and a motion filter.
+The learned branch predicts P(NLOS) from observed ranges, geometry and optional map context, then weights the existing robust estimator multiplicatively. It never receives simulator truth, labels, injected bias, fault flags or future samples. The validation-selected policy is conservative and falls back to LOCUS-X when fewer than three anchors are predicted LOS.
 
 To replay an exported scenario's initial settings through the API (after saving the Diagnostics export as `scenario.json`):
 
@@ -88,7 +89,16 @@ npm.cmd test
 npm.cmd run build
 ```
 
-For the sandbox configuration-loading error, use `npm.cmd test -- --configLoader native` (Node 24.14.0). A restricted Windows runner may also need access to pytest's temporary directory. `backend/research` contains pre-existing lint/format findings; it is preserved separately from the production checks above. See [V3 status](docs/v3-status.md) for the precise executed results, including the browser-verification gap.
+For the sandbox configuration-loading error, use `npm.cmd test -- --configLoader native` (Node 24.14.0). A restricted Windows runner may also need access to pytest's temporary directory. `backend/research` contains pre-existing lint/format findings; it is preserved separately from the production checks above. The frozen Phase 1-5 files also retain pre-freeze formatting so their recorded hashes stay valid; `ruff format --check` reports those files, while new code is formatted. See [V3 status](docs/v3-status.md) for the precise executed results, including the browser-verification gap.
+
+Run the AI dataset/training/evaluation pipeline:
+
+```powershell
+.\.venv\Scripts\python.exe -m backend.locus_x.ai_training --generate
+.\.venv\Scripts\python.exe -m backend.locus_x.ai_training --train
+.\.venv\Scripts\python.exe -m backend.locus_x.ai_evaluation --tune-policy --apply-policy
+.\.venv\Scripts\python.exe -m backend.locus_x.ai_evaluation --evaluate
+```
 
 Run the full independent evaluation:
 
@@ -110,6 +120,14 @@ V3 functional checks (360 frames per floor, not an expanded accuracy claim):
 
 `configs/environments/hospital_v3.json` is the runtime source for all consumers. `python scripts/build_hospital_v3.py` regenerates that file from its deterministic authoring recipe; it never touches the legacy fixture. Restart the backend after changing configuration.
 
+## AI reliability branch
+
+The trained model and its reproducible evaluation are documented in [docs/ai-reliability.md](docs/ai-reliability.md). The model is a 24-feature, 24-32-16-1 NumPy MLP with Platt calibration. Held-out classification results are F1 **0.9100**, ROC-AUC **0.9895**, Brier **0.0271** and ECE **0.0127**. Model size is 14,307 bytes; the saved adapter benchmark is 0.386 ms mean and 0.434 ms p95 in this Python environment.
+
+End-to-end results are mixed. On the primary held-out protocol, 8-anchor NLOS RMSE fell from **1.9185 m** (LOCUS-X) to **1.6840 m** with AI, **12.2% lower**. NLOS + outage fell from **2.2075 m** to **2.0248 m**, **8.3% lower**. A mixed NLOS + packet-loss 8-anchor case regressed from **2.5941 m** to **2.8481 m**, **9.8% higher**. Three-anchor cases usually fall back unchanged because the model cannot establish three reliable anchors. These are simulator results, not radio validation.
+
+The Phase 4-6 final test used reserved seeds `8001-8081`, four layouts, 18 base/mixed variants and anchor counts 3-8: **3,456 runs / 414,720 frames**. v2 improved over v1 by **0.263%** overall but regressed against statistical LOCUS-X by **0.503%** (95% CI **+0.351% to +0.668%**), crossing the preregistered `+0.5%` guard. All 21 validation policy candidates were disqualified, so no new policy was selected and v2 was not promoted. The first frozen attempt was invalidated by an anchor-subset bug and a reversed-probability report; it is preserved but excluded. See the [final report](docs/ai-reliability-final.md) for the full negative result, corrected tables and matched-baseline caveat.
+
 ## Actual results and limitations
 
 The completed reference run on the held-out route produced these **8-anchor RMSEs**, in metres, pooled over seeds 101 and 202:
@@ -130,8 +148,8 @@ These historical metrics evaluate the original synthetic floor. V3 functional ru
 
 ## Architecture and next work
 
-`configs → simulation → identical range observations → baseline / robust estimator → motion filter → evaluation → API → React/Three.js`
+`configs → simulation → identical range observations → baseline / robust estimator / AI reliability → motion filter → evaluation → API → React/Three.js`
 
 See [architecture](docs/architecture.md), [methodology](docs/methodology.md), [assumptions and limitations](docs/assumptions-limitations.md), [build status](docs/build-status.md), and the [final integration audit](docs/integration-audit.md).
 
-Next: the [V3 handoff](docs/v3-handoff.md) divides trained reliability modeling, candidate-based anchor optimization, expanded evaluation and floor-transition integration into parallel workstreams with shared interfaces and acceptance criteria. Persistent storage and real radio ingestion remain separate extensions.
+Next: candidate-based anchor optimization, a policy that improves mixed-fault localization without regressions, floor-transition integration, persistent storage and real radio ingestion remain open. The mixed-fault v2 policy was evaluated and rejected on the reserved final test. The [V3 handoff](docs/v3-handoff.md) records the earlier workstream split and acceptance criteria.

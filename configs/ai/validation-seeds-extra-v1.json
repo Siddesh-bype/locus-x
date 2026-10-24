@@ -1,0 +1,79 @@
+{
+  "version": "1.0.0",
+  "status": "preregistered_unrun",
+  "registered_at": "2026-10-21",
+  "baseline_commit": "468f7e748fe3e47dc146871761fbdbd013a2ac4d",
+  "purpose": "Additional validation-only seeds for Phase 3 v2 feature selection. These seeds are not test seeds and must not be used for final evidence.",
+  "freshness_check": {
+    "method": "ripgrep whole-word search over tracked source, configs, docs and JSON artifacts, excluding binary NPZ payloads",
+    "result": "no matches",
+    "note": "Seeds 1-4, 11, 17, 22, 29, 33, 44, 101, 202, 303, 404, 7001-7069 and 8001-8081 are treated as used, inspected or reserved test seeds."
+  },
+  "extra_validation_seeds": [
+    6007,
+    6011,
+    6019,
+    6029,
+    6037,
+    6043
+  ],
+  "label": "validation",
+  "protocol": {
+    "route": "held_out",
+    "dt": 0.5,
+    "steps": 120,
+    "anchor_counts": [
+      3,
+      4,
+      6,
+      8
+    ],
+    "scenarios": [
+      "nlos",
+      "nlos_packet",
+      "nlos_packet_outage",
+      "packet_loss",
+      "packet_outage",
+      "chaos",
+      "noise_nlos_packet",
+      "all_four"
+    ],
+    "classifier_anchor_count": 8,
+    "bootstrap_resamples": 2000,
+    "confidence_level": 0.95
+  },
+  "excluded_used_seeds": [
+    1,
+    2,
+    3,
+    4,
+    11,
+    17,
+    22,
+    29,
+    33,
+    44,
+    101,
+    202,
+    303,
+    404,
+    7001,
+    7013,
+    7019,
+    7027,
+    7039,
+    7043,
+    7057,
+    7069
+  ],
+  "reserved_test_seeds": [
+    8001,
+    8009,
+    8017,
+    8023,
+    8039,
+    8053,
+    8069,
+    8081
+  ]
+}

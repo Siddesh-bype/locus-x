@@ -227,6 +227,7 @@ def test_legacy_default_api_and_unknown_floor_requests():
 def test_v3_benchmark_uses_selected_floor_and_preserves_input_isolation(
     floor_id, building, monkeypatch
 ):
+    import backend.locus_x.ai_policy as policy_module
     import backend.locus_x.session as module
 
     inputs = []
@@ -236,7 +237,10 @@ def test_v3_benchmark_uses_selected_floor_and_preserves_input_isolation(
         inputs.append(deepcopy(observations))
         return solve(observations, **kwargs)
 
+    # Baseline and robust solves run in session; the AI re-solve runs in the shared policy
+    # pipeline. All three must still see identical observations.
     monkeypatch.setattr(module, "solve", spy)
+    monkeypatch.setattr(policy_module, "solve", spy)
     result = run_benchmark(
         BenchmarkRequest(
             environment_id=building.id,
@@ -251,7 +255,8 @@ def test_v3_benchmark_uses_selected_floor_and_preserves_input_isolation(
     assert result["floor_id"] == floor_id
     assert result["result_version"] == "3.0"
     assert result["rows"][0]["rmse"] < 1e-6
-    assert all(inputs[i] == inputs[i + 1] for i in range(0, len(inputs), 2))
+    assert len(inputs) % 3 == 0
+    assert all(inputs[i] == inputs[i + 1] == inputs[i + 2] for i in range(0, len(inputs), 3))
     assert all(
         set(m.model_dump()) == set(Measurement.model_fields) for stream in inputs for m in stream
     )

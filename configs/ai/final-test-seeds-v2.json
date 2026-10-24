@@ -1,0 +1,30 @@
+{
+  "version": "2.0.0",
+  "status": "preregistered_unrun",
+  "registered_at": "2026-10-21",
+  "baseline_commit": "71432dc6b3d72d15944a8972119605186c591c7d",
+  "purpose": "Fresh seeds reserved for Phase 3-6 final evidence. These seeds must not be evaluated during Phase 2.",
+  "freshness_check": {
+    "method": "whole-word search over tracked source, configs, docs and JSON artifacts, plus review of backend/research and configs/benchmarks seed lists",
+    "result": "no matches",
+    "note": "Seeds 1-4, 11, 22, 17, 29, 33, 44, 101, 202, 303, 404 and 7001-7069 are treated as used or inspected."
+  },
+  "fresh_seeds": [8001, 8009, 8017, 8023, 8039, 8053, 8069, 8081],
+  "protocol": {
+    "route": "held_out",
+    "dt": 0.5,
+    "steps": 120,
+    "anchor_counts": [3, 4, 6, 8],
+    "layouts": [
+      {"environment_id": "hospital_floor_01", "floor_id": null, "role": "original_reference"},
+      {"environment_id": "hospital_v3", "floor_id": "ground", "role": "in_distribution_v3"},
+      {"environment_id": "hospital_v3", "floor_id": "first", "role": "in_distribution_v3"},
+      {"environment_id": "hospital_v3", "floor_id": "second", "role": "unseen_layout"}
+    ],
+    "variants": "all base_variants() and mixed_variants() from backend.locus_x.ai_evaluation",
+    "classifier_anchor_count": 8,
+    "bootstrap_resamples": 2000,
+    "confidence_level": 0.95
+  },
+  "excluded_used_seeds": [1, 2, 3, 4, 11, 17, 22, 29, 33, 44, 101, 202, 303, 404, 7001, 7013, 7019, 7027, 7039, 7043, 7057, 7069]
+}

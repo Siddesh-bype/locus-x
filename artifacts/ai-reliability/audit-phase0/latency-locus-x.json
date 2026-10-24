@@ -1,0 +1,35 @@
+{
+  "note": "Supplemental Phase 1 LOCUS-X solve/tracker timing on the same synthetic NLOS frame as audit latency.json. Times are machine-dependent.",
+  "frame": {
+    "environment": "hospital_floor_01",
+    "scenario": "nlos",
+    "seed": 404,
+    "route": "held_out",
+    "timestamp_s": 10.0,
+    "anchors": 8
+  },
+  "preliminary_solve_only": {
+    "iterations": 300,
+    "mean_ms": 1.0200056666720532,
+    "median_ms": 0.9457999999540334,
+    "p95_ms": 1.3158200000134457
+  },
+  "locus_x_robust_solve_only": {
+    "iterations": 300,
+    "mean_ms": 4.463339666654065,
+    "median_ms": 4.145250000192391,
+    "p95_ms": 6.271100000003572
+  },
+  "tracker_update_only": {
+    "iterations": 300,
+    "mean_ms": 0.029838999983743026,
+    "median_ms": 0.027999999929306796,
+    "p95_ms": 0.03341000010550488
+  },
+  "locus_x_robust_solve_plus_tracker": {
+    "iterations": 300,
+    "mean_ms": 13.416631333343503,
+    "median_ms": 15.34035000008771,
+    "p95_ms": 18.314050000117277
+  }
+}

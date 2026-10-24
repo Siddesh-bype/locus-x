@@ -228,12 +228,15 @@ def test_truth_and_fault_labels_cannot_change_estimates_for_identical_observatio
     )
     second = SimulationSession(environment, Settings()).frame
     assert inputs[0] == inputs[1] == inputs[2] == inputs[3]
-    for key in ("baseline", "robust", "tracking"):
+    for key in ("baseline", "robust", "tracking", "ai", "ai_tracking", "ai_metadata"):
         assert getattr(first, key).model_dump(exclude={"runtime_ms"}) == getattr(
             second, key
         ).model_dump(exclude={"runtime_ms"})
+    assert first.ai_metadata.predictions == second.ai_metadata.predictions
+    assert first.ai.reliability == second.ai.reliability
     assert first.evaluation.baseline_error != second.evaluation.baseline_error
     assert first.evaluation.proposed_error != second.evaluation.proposed_error
+    assert first.evaluation.ai_error != second.evaluation.ai_error
     assert_errors(second.model_dump())
 
 
