@@ -101,7 +101,7 @@ def generate_split(config: dict, split: str, dataset_dir: Path = DEFAULT_DATASET
     dataset_dir.mkdir(parents=True, exist_ok=True)
     dt = float(config["dt"])
     steps = int(config["steps"])
-    matrices, labels, run_ids, step_ids, anchor_ids = [], [], [], [], []
+    matrices, labels, bias_magnitudes, run_ids, step_ids, anchor_ids = [], [], [], [], [], []
     runs = []
     for run_id, spec in enumerate(iter_run_specs(config, split)):
         environment = _resolve_environment(spec.environment_id, spec.floor_id)
@@ -130,6 +130,7 @@ def generate_split(config: dict, split: str, dataset_dir: Path = DEFAULT_DATASET
                     continue
                 matrices.append(row)
                 labels.append(1 if label.kind == "nlos" else 0)
+                bias_magnitudes.append(float(label.injected_bias))
                 run_ids.append(run_id)
                 step_ids.append(step)
                 anchor_ids.append(int(anchor_id[1:]) - 1)
@@ -159,6 +160,7 @@ def generate_split(config: dict, split: str, dataset_dir: Path = DEFAULT_DATASET
         dataset_dir / f"{split}.npz",
         X=X,
         y=y,
+        bias_magnitude=np.asarray(bias_magnitudes, dtype=np.float32),
         run_id=np.asarray(run_ids, dtype=np.int32),
         step=np.asarray(step_ids, dtype=np.int16),
         anchor_index=np.asarray(anchor_ids, dtype=np.int8),
@@ -219,10 +221,16 @@ def generate_dataset(
 
 def load_split(split: str, dataset_dir: Path = DEFAULT_DATASET_DIR):
     data = np.load(dataset_dir / f"{split}.npz")
+    bias = (
+        data["bias_magnitude"].astype(np.float64)
+        if "bias_magnitude" in data
+        else np.zeros(len(data["y"]), dtype=np.float64)
+    )
     return (
         data["X"].astype(np.float64),
         data["y"].astype(np.int64),
         data["run_id"],
+        bias,
     )
 
 
@@ -513,6 +521,47 @@ def fit_platt(logits: np.ndarray, y: np.ndarray) -> tuple[float, float, dict]:
     )
 
 
+def fit_bias_head(
+    mlp_weights: "MLPWeights",
+    X: np.ndarray,
+    bias_magnitude: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray, dict]:
+    """Fit a linear regression head on the MLP's second hidden layer (a2) to predict NLOS bias.
+
+    Only NLOS samples (bias_magnitude > 0) are used for fitting. The head is applied at
+    inference time to correct range measurements: corrected_range = observed_range - predicted_bias.
+    Returns (W_bias [16,1], b_bias [1,], metrics).
+    """
+    _, cache = _forward(mlp_weights, X)
+    a2 = cache[4]  # shape (N, 16) — second hidden activation
+    nlos_mask = bias_magnitude > 0
+    if nlos_mask.sum() < 10:
+        zeros = np.zeros((a2.shape[1], 1), dtype=np.float64)
+        warning = {"warning": "insufficient NLOS samples for bias head"}
+        return zeros, np.zeros(1, dtype=np.float64), warning
+    a2_nlos = a2[nlos_mask]
+    b_nlos = bias_magnitude[nlos_mask]
+    # Closed-form ridge regression: (AᵀA + λI)⁻¹Aᵀb
+    lam = 1e-3 * len(a2_nlos)
+    A = np.column_stack([a2_nlos, np.ones(len(a2_nlos))])
+    AtA = A.T @ A
+    AtA[np.diag_indices_from(AtA)] += lam
+    Atb = A.T @ b_nlos
+    coeffs = np.linalg.solve(AtA, Atb)
+    W_bias = coeffs[:-1].reshape(-1, 1)
+    b_bias = coeffs[-1:].reshape(1)
+    predicted = a2_nlos @ W_bias.reshape(-1) + b_bias[0]
+    residuals = b_nlos - predicted
+    rmse = float(np.sqrt(np.mean(residuals**2)))
+    mean_bias = float(np.mean(b_nlos))
+    return W_bias, b_bias, {
+        "nlos_samples": int(nlos_mask.sum()),
+        "train_rmse_m": rmse,
+        "mean_nlos_bias_m": mean_bias,
+        "baseline_rmse_m": float(np.sqrt(np.mean((b_nlos - mean_bias) ** 2))),
+    }
+
+
 def _feature_indices(groups: list[str] | None) -> np.ndarray:
     if groups is None:
         return np.arange(len(FEATURE_NAMES))
@@ -535,42 +584,79 @@ def _standardize(X_train, X_validation, X_test):
     )
 
 
+def _split_validation_by_run(
+    X_validation: np.ndarray,
+    y_validation: np.ndarray,
+    run_ids: np.ndarray,
+    calibration_fraction: float = 0.2,
+    seed: int = RANDOM_SEED,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """Split validation into early-stop and Platt-calibration subsets by run.
+
+    Grouping by run prevents within-trajectory leakage. The Platt calibration
+    set is kept strictly separate from the early-stopping set so calibration
+    metrics are unbiased (P2 fix: double-use of validation set).
+    """
+    unique_runs = np.unique(run_ids)
+    rng = np.random.default_rng(seed)
+    shuffled = rng.permutation(unique_runs)
+    n_cal = max(1, int(round(len(shuffled) * calibration_fraction)))
+    cal_run_set = set(shuffled[-n_cal:].tolist())
+    early_mask = np.array([int(r) not in cal_run_set for r in run_ids])
+    cal_mask = ~early_mask
+    return (
+        X_validation[early_mask],
+        y_validation[early_mask],
+        X_validation[cal_mask],
+        y_validation[cal_mask],
+    )
+
+
 def train_and_save(
     dataset_dir: Path = DEFAULT_DATASET_DIR,
     model_dir: Path = DEFAULT_MODEL_DIR,
     epochs: int = 35,
 ) -> dict:
     model_dir.mkdir(parents=True, exist_ok=True)
-    X_train, y_train, _ = load_split("train", dataset_dir)
-    X_validation, y_validation, _ = load_split("validation", dataset_dir)
-    X_test, y_test, _ = load_split("test", dataset_dir)
+    X_train, y_train, _, bias_train = load_split("train", dataset_dir)
+    X_validation, y_validation, run_ids_val, _ = load_split("validation", dataset_dir)
+    X_test, y_test, _, _ = load_split("test", dataset_dir)
     X_train, X_validation, X_test, mean, scale = _standardize(X_train, X_validation, X_test)
+
+    # P2: Split validation by run — 80% for early stopping, 20% for Platt calibration.
+    # Previously both used the same set, giving optimistic Brier/ECE on the val report.
+    X_val_early, y_val_early, X_val_cal, y_val_cal = _split_validation_by_run(
+        X_validation, y_validation, run_ids_val
+    )
+
     started = perf_counter()
     heuristic_probability = 1 - np.clip(X_test[:, FEATURE_NAMES.index("instant_reliability")], 0, 1)
     heuristic = classification_metrics(y_test, heuristic_probability)
     logistic_weights, logistic_bias = fit_logistic(X_train, y_train)
-    logistic_validation_logits = X_validation @ logistic_weights + logistic_bias
+    logistic_validation_logits = X_val_early @ logistic_weights + logistic_bias
     logistic_test_probabilities = expit(X_test @ logistic_weights + logistic_bias)
     logistic = classification_metrics(y_test, logistic_test_probabilities)
-    logistic_validation = classification_metrics(y_validation, expit(logistic_validation_logits))
+    logistic_validation = classification_metrics(y_val_early, expit(logistic_validation_logits))
     mlp_weights, training = fit_mlp(
         X_train,
         y_train,
-        X_validation,
-        y_validation,
+        X_val_early,
+        y_val_early,
         epochs=epochs,
     )
-    validation_logits = _forward(mlp_weights, X_validation)[0]
+    # Platt calibration on the held-out calibration fold (not the early-stop fold).
+    validation_logits_cal = _forward(mlp_weights, X_val_cal)[0]
     calibration_slope, calibration_intercept, calibration = fit_platt(
-        validation_logits, y_validation
+        validation_logits_cal, y_val_cal
     )
     test_logits = _forward(mlp_weights, X_test)[0]
     calibrated_test_probabilities = expit(calibration_slope * test_logits + calibration_intercept)
     mlp = classification_metrics(y_test, calibrated_test_probabilities)
+    validation_logits_early = _forward(mlp_weights, X_val_early)[0]
     calibrated_validation_probabilities = expit(
-        calibration_slope * validation_logits + calibration_intercept
+        calibration_slope * validation_logits_early + calibration_intercept
     )
-    mlp_validation = classification_metrics(y_validation, calibrated_validation_probabilities)
+    mlp_validation = classification_metrics(y_val_early, calibrated_validation_probabilities)
     ablation = {}
     for name, groups in (
         ("residual_geometry", ["residual", "geometry"]),
@@ -603,6 +689,9 @@ def train_and_save(
                 "best_validation_log_loss": subset_training["best_validation_log_loss"],
             },
         }
+    # P2.2: Bias regression head — predicts per-anchor NLOS range error from MLP hidden layer.
+    # Trained on training-set NLOS samples only; applied at inference for range correction.
+    bias_head_W, bias_head_b, bias_head_metrics = fit_bias_head(mlp_weights, X_train, bias_train)
     np.savez_compressed(
         model_dir / "weights.npz",
         W1=mlp_weights.W1,
@@ -611,6 +700,8 @@ def train_and_save(
         b2=mlp_weights.b2,
         W3=mlp_weights.W3,
         b3=mlp_weights.b3,
+        W_bias=bias_head_W,
+        b_bias=bias_head_b,
     )
     model_config = {
         "model_version": "ai-reliability-v1",
@@ -657,6 +748,7 @@ def train_and_save(
             "mlp": {"validation": mlp_validation, "test": mlp},
         },
         "feature_ablation": ablation,
+        "bias_head": bias_head_metrics,
         "model_size_bytes": model_size,
         "train_seconds": perf_counter() - started,
     }

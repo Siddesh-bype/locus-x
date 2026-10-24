@@ -290,6 +290,12 @@ class ReliabilityModel:
         hidden = np.maximum(0.0, hidden @ self.weights["W2"] + self.weights["b2"])
         return (hidden @ self.weights["W3"] + self.weights["b3"]).reshape(-1)
 
+    def _forward_with_a2(self, matrix: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+        a1 = np.maximum(0.0, matrix @ self.weights["W1"] + self.weights["b1"])
+        a2 = np.maximum(0.0, a1 @ self.weights["W2"] + self.weights["b2"])
+        logits = (a2 @ self.weights["W3"] + self.weights["b3"]).reshape(-1)
+        return logits, a2
+
     def predict(
         self,
         measurements: list[Measurement],
@@ -297,14 +303,35 @@ class ReliabilityModel:
         estimate: Estimate | None,
         history: FeatureHistory,
     ) -> ReliabilityOutput:
+        return self.predict_full(measurements, environment, estimate, history)[0]
+
+    def predict_full(
+        self,
+        measurements: list[Measurement],
+        environment: Environment,
+        estimate: Estimate | None,
+        history: FeatureHistory,
+    ) -> tuple[ReliabilityOutput, dict[str, float]]:
+        """Prediction plus per-anchor NLOS range-bias estimates (metres) from the bias head.
+
+        Features are extracted once so ``history`` advances exactly one frame. The bias dict
+        is empty when the loaded weights have no bias head.
+        """
         start = perf_counter()
         if not self.available:
-            return self._fallback("AI model unavailable; statistical fallback")
+            return self._fallback("AI model unavailable; statistical fallback"), {}
         batch = extract_features(measurements, environment, estimate, history)
         if batch is None:
-            return self._fallback("AI features unavailable; statistical fallback")
+            return self._fallback("AI features unavailable; statistical fallback"), {}
         normalized = (batch.matrix - self.mean) / self.scale
-        logits = self._forward(normalized)
+        logits, a2 = self._forward_with_a2(normalized)
+        bias: dict[str, float] = {}
+        if "W_bias" in self.weights and "b_bias" in self.weights:
+            predicted = a2 @ self.weights["W_bias"].reshape(-1) + self.weights["b_bias"][0]
+            bias = {
+                anchor: float(max(0.0, value))
+                for anchor, value in zip(batch.anchors, predicted, strict=True)
+            }
         slope, intercept = self.calibration
         nlos_probabilities = _sigmoid(slope * logits + intercept)
         predictions = []
@@ -334,7 +361,7 @@ class ReliabilityModel:
             if ambiguous
             else "AI reliability active"
         )
-        return ReliabilityOutput(
+        output = ReliabilityOutput(
             weights=(
                 None
                 if fallback
@@ -352,6 +379,7 @@ class ReliabilityModel:
                 runtime_ms=(perf_counter() - start) * 1000,
             ),
         )
+        return output, bias
 
     def with_policy(self, floor: float, threshold: float) -> ReliabilityModel:
         return ReliabilityModel(
