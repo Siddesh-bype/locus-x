@@ -1,812 +1,428 @@
-# LOCUS-X — Project Context
+# LOCUS-X — Project Context (updated)
 
-Last updated: 2026-10-21  
-Project root: `C:\Users\chiranjilalkumawat\Downloads\locus-x-main\locus-x-main`  
-Purpose of this document: persistent, evidence-based orientation for future developers/AI sessions.  
-Scope: read-only investigation of the repository; no application source was modified.
+Last updated: 2026-10-24
+Project root: `C:\Users\chiranjilalkumawat\Downloads\locus-x-main\locus-x-main`
+Branch: `feat/ai-reliability-final` (last commit `4b72560`; **many later changes are uncommitted**, see section M)
+Replaces: `PROJECT_CONTEXT.md` (2026-10-21), which predates the whole AI layer and is now wrong about
+several basics (no ML model, no `.git`, no `artifacts/`, proxy port 8000).
+
+**Provenance of this document.** Sections marked *[verified 10-24]* were checked against code, saved
+artifacts or executed commands on 2026-10-24. Sections marked *[carried over]* come from the
+2026-10-21 context and were not re-inspected (mainly the 3-D frontend and building validation).
+Numbers are labelled *verified* (re-computed from saved files or re-run) or *reported* (taken from
+a project report).
 
 ---
 
 ## A. Executive summary
 
-LOCUS-X is a **local research workspace for indoor range-based positioning**, built around a **fictional hospital digital twin**. It compares:
+LOCUS-X is a **local research workspace for indoor range-based positioning** on a fictional hospital
+digital twin. A seeded simulator produces anchor ranges with noise, wall-induced NLOS bias, packet
+loss and anchor outages. Every frame computes **three position estimates from identical observations**:
 
-1. **Baseline** — 2-D range-only localization using algebraic initialization plus nonlinear least squares.
-2. **LOCUS-X** — the same observations, but with Huber robust estimation, residual-consistency weights, and a constant-velocity Kalman filter.
+1. **Baseline**: plain nonlinear least squares (NLS).
+2. **Statistical LOCUS-X**: Huber-robust NLS with residual-consistency weights, plus a
+   constant-velocity Kalman tracker.
+3. **AI LOCUS-X** *(new since 10-21)*: a learned per-anchor LOS/NLOS probability turns into solver
+   weights, and a learned per-anchor range-bias estimate is subtracted from the ranges before the same
+   robust solve and a second Kalman tracker.
 
-The app also provides a React/Three.js hospital viewer, live error metrics, CSV/scenario exports, and a separate reproducible benchmark runner.
+All of it is served by a FastAPI backend and shown in a React/Three.js UI. Truth and fault labels are used
+only for scoring (and for training the models offline).
 
-**Problem addressed:** indoor positioning cannot rely on GPS; the project studies how range observations behave under noise, wall-induced NLOS bias, packet loss, anchor outages, and combined faults. It demonstrates a complete synthetic loop from geometry → simulated ranges → estimation → tracking → evaluation → visualization.
-
-**Primary users:** the project team/judges/students exploring indoor-localization robustness. It is a research/demo tool, not a clinical or production system.
-
-**Implemented status (verified from code):**
-- 2-D localization on a **manually selected, known floor**; no vertical estimation and no automatic floor transitions.
-- Three-floor fictional building (`hospital_v3`) plus the preserved legacy single-floor environment.
-- Deterministic synthetic range generation, two estimators, Kalman tracking, evaluation, REST API, React/Three.js UI, benchmark job/CLI.
-- No trained ML model, no anchor optimizer, no real UWB/BLE ingestion, no database, no authentication, no persistent experiment library.
-- Python and frontend tests are present and documented as passing; this checkout has **no installed dependencies**, so tests were not re-executed during this investigation.
-
----
-
-## B. Technology stack
-
-### Backend
-- Python 3.13 target (`pyproject.toml`), tested per README on Python 3.13.13.
-- FastAPI `0.141.1`, Starlette `1.5.0`, Uvicorn `0.52.1`.
-- Pydantic `2.13.4` for strict API/configuration validation.
-- NumPy `2.2.6`, SciPy `1.18.0` for estimation and linear algebra.
-- pytest `9.1.1`, pytest-cov, Ruff `0.17.0`, httpx.
-- No database or external services. In-memory sessions/jobs.
-
-### Frontend
-- React `19`, React DOM `19`, TypeScript `~5.7.3`.
-- Vite `6`, `@vitejs/plugin-react`.
-- Three.js `0.175`, `@react-three/fiber` `9.1.2`.
-- Lucide React icons; bundled IBM Plex Sans and JetBrains Mono fonts.
-- Vitest `3`, ESLint `9`, typescript-eslint.
-- No CDN, image service, external API, websocket, or runtime credentials.
-
-### Tooling / configuration
-- `package.json` scripts: `dev`, `build`, `preview`, `typecheck`, `lint`, `test`.
-- Vite proxies `/api` to `http://127.0.0.1:8000`.
-- pytest configured in `pyproject.toml` with `testpaths = ["backend/tests"]`.
-- Ruff target `py313`, line length 100, rules `E,F,I,B,UP`.
-- No `AGENTS.md` or equivalent instruction file exists in this checkout.
-- No CI/CD configuration, Dockerfile, or deployment manifest exists.
+**Status in one paragraph** *(details in section K)*: in simulation the AI path is strong with 8 anchors and
+NLOS (about 50% lower RMSE than the baseline), weak at 3–4 anchors, and slightly worse than the baseline when there
+is nothing to correct (packet loss, clean). The statistical core is worse than the plain baseline under NLOS.
+No blind evaluation exists for the current system, and nothing here is validated on real radio hardware.
 
 ---
 
-## C. Project structure
+## B. Technology stack *[verified 10-24 unless noted]*
+
+- **Backend:** FastAPI 0.141.1, Starlette 1.5.0, Uvicorn 0.52.1, Pydantic 2.13.4, NumPy 2.2.6,
+  SciPy 1.18.0 (pinned in `requirements-lock.txt`). The project targets Python 3.13
+  (`pyproject.toml`); the commands in this session ran on **Python 3.14.3** (global install, not `.venv`).
+- **AI:** no ML framework. Models are plain **NumPy MLPs** (forward pass in NumPy; training in
+  `ai_training.py` with hand-written Adam). Weights are `.npz`.
+- **Frontend** *[carried over]*: React 19, TypeScript ~5.7, Vite 6, Three.js 0.175, `@react-three/fiber` 9,
+  Vitest 3, ESLint 9.
+- **Tooling:** pytest (119 tests, all pass, verified). **Ruff is not installed** on this machine (pip timeouts),
+  so lint has not been run since the AI changes.
+- **Ports:** `vite.config.ts` currently proxies `/api` to **`http://127.0.0.1:8080`** (changed from 8000 because
+  port 8000 is blocked on this machine; uncommitted). Revert to 8000 elsewhere.
+- No database, no authentication, no external services. In-memory sessions and jobs.
+
+---
+
+## C. Project structure *[verified 10-24]*
 
 ```text
 locus-x-main/
-├── backend/
-│   ├── locus_x/                 Production engine
-│   │   ├── main.py              FastAPI app, endpoints, session/job stores
-│   │   ├── session.py           Authoritative session state and frame lifecycle
-│   │   ├── schemas.py           API contracts, settings presets, frame/estimate models
-│   │   ├── environment.py       Load legacy/V3 configs, floor resolution, route motion
-│   │   ├── building.py          V3 Building/Floor schema and topology validation
-│   │   ├── geometry.py          Segment intersection and exact region coverage
-│   │   ├── simulation.py        Seeded synthetic range/measurement generation
-│   │   ├── estimators.py        Baseline + robust range-only solver
-│   │   ├── tracking.py          Constant-velocity Kalman filter, gating, ellipse
-│   │   ├── evaluation.py        Truth-based error and covariance coverage
-│   │   └── benchmark.py         Reproducible experiment runner + CSV/JSON CLI
-│   ├── research/                Preserved offline research candidates
-│   │   ├── candidates.py        Alternative estimator experiments
-│   │   ├── experiment.py        Split-based replay experiment
-│   │   └── diagnose.py          Reproduces known NLOS failure
-│   └── tests/                   Backend test suite
-├── configs/
-│   ├── environments/
-│   │   ├── hospital_v3.json     Runtime source for 3-floor building
-│   │   └── hospital_floor_01.json  Preserved legacy 30×20 m floor
-│   └── benchmarks/
-│       ├── competition.json     Full historical 7×4×2×160 protocol
-│       ├── v3/*-smoke.json      Per-floor functional smoke runs
-│       └── nlos-audit/protocol.json  Frozen research split plan
-├── docs/                        Architecture, methodology, contracts, audits, status
-│   └── presentation-prep/       Presentation scripts/question bank (not runtime)
-├── public/locus.svg             App icon
-├── scripts/
-│   ├── build_hospital_v3.py     Deterministic V3 fixture authoring
-│   └── verify_v3_http.py        Live API/proxy verification
-├── src/
-│   ├── main.tsx, App.tsx        Frontend entry and application shell
-│   ├── useSession.ts            Serial HTTP session state and polling loop
-│   ├── workspace.ts             Floor/view/layer/metrics/trajectory helpers
-│   ├── lib.ts                   Coordinate mapping, fetch, CSV, history
-│   ├── types.ts                 TypeScript mirrors of API contracts
-│   ├── Controls.tsx             Scenario/fault/anchor/route controls
-│   ├── EnvironmentPanel.tsx     Environment/floor/layer sidebar
-│   ├── Diagnostics.tsx          Live comparison and per-anchor diagnostics
-│   ├── Benchmark.tsx            Benchmark job UI and result tables
-│   ├── Charts.tsx               SVG error/CDF charts
-│   ├── Scene.tsx                React Three Fiber scene composition
-│   ├── scene/                   Architecture, overlays, camera, primitives
-│   └── *.test.ts(x)             Frontend unit/SSR contract tests
-├── package.json / lockfile
-├── requirements.txt / requirements-lock.txt
-├── pyproject.toml, tsconfig.json, vite.config.ts, eslint.config.js
-├── index.html
-├── README.md, CONTRIBUTING.md
-└── APEX_PPT_2.0.pptx            Presentation file (binary; not runtime)
+├── backend/locus_x/
+│   ├── main.py            FastAPI app, 11 routes, session/job stores
+│   ├── session.py         SimulationSession: frame lifecycle; runs all three methods
+│   ├── schemas.py         API contracts, presets, Frame, AI metadata
+│   ├── environment.py     config loading, floor resolution, route_position
+│   ├── building.py        V3 Building/Floor schema and validation
+│   ├── geometry.py        segment intersection, region coverage
+│   ├── simulation.py      seeded range generation + separate FaultLabels
+│   ├── estimators.py      baseline and robust solver (+ ai_weights, bias_corrections)
+│   ├── tracking.py        constant-velocity Kalman tracker (gate parameter)
+│   ├── evaluation.py      truth-based error and 95% coverage
+│   ├── benchmark.py       benchmark runner (methods: baseline, proposed, ai)
+│   │  ── AI runtime ──
+│   ├── reliability.py     v1: 24-feature extractor, MLP, bias head (predict_full)
+│   ├── reliability_v2.py  v2: 41-column extractor (26 active), 5-model ensemble
+│   ├── ai_policy.py       policy_weights + run_v2_policy (single shared AI pipeline)
+│   │  ── AI offline / experiments ──
+│   ├── ai_training.py     dataset generation, MLP training, Platt calibration, bias head
+│   ├── policy_v2.py       validation-only policy selection; load_policy; --refresh-hash
+│   ├── ai_final.py        frozen final-test harness (uses run_v2_policy)
+│   ├── ai_ablation_v3.py  ablation of weights / range correction / scaling / gate
+│   ├── ai_evidence.py, ai_ablation.py, ai_ablation_diagnostics.py, ai_evaluation.py, ai_phase3.py
+│   │                      earlier phase experiments (Phase 1–3 evidence, ablations, v2 selection)
+│   ├── oracle_experiments.py  oracle-label experiments (written; never completed a run)
+│   └── diagnostics/recall_diagnosis.py   post-hoc NLOS recall diagnosis
+├── backend/research/      preserved offline estimator research (depends on missing historical files)
+├── backend/tests/         119 tests (core, api, building, audit, ablation, ai_phase3,
+│                          phase4_engineering, policy_v2, recall_diagnosis, reliability_v2)
+├── configs/environments/  hospital_v3.json (3 floors), hospital_floor_01.json (legacy)
+├── configs/benchmarks/    competition.json, v3 smoke, nlos-audit
+├── configs/ai/            dataset configs v1/v2, seed manifests (final-test v1/v2,
+│                          recall-fix-test-seeds-v1, validation-seeds-extra-v1)
+├── models/ai-reliability-v1/   weights.npz (incl. W_bias, b_bias), config.json, metrics.json
+├── models/ai-reliability-v2/   seed_2026102{1..5}.npz, config.json, policy-v2.json,
+│                               promotion.json, selection.json
+├── artifacts/ai-reliability/   experiment outputs (gitignored; see section G)
+├── docs/                  architecture, methodology, ai-reliability-*.md reports, v3 docs
+├── scripts/               analyze_final.py, build_hospital_v3.py, verify_v3_http.py
+├── src/                   React/TypeScript frontend [carried over]
+├── results_summary.md/.csv   Phase 4–6 frozen-final-test summary (committed)
+└── PROJECT_CONTEXT.md / PROJECT_CONTEXT_UPDATED.md
 ```
-
-Generated/absent in this checkout: `node_modules/`, `.venv/`, `dist/`, `artifacts/`, `.git/`. Historical benchmark artifacts referenced by docs are **not present**.
 
 ---
 
-## D. Architecture
-
-### High-level flow
+## D. Architecture *[verified 10-24]*
 
 ```mermaid
 flowchart LR
-  CFG[configs/environments/*.json] --> ENV[environment.py / building.py]
+  CFG[configs/environments] --> ENV[environment.py]
   ENV --> SIM[simulation.py]
-  ENV --> SESSION[session.py]
-  SIM -->|Measurement list| BASE[estimators.solve baseline]
-  SIM -->|Same Measurement list| ROB[estimators.solve robust]
-  ROB --> KF[tracking.MotionTracker]
-  BASE --> FRAME[Frame]
-  KF --> FRAME
-  TRUTH[route_position] --> EVAL[evaluation.evaluate]
+  SIM -->|Measurements| BASE[solve baseline]
+  SIM --> ROB[solve robust]
+  ROB --> STK[tracker: statistical]
+  ROB --> FEAT[v1 and v2 features]
+  STK -->|state before update| FEAT
+  FEAT --> NN[v1 bias head + v2 classifier]
+  NN --> POL[ai_policy: weights + range correction]
+  POL --> AIS[solve robust with weights and corrections]
+  AIS --> ATK[tracker: AI]
+  SIM -.->|truth and labels: scoring only| EVAL[evaluation.py]
   BASE --> EVAL
-  KF --> EVAL
-  EVAL --> FRAME
-  FRAME --> API[main.py REST]
-  API --> UI[React / Three.js]
-  CFG --> BENCH[benchmark.py]
-  SESSION --> BENCH
+  STK --> EVAL
+  ATK --> EVAL
+  EVAL --> FRAME[Frame] --> API[main.py] --> UI[React / Three.js]
 ```
 
-### Architectural style
-- Small **layered monolith**: configuration/schema → simulation → estimation/tracking → evaluation → session/API → UI.
-- Browser is a thin client; **all simulation, estimation, and truth evaluation happen server-side**.
-- REST polling with a serial client queue, not WebSockets.
-- Sessions are authoritative server objects protected by a per-session `RLock` and monotonic revision. Browser writes send `expected_revision`; stale writes get HTTP 409.
-- Benchmarks run in a separate single-worker `ThreadPoolExecutor`, independent of live sessions.
-
-### Module responsibilities
-| Module | Responsibility |
-|---|---|
-| `environment.py` | Load/validate JSON catalog, select floor, interpolate target route by simulation time |
-| `building.py` | V3 floor/building schema, topology/route/door/core validation |
-| `geometry.py` | Closed segment intersection, rectangle bounds, exact segment-union coverage |
-| `simulation.py` | Seeded ranges, wall bias, dropout, timed outages, separate fault labels |
-| `estimators.py` | Input validation, geometry checks, algebraic init, NLS, Huber, consistency weights |
-| `tracking.py` | CV Kalman filter, innovation gate, coasting/timeout, covariance ellipse |
-| `evaluation.py` | Independent truth error and 95% region coverage |
-| `session.py` | Settings, time/frame index, trust/filter state, compute/update/reset/floor lifecycle |
-| `main.py` | FastAPI routes, session/job stores, locks, static dist serving |
-| `benchmark.py` | Independent multi-scenario protocol, summaries, traces, CLI exports |
-
-### Truth boundary (important)
-The estimator receives only `Measurement(anchor_id, anchor_position, timestamp, observed_range)`. Simulator-only `FaultLabel` includes true range, injected bias, wall IDs, availability kind, and is emitted separately (`simulation.py:9-55`). Both estimators receive the **same measurement list object** (`session.py:54-57`). `tracking` receives only the robust `Estimate`. Evaluation runs afterward. This boundary is asserted by tests (`backend/tests/test_core.py:196-220`, `test_audit.py:202-237`).
+- **Style:** layered monolith; the browser is a thin client; all simulation, estimation and evaluation run
+  server-side. REST polling, no websockets.
+- **Concurrency:** per-session `RLock`, monotonic `revision`, `expected_revision` on every write (stale = HTTP 409).
+  One benchmark worker thread; at most one active benchmark job.
+- **Truth boundary:** estimators and models receive only `Measurement` (anchor id, anchor position, timestamp,
+  observed range), the known map, their own history and the statistical estimate/tracker state. `FaultLabel`
+  (true range, injected bias, walls, availability) goes only to `evaluate`. A test asserts the AI path never
+  reads `settings.nlos_bias` or `walls_enabled`.
+- **Two trackers** per session: one for the statistical fix, one for the AI fix. v2 features use the
+  *statistical* tracker's pre-update state, not the AI tracker's.
 
 ---
 
-## E. File-by-file documentation
+## E. How each part works
 
-### Backend production code
+### E1. Simulator — `simulation.py` *[verified]*
+`generate_measurements(env, settings, position, t, frame_index)` per anchor:
+true range; walls crossed by the straight segment; `bias = nlos_bias × min(walls,3)/2` (if walls enabled);
+availability precedence **disabled → timed outage (A2/A4/A6/A8 for `anchor_failure`/`chaos`, `12 ≤ t%40 < 22`) →
+Bernoulli packet loss**; `observed = max(0.01, true + bias + N(0,σ))`. Per-anchor RNG
+`SeedSequence([seed, frame_index, i])`. Returns `Measurement`s and separate `FaultLabel`s. The bias is a
+**deterministic** function of wall count, with no randomness; this makes it easy for the models to learn.
 
-#### `backend/locus_x/schemas.py`
-Public Pydantic contracts. `StrictModel` forbids extra fields and non-finite values (`:11-13`).
-- `Anchor`, `Wall`, `Room`, `Waypoint`, `Environment` (`:15-61`); `Environment.validate_geometry` checks unique anchor IDs, non-empty routes with ≥2 waypoints, and all geometry within floor bounds.
-- `Settings` (`:64-81`): scenario, noise, NLOS bias, dropout, disabled anchors, wall propagation, route, speed, seed. A `before` validator applies `PRESETS` (`:65-71`), with explicit request fields overriding preset values.
-- `PRESETS` (`:84-92`): clean, noise, high_noise, nlos, packet_loss, anchor_failure, chaos.
-- Request models: `SessionCreate`, `Controls`, `Advance`, `Revision`, `FloorSelection` (`:95-124`).
-- Estimator input `Measurement` (`:127-133`) — deliberately excludes truth/labels.
-- `FaultLabel` (`:136-142`), `Estimate` (`:145-153`), `Ellipse` (`:156-160`), `Tracking` (`:163-173`), `Evaluation` (`:176-182`), `Event`, `Frame` (`:185-210`).
-- `BenchmarkRequest` (`:213-233`): scenario list, anchor counts `3|4|6|8`, seeds, steps, dt, route literal `asset_round|held_out`; bounds total work to 25,000 frames.
-- `Frame.localization_mode` is fixed to `"2d_on_known_floor"`.
+### E2. Solvers — `estimators.py` *[verified]*
+- `valid_observations`: first occurrence per anchor, drop non-positive/non-finite.
+- `solve(measurements, robust, trust, ai_weights, bias_corrections)`:
+  needs 3 or more valid anchors; SVD spread check (ratio < 0.025 → `poor_geometry`); algebraic initialisation;
+  plain NLS. **If `bias_corrections` is given, the ranges are reduced by it (floor 0.01) before everything else.**
+  Robust mode: MAD scale (min 0.2 m), Huber re-solve, consistency weights
+  `clip(1/(1+(|r|/2s)²), 0.08, 1)`, weights `0.65·trust + 0.35·instant`, weighted Huber solve.
+  **If `ai_weights` is given, those weights replace the statistical ones entirely** (additive coupling, clipped 0..1).
+  Final checks: converged, finite, information-matrix condition ≤ 1000; covariance `s²·(JᵀWJ)⁻¹`.
+- Status values: `valid`, `insufficient`, `poor_geometry`, `solver_failed`.
 
-#### `backend/locus_x/building.py`
-V3 composition while preserving legacy `Environment`.
-- `BuildingRoom` adds required `id`; `Region`, `AccessCore`, `Door` (`:12-36`).
-- `Floor` extends `Environment` (`:38-50`) adding presentation metadata, rooms, corridors, doors, cores, movement-region references, candidate anchors, layout ID, route names.
-- `Floor.validate_floor` (`:52-155`) checks unique IDs across groups, candidate/installed separation, region bounds/overlap, movement references, route-name coverage, candidate bounds, wall length, door width/references/jamb endpoints/wall-free interiors, core entry/door matching, and **complete route segments** against walls and movement regions (including loop closure).
-- `ConnectionStop`, `FloorConnection`, `ValidationMetadata` (`:158-173`).
-- `Building` (`:176-232`): unique/ascending floors, footprint fit, slab/wall clearance, unique connections, stops referencing matching aligned cores, one connection per core.
+### E3. Tracker — `tracking.py` *[verified]*
+Constant-velocity Kalman `[x,y,vx,vy]`, white-acceleration process noise 1.2 m/s², measurement covariance =
+solver covariance + 0.04·I. `update(estimate, timestamp, gate=13.82)`: reinitialise if no state or no accepted
+update for ≥ 3 s; otherwise accept when innovation χ² < `gate`, else prediction only (`degraded`); after 3 s without
+an accepted update the position is withheld (`unavailable`). Joseph covariance update; 95% ellipse from covariance.
+The gate is a parameter, but the live policy keeps the default 13.82 (a tighter 5.99 variant was tested and removed).
 
-#### `backend/locus_x/environment.py`
-- `CONFIG_DIR` points to `configs/environments` (`:10`).
-- `load_environments` (`:13-22`) loads sorted `*.json`, chooses `Building` when `schema_version == "3.0"`, otherwise `Environment`; rejects duplicate IDs.
-- `resolve_floor` (`:25-35`) selects a floor manually; never infers floor.
-- `floor_elevation` (`:38-39`).
-- `route_position` (`:42-60`) builds segment durations from waypoint dwell plus Euclidean distance/speed; time is modulo route period. Handles dwells, interpolation, and loop closure.
+### E4. AI feature extraction and models *[verified]*
+- **v1** (`reliability.py`): 24 features per anchor from the statistical fix: normalised range/predicted range,
+  residual (m, normalised, absolute), consistency, anchor and relative geometry, bearing, available fraction,
+  condition number, **wall count along anchor→estimated-position (map-aware)**, frame mean wall count, consensus
+  median/MAD, previous residual and deltas. MLP **24→32→16→1** (ReLU, Platt-calibrated). A **bias head**
+  (linear 16→1 on the second hidden layer) predicts the NLOS range error in metres, trained by ridge regression on
+  NLOS-only training samples; output clipped at 0. **In the live pipeline only the bias output is used.**
+  `predict_full(...)` returns `(ReliabilityOutput, {anchor_id: bias_m})` and advances the feature history once.
+- **v2** (`reliability_v2.py`): 41 candidate columns; the promoted **G5** variant uses **26 active features**
+  (22 map-free v1 features + 4 reception features); the other 15 inputs have zeroed first-layer weights, so it does
+  **not** use wall counts. **Five** MLPs (41→32→16→1), each Platt-calibrated, probabilities averaged. Output:
+  `p_los` per anchor. Its built-in weight formula (threshold 0.05) is unused in the live path.
+- Training labels: `y = 1` iff the simulator marked the observation NLOS; bias target = injected bias. Packet-loss,
+  outage and disabled observations are excluded from supervision.
 
-#### `backend/locus_x/geometry.py`
-- `intersects` (`:6-21`): closed segment intersection including collinear overlap.
-- `rectangle_bounds` (`:24-30`).
-- `segment_in_regions` (`:33-58`): exact interval coverage by a union of rectangles, not sampled points; used for route validation.
+### E5. Policy and range correction — `ai_policy.py`, `policy-v2.json` *[verified]*
+`run_v2_policy(...)` is the single AI pipeline, called by `session.py` and `ai_final.py`:
+1. v2 predicts `p_los` per anchor. If it returns no predictions (model missing, fewer than 3 anchors, no statistical
+   fix, non-finite features), the AI estimate **falls back to the statistical fix**.
+2. `policy_weights` (policy v2.3.0: threshold 0.25, floor 0.08): if fewer than 3 anchors have `p_los ≥ 0.5`
+   (majority/all NLOS) the AI **stays active**: predicted-LOS anchors get 1.0, predicted-NLOS get the floor.
+   Otherwise `weight = 1` if `p_los ≥ 0.25`, else `0.08 + 0.92·p_los/0.25`. Fewer than 3 anchors, or non-finite
+   probabilities, are the only hard fallbacks.
+3. **Range correction** (policy `range_correction`, enabled, `min_p_nlos` 0.25): for anchors with `p_nlos > 0.25`,
+   `range −= p_nlos × predicted_bias` (bias from the v1 head).
+4. `solve(robust=True, ai_weights, bias_corrections)`, then the AI tracker with the default gate.
+5. The metadata returned to the UI reports the **applied** weights and status (`active`/`fallback`).
+The policy file is hashed (`policy_sha256`); `load_policy` refuses a mismatch. Current policy:
+`hard_t025_f008_active_majority_rc`, version **2.3.0**.
 
-#### `backend/locus_x/simulation.py`
-`generate_measurements` (`:9-55`) for each anchor:
-- Per-anchor RNG `SeedSequence([seed, frame_index, anchor_index])` so disabling one anchor does not perturb others.
-- True Euclidean range; wall IDs intersected by the direct segment.
-- Bias `nlos_bias * min(wall_count, 3) / 2` when walls enabled.
-- Availability order: disabled anchor → timed outage (A2/A4/A6/A8 during `12 <= t % 40 < 22` for `anchor_failure`/`chaos`) → Bernoulli packet loss.
-- Observed range `max(0.01, true_range + bias + noise)`.
-- Returns separate `observations` and `labels`.
+### E6. Session — `session.py` *[verified]*
+`compute()` per frame: snapshot tracker/trust/feature state → truth from the route → `generate_measurements` →
+`solve` baseline → `solve` robust (updates trust) → capture statistical tracker state → statistical tracker update →
+AI branch (`predict_full` for bias, `run_v2_policy`; legacy v1-only branch if v2 is unavailable) → AI tracker update →
+events → `evaluate` → `Frame`. `update` (controls) replays the same timestamp from the snapshot; route/speed/seed changes
+restart. `reset`, `select_floor`, `restart` as before. The default route in `Settings` is now **`held_out`**.
 
-#### `backend/locus_x/estimators.py`
-- `valid_observations` (`:11-24`): first occurrence per anchor ID, drops nonpositive/non-finite ranges and non-finite coordinates/timestamps.
-- `solve` (`:27-107`):
-  1. Requires ≥3 valid anchors.
-  2. SVD spread check; rejects collinear/nearly collinear (`singular[1]/singular[0] < 0.025`).
-  3. Algebraic initialization via differenced squared ranges and `lstsq` (`:49-56`).
-  4. Baseline NLS minimizing `||p - a_i|| - r_i` (`:45-57`).
-  5. Robust mode: MAD scale, Huber candidate solve, instantaneous consistency `clip(1/(1+(|r|/(2s))²), 0.08, 1)`, exponential trust `0.65*previous + 0.35*current`, weighted Huber re-solve (`:60-79`).
-  6. Reject failed/non-finite result; local information matrix condition >1000 rejected.
-  7. Covariance `s² * inv(JᵀWJ)`, residuals, reliability, condition number, runtime.
-- No imports from `simulation` or `evaluation`.
+### E7. Evaluation and benchmark *[verified]*
+`evaluate` gives baseline/proposed/AI errors, 95% coverage for the tracked estimates, and `has_nlos`/`has_dropout`.
+`benchmark.run_benchmark` creates fresh `SimulationSession`s (so it exercises the live AI pipeline) and summarises
+three methods: `baseline`, `proposed`, `ai`.
 
-#### `backend/locus_x/tracking.py`
-- `covariance_ellipse` (`:13-22`): eigen-decomposition; semiaxes `sqrt(5.9914645 * eigenvalue)`; angle from major eigenvector.
-- `MotionTracker.update` (`:32-96`):
-  - State `[x,y,vx,vy]`; prediction with `F[0,2]=F[1,3]=dt`.
-  - Process noise with acceleration columns, `1.2² * G Gᵀ`.
-  - Measurement covariance = robust covariance + `0.04 I`.
-  - Reinitialize if no state or ≥3 s since last accepted update.
-  - Otherwise normalized innovation squared gate `< 13.82`.
-  - Joseph covariance update.
-  - Rejected/missing fix = prediction only, status `degraded` until 3 s, then `unavailable` with null position/ellipse.
-  - Reacquisition after outage initializes position and resets velocity uncertainty.
-
-#### `backend/locus_x/evaluation.py`
-`evaluate` (`:9-26`) computes Euclidean errors only for available positions, empirical coverage using `deltaᵀ cov⁻¹ delta <= CHI2_95_2D`, and `has_nlos`/`has_dropout` flags. Missing positions produce `None`, never zero error.
-
-#### `backend/locus_x/session.py`
-`SimulationSession` (`:16-180`):
-- Creation captures environment, resolved floor, environment hash, deep-copied initial settings, revision 0, time 0, tracker/trust, event log, and computes the initial frame.
-- `validate_settings` (`:38-44`) rejects duplicate/unknown disabled anchors and unknown routes.
-- `compute` (`:46-106`) snapshots pre-frame tracker/trust, obtains truth from route, generates identical measurements, runs baseline and robust solve, updates tracker, appends status/outage events, and builds a `Frame`.
-- `advance` (`:112-117`) advances rounded timestamp, frame index, revision, recomputes.
-- `reset` (`:119-123`) restores creation floor + settings then `restart`.
-- `select_floor` (`:125-140`) resolves floor, adjusts route/disabled anchors, then restarts a fresh 2-D run; same-floor request is idempotent.
-- `restart` (`:142-158`) resets time/index/tracker/trust/events and recomputes.
-- `update` (`:160-180`) merges preset defaults, validates, restarts only for route/speed/seed changes; otherwise restores the pre-frame tracker/trust snapshot and recomputes once at the same timestamp to avoid double-counting observations.
-
-#### `backend/locus_x/main.py`
-FastAPI app and stores:
-- Module import loads/validates environments (`:29`), initializes in-memory `sessions`, `jobs`, `store_lock`, single benchmark executor (`:30-33`).
-- `GET /api/v1/health` (`:59-65`).
-- `GET /api/v1/environments` (`:68-74`) returns catalog, presets, coordinate convention.
-- Session endpoints (`:86-147`): create, get, delete, advance, controls, reset, floor. Mutations check revision inside the per-session lock; 409 stale, 422 invalid, 404 unknown.
-- Session store keeps ≤64 sessions and evicts >1 h idle on create (`:95-101`).
-- Benchmark endpoints (`:150-198`): start validates environment/floor/route/A1–A8, rejects concurrent jobs, keeps ≤5 jobs, queues a worker, returns job; poll returns status/progress/result.
-- If `dist/` exists at import, serves `/assets`, `/`, `/locus.svg` (`:201-211`); otherwise only API is served.
-
-#### `backend/locus_x/benchmark.py`
-- `ANCHOR_SELECTION` (`:18-23`): 3/4/6/8 anchor subsets are named A1–A8.
-- `summarize` (`:26-54`): RMSE, median, P95, valid rate, update rate, NLOS/dropout RMSE, mean latency, empirical coverage.
-- `run_benchmark` (`:57-162`): loops scenarios × anchor counts × seeds × steps; creates a fresh `SimulationSession`; skips t=0 evaluation; records per-frame evaluation and runtimes; first seed supplies trace; returns rows/traces/distributions plus environment hash/version/floor metadata.
-- CLI `main` (`:165-197`): reads config, chooses timestamped unique output or explicit new directory, refuses to overwrite existing `results.json`/`metrics.csv`, writes both, prints summary.
-
-### Frontend
-
-#### `src/types.ts`
-TypeScript interfaces mirroring the REST contracts: environment/floor/building, settings, estimate, frame, sample, benchmark row/result/job. Note: backend `Tracking` includes `state_covariance`, but the frontend type omits it; the UI does not use it.
-
-#### `src/lib.ts`
-- `toScene([x,y], elevation) -> [x,elevation,-y]`; `fromScene` inverse (`:4-5`).
-- Formatting helpers, scenario display names.
-- `ApiError` + `request` wrapper; 30 s timeout; extracts FastAPI `detail`; handles 204 (`:10-23`).
-- Blob download, CSV serialization with escaping/missing values, history append/replacement/cap 600 (`:24-45`).
-
-#### `src/workspace.ts`
-- View/layer types and defaults; truth/signal layer coupling (`:22-24`).
-- Legacy floor adaptation with presentation metadata only; geometry arrays are reused by reference (`:31-38`).
-- `floorForFrame` rejects environment/floor/elevation mismatch (`:40-45`).
-- Display elevation and visible floor selection for floor/building/exploded modes (`:47-54`).
-- View reducer for mode/angle/floor/reset/zoom (`:56-67`).
-- `settingsKey` for history reset; includes session/environment/floor/settings.
-- `recordFrame` builds a truthful sample; resets history when configuration changes (`:76-86`).
-- `windowMetrics` computes RMSE, median, P95, valid/update rates, latency, coverage with independent denominators (`:88-109`).
-- `trajectorySegments` breaks paths across missing values/floor changes (`:112-120`).
-- `ellipsePoints` rotates backend-plane ellipse before scene mapping (`:122-129`).
-
-#### `src/useSession.ts`
-Hook owning catalog/frame/history/running/error/busy:
-- One serial promise queue for all mutations (`:33-54`).
-- `connect` loads `/environments`, tries stored session ID, else creates `hospital_v3` or first environment (`:56-71`).
-- `accept` validates frame against catalog/floor, updates state, stores session ID in `sessionStorage`, records history.
-- `mutate` sends expected revision; on 409 it refetches the current frame while preserving the original error (`:44-49`).
-- Running loop requests 0.2 s advances with 150 ms delay (`:100-110`).
-- Environment switch creates a replacement session before deleting the old one; floor switch pauses and resets the run; reset/step helpers.
-
-#### `src/App.tsx`
-Application shell and layout:
-- Header/nav, Twin/Benchmarks tabs, Help dialog.
-- Lazy-loads the 3-D `Scene` chunk (`:12`).
-- Run/pause/reset/step controls; only 0.2 s fixed steps.
-- Floor/building/exploded and plan/perspective controls; fit/zoom/expand.
-- Scene layers, diagnostics toggle, live chart, events panel, CSV/scenario exports.
-- Single-column adaptive layout; `activeView` forces floor mode for legacy single-floor environments.
-
-#### `src/Controls.tsx`
-- Scenario preset selector; noise, NLOS bias, packet-loss sliders with commit-on-release/keyboard/blur; wall-bias toggle.
-- Anchor enable/disable buttons using functional updates; shows current availability.
-- Route select generated from floor config (no hardcoded route names), speed/seed inputs with validation.
-- Notes that route/speed/seed edits restart time and reset restores creation state.
-
-#### `src/EnvironmentPanel.tsx`
-- Environment select, floor list with elevation/room count, experiment/layers tabs.
-- Layer checkboxes grouped by architecture/infrastructure/experiment; unavailable layers disabled when geometry is absent.
-- Cutaway toggle; candidate-site count disclosure; layer reset.
-
-#### `src/Diagnostics.tsx`
-- Current baseline/LOCUS-X error, comparison table (RMSE/median/P95/valid/update/latency/coverage), tracker status/position/velocity/condition/outage, per-anchor range/residual/label/weight table.
-- Derives window metrics independently from returned samples.
-- Explicitly shows baseline coverage as N/A.
-
-#### `src/Charts.tsx`
-SVG error-over-time chart with gaps for missing values, hover/keyboard inspection, and empirical CDF chart from sampled quantiles.
-
-#### `src/Benchmark.tsx`
-Separate benchmark workspace:
-- Environment/floor/scenario/scope controls; always requests seeds 101/202, 160 frames, 0.5 s, held-out route, anchor counts 3/4/6/8.
-- Starts async job, polls every 800 ms, shows progress, result table, error/CDF charts, metrics CSV and full JSON export.
-- Handles completed results from previous runs; shows a message if selected scenario was not part of that run.
-
-#### `src/Scene.tsx` and `src/scene/*`
-- `Scene` renders an orthographic R3F canvas with demand rendering, shadows, DPR cap 1.5, and an error boundary.
-- Geometry is data-driven from the selected environment/floor.
-- `Architecture` builds instanced slabs/rooms/walls/doors/cores/equipment and labels; cutaway is visual only.
-- `Anchors` shows installed anchors with simulator status, and candidate sites separately.
-- `ExperimentOverlays` draws planned route, simulated signal rays, truth/baseline/proposed trails, markers, and ellipse.
-- `CameraRig` implements orbit/pan, plan view, auto-fit, relative zoom, reduced-motion handling.
-- `Primitives` provides instanced solids, canvas-texture labels, and polylines with disposal.
-- `architectureGeometry` cuts access-core openings from slabs and generates decorative room equipment.
-
-### Tests
-- `backend/tests/test_core.py`: numerical exactness, noise, insufficient anchors, degenerate geometry, solver failure, wall/door geometry, NLOS/bias, determinism, outages, route behavior, reset/control recompute, filter coasting, ellipse scaling, truth isolation, benchmark reproducibility.
-- `backend/tests/test_api.py`: health/catalog, full lifecycle, invalid controls, unknown environment/extra fields, preset initialization, async benchmark job.
-- `backend/tests/test_building.py`: legacy hash preservation, floor elevations, route/door walkability, 18 invalid-building cases, non-finite rejection, region-union gaps, candidate isolation, floor switch/reset atomicity, legacy default, per-floor benchmark isolation, all floors reuse `Environment`, CLI artifact protection.
-- `backend/tests/test_audit.py`: malformed scenarios, duplicate anchors, fault controls, custom reset, insufficient/collinear geometry, truth/label isolation, numerical initialization failures.
-- `src/lib.test.ts`: coordinate round-trip, history replacement/reset, CSV missing/identity/escaping.
-- `src/workspace.test.tsx`: legacy adaptation, frame/floor matching, view modes, coordinate round-trips, slab openings, ellipse rotation, view/layer logic, trajectory gaps, truthful window metrics, 600 cap, SSR control contracts.
-
-### Configuration and scripts
-- `configs/environments/hospital_v3.json`: Meridian Hospital, 42×28 m, floors ground/first/second at 0/4.2/8.4 m, 8 anchors, 21 candidates per floor, 10/10/8 rooms, corridors/doors/cores, two routes per floor. Generated by `scripts/build_hospital_v3.py`.
-- `configs/environments/hospital_floor_01.json`: legacy 30×20 m, 8 anchors, 6 rooms, 2 routes; hash preserved by tests.
-- `configs/benchmarks/competition.json`: 7 scenarios × 4 anchor counts × 2 seeds × 160 steps, held-out route.
-- `configs/benchmarks/v3/*-smoke.json`: clean/NLOS/chaos, 8 anchors, seeds 17/29, 60 steps per floor.
-- `scripts/build_hospital_v3.py`: deterministic authoring only; writes `hospital_v3.json`.
-- `scripts/verify_v3_http.py`: exercises health/catalog/session/advance/floor/controls/reset/delete for all floors and legacy default; can target Vite proxy.
+### E8. Frontend *[carried over; AI items spot-checked]*
+React shell (`App.tsx`), `useSession.ts` (serial request queue, 0.2 s advance loop), `workspace.ts` (history,
+metrics, trajectories incl. AI position), `Diagnostics.tsx` (shows `ai_metadata` status/version and
+per-anchor predictions), `Charts.tsx` (baseline/proposed/AI series), `scene/Overlays.tsx` (AI trail),
+`Benchmark.tsx`, `Controls.tsx`, `EnvironmentPanel.tsx`. Colours in the legend: amber = baseline, teal =
+statistical, purple = AI. Frontend tests were not re-run on 10-24.
 
 ---
 
-## F. End-to-end workflows
+## F. Workflows
 
-### 1. Backend startup
-1. Uvicorn imports `backend.locus_x.main`.
-2. `load_environments()` scans `configs/environments/*.json`, validates each as `Building` or `Environment` (`environment.py:13-22`, `main.py:29`). Invalid configuration fails startup.
-3. FastAPI app is created; benchmark executor and in-memory stores are initialized.
-4. If `dist/` exists at import, static assets/index/icon are mounted (`main.py:201-211`).
-5. No environment variables or credentials are read.
+**Live loop:** UI → `POST /sessions/{id}/advance {expected_revision, dt}` → lock → `SimulationSession.advance` →
+`compute()` (E6) → `Frame` JSON → UI.
 
-### 2. Browser startup / reconnect
-1. `main.tsx` mounts `<App/>`.
-2. `useSession` `connect()` requests `/api/v1/environments`.
-3. It checks `sessionStorage['locus-x-v3-session']`; if present, `GET /sessions/{id}`. A 404 falls through to a new session.
-4. New sessions prefer `hospital_v3`, else the first catalog environment; POST `/sessions` with `{environment_id}`.
-5. `accept()` verifies the frame's environment/floor/elevation against the catalog, stores the session ID, updates React state, and seeds history.
-6. UI shows loading/error/telemetry accordingly.
+**Benchmark:** `POST /benchmarks` → single worker → `run_benchmark` → poll `GET /benchmarks/{id}`.
 
-### 3. Live experiment step (the core loop)
-1. User presses Run. `useSession` starts a recursive timer.
-2. Each tick calls `POST /sessions/{id}/advance` with `expected_revision` and `dt=0.2`.
-3. `main.advance_session` → `mutate` acquires session lock, checks revision, calls `session.advance`.
-4. `advance` increments simulation time/frame index/revision, then `compute`:
-   - `route_position` computes target truth at simulation time.
-   - `generate_measurements` creates available ranges + separate fault labels.
-   - `solve(measurements)` computes baseline.
-   - `solve(measurements, robust=True, trust=self.trust)` computes robust estimate and updates trust.
-   - `MotionTracker.update` fuses the robust fix into the motion state (or coasts).
-   - `evaluate` computes errors/coverage after inference.
-5. The `Frame` returns over HTTP.
-6. `useSession.accept` updates frame/history; `recordFrame` resets history if the session/environment/floor/settings identity changed, otherwise appends (same timestamp replaces; cap 600).
-7. UI re-renders scene overlays, diagnostics, and charts. Rendering time does not affect simulation time.
+**Train a model (offline):** `python -m backend.locus_x.ai_training --generate --train` (flags `--all`, `--epochs`).
+Generates `artifacts/ai-reliability/dataset-v1/{train,validation,test}.npz`, trains v1 (validation split 80/20 by run:
+early stopping vs Platt calibration), fits the bias head, writes `models/ai-reliability-v1/`.
 
-### 4. Control edit
-1. Control sends `PATCH /sessions/{id}/controls` with expected revision and changed fields.
-2. `SimulationSession.update` merges scenario preset first, then explicit fields.
-3. Validates disabled anchors/route.
-4. If route/speed/seed changed → `restart` (time/filter/trust reset, edited settings retained).
-5. Otherwise increments revision, restores the pre-frame tracker/trust snapshot, recomputes once at the same timestamp, and adds an event.
-6. This prevents the same measurement from being counted twice and avoids filter-state drift.
+**Select / refresh policy:** `python -m backend.locus_x.policy_v2 --select` (validation only);
+`--refresh-hash` after editing `policy-v2.json` by hand.
 
-### 5. Reset
-`POST /reset` restores the **creation floor and creation settings**, clears tracker/trust/events, sets time/index 0, increments revision, and recomputes. Custom API-created settings are restored, not browser defaults.
+**Frozen final test:** `python -m backend.locus_x.ai_final --workers N` writes `artifacts/ai-reliability/final-test/`
+and **refuses to overwrite an existing directory** by design.
 
-### 6. Floor switch
-`POST /floor` validates revision/floor, chooses a valid route and filters disabled anchors, replaces the environment with the selected `Floor`, and restarts a fresh 2-D run. No tracker state crosses floors. Same-floor selection returns the current frame.
+**Ablation:** `python -m backend.locus_x.ai_ablation_v3 --seeds 2 --workers 4` (validation seeds only) writes
+`artifacts/ai-reliability/ablation-v3/summary.json`.
 
-### 7. Benchmark
-1. User configures environment/floor/scenario/scope in `Benchmark.tsx`.
-2. `POST /benchmarks` validates environment/floor/route/A1–A8 and creates a queued job.
-3. Single benchmark worker calls `run_benchmark`.
-4. For each scenario/count/seed, it creates a fresh `SimulationSession` using preset + named anchor subset, advances `steps` times at `dt`, and records evaluation/runtime.
-5. Summaries are pooled across seeds; traces use the first seed; distributions use valid errors.
-6. UI polls `GET /benchmarks/{id}` until complete/failed, then renders table/charts and offers CSV/JSON export.
-
-### 8. Exports
-- **Scenario JSON**: current environment/floor/settings, replayable via `POST /sessions`.
-- **Window CSV**: history samples with errors, floor identity, update flags, runtimes, coverage, truth/estimate positions.
-- **Benchmark metrics CSV / full JSON**: independent run output.
+**Other:** `python -m scripts.analyze_final`; `python -m backend.locus_x.diagnostics.recall_diagnosis`;
+`LOCUS_X_AI_MODEL_DIR` overrides the v1 model directory.
 
 ---
 
-## G. Data and database design
+## G. Data, models and artifacts *[verified 10-24]*
 
-There is **no database**. All state is in memory and validated JSON configuration.
-
-### Configuration model
-`Building (3.0)` → ordered `Floor`s → anchors, walls, rooms, routes + V3 additions (corridors, doors, access cores, movement regions, candidate anchors, route names). `FloorConnection` links aligned stair/lift cores across floors. Legacy `Environment` remains the reused base geometry contract.
-
-### Runtime state
-`SimulationSession`: ID, configuration, selected floor, initial/current settings, environment hash, revision, frame index, simulation timestamp, `MotionTracker`, trust weights, event ring (last 20), per-session lock, idle timestamp, current `Frame`, pre-frame tracker/trust snapshot.
-
-`Frame` contains: identities/hash/floor/elevation/mode, revision/index/time, settings, anchors, measurements, simulator labels, baseline/robust estimates, tracking, evaluation, events.
-
-`BenchmarkJob`: ID, status, progress, result/error; at most 5 jobs; one active job.
-
-### Data lifecycle
-- Session creation → initial frame at t=0.
-- Advance → new frame, revision +1.
-- Control → same timestamp recompute or restart.
-- Reset → initial floor/settings, t=0, fresh tracker/trust.
-- Floor switch → selected floor, t=0, fresh tracker/trust.
-- Delete → removed from memory.
-- Backend restart → all sessions/jobs lost.
-- Idle eviction on session creation: >1 h.
-- Session cap: 64.
-
-### Persistence and caching
-- No persistent storage.
-- Browser keeps at most 600 samples in memory; session ID in `sessionStorage`; no plot persistence across reload.
-- Environment definitions are loaded once at backend import; edit JSON then restart backend.
+- **Datasets** (`dataset-v1`, regenerated 10-24): train 272,027 samples (75,891 NLOS), validation 31,596,
+  test 63,776; includes `bias_magnitude`.
+- **Models:** v1 weights **retrained 10-24 in place** (still labelled `ai-reliability-v1`, now with bias head
+  and a separate calibration split); v2 unchanged since 10-22 (5 checkpoints, SHA-checked at load).
+- **Seed manifests:** final-test seeds 8001–8081 are **consumed** (committed frozen run on 10-23). Seeds
+  **12001–12037** (`configs/ai/recall-fix-test-seeds-v1.json`) are reserved and unevaluated. Validation seeds 11 and 22
+  have driven most design decisions.
+- **Artifacts present:** `ablation-v1`, `ablation-v3`, `audit-phase0`, `competition-ai-v1/v2`, `dataset-v1`,
+  `evidence-v1-fresh`, `final-evaluation`, `final-freeze`, `final-test` (**incomplete, see M**),
+  `final-test-invalid-mask` (preserved invalid pre-run), `final-test-v2` (catalog only), `oracle-experiments`
+  (empty), `phase3-v2`, `phase4-final`, `recall-diagnosis`, `reference-existing`, `policy-tuning.json`.
 
 ---
 
-## H. Algorithms and business logic
+## H. Algorithms in one place
 
-### 1. Route motion
-Piecewise-linear closed loop with per-waypoint dwell; constant speed; simulation time modulo route period. Abrupt turns/stops are intentional stressors (`environment.py:42-60`).
-
-### 2. Synthetic range model
-`r = max(0.01, ||target - anchor|| + b·min(wall_intersections,3)/2 + Normal(0,σ))`, with `b = nlos_bias` only if wall bias enabled. Availability precedence: manual disable → timed outage → packet loss. Per-anchor seeded RNG makes surviving observations stable when anchors are toggled. Fault labels are simulator-only.
-
-### 3. Baseline localization
-- Validate/normalize observations.
-- Require ≥3 distinct anchors and non-collinear geometry via SVD ratio.
-- Algebraic initialization by differencing squared ranges.
-- NLS `sum((||p-a_i|| - r_i)^2)`, max 100 evaluations.
-- Reject failed/non-finite solutions and information-matrix condition >1000.
-- Return position, residuals, covariance proxy, condition, runtime.
-- No clamping to the floor footprint.
-
-### 4. Robust localization
-- Same initialization.
-- MAD scale `max(0.2, 1.4826·MAD(residuals))`.
-- Huber candidate solve.
-- Instantaneous consistency weight `clip(1/(1+(|r_i|/(2s))²), 0.08, 1)`.
-- Temporal trust `w_i = 0.65·previous + 0.35·instant`; missing anchors do not update.
-- Weighted Huber re-solve; covariance `s²·(JᵀWJ)⁻¹`.
-- These are heuristic consistency weights, **not** probabilities, LOS labels, or a trained model.
-
-### 5. Kalman tracking
-- State `[x,y,vx,vy]`; constant-velocity transition.
-- White-acceleration process noise with `1.2 m/s²`.
-- Position measurement = robust estimate; covariance + `0.04 I`.
-- Normalized innovation squared gate 13.82 (≈99.9% 2-D chi-square).
-- Joseph covariance update.
-- Prediction-only during rejected/missing fixes; `degraded` until 3 s without accepted update, then `unavailable` and position/ellipse withheld.
-- Reacquisition after timeout reinitializes position and velocity uncertainty.
-- Not an EKF, not map-constrained, and no route/truth input.
-
-### 6. Uncertainty region
-Covariance eigen-decomposition; semiaxes `sqrt(5.9914645471·eigenvalue)`; nominal 95% 2-D Gaussian ellipse. Empirical coverage checks `errorᵀ cov⁻¹ error <= 5.9914645471`. Display is a model-based region, not calibrated confidence.
-
-### 7. Benchmark metrics
-RMSE, median, P95 over valid outputs; valid rate = valid frames / all evaluated frames; update rate = accepted updates / all frames (for baseline, position availability; see caveat in K); NLOS/dropout-conditioned RMSE; mean solver latency; empirical coverage over available ellipses. Missing errors stay missing. Frames are correlated, so pooled frame metrics are not independent trials.
-
-### 8. Historical measured results (documentation only)
-README records 8-anchor pooled RMSE over seeds 101/202 on the legacy floor:
-
-| Scenario | Baseline | LOCUS-X |
-|---|---:|---:|
-| Clean LOS | ~0 | 0.050 |
-| Moderate noise | 0.285 | 0.266 |
-| High noise | 0.853 | 0.783 |
-| NLOS bias | 1.540 | 1.968 |
-| Packet loss | 0.216 | 0.214 |
-| Anchor outage | 0.160 | 0.155 |
-| Combined failures | 3.640 | 3.782 |
-
-Documented NLOS 95%-ellipse coverage: 49.4%; combined: 36.3%. The project explicitly states the proposed method does **not** always win. These numbers are not independently reproducible from this checkout because `artifacts/` is absent.
+Range model → plain NLS (baseline) → Huber + consistency weights (statistical) → Kalman (both trackers) →
+AI: v2 ensemble `p_nlos` → floor/threshold weights; v1 bias head → `p_nlos × bias` subtracted from ranges →
+weighted robust NLS → Kalman. Metrics: RMSE, median, P95, valid/update rate, 95% ellipse coverage, latency.
+A paired, run-clustered bootstrap (2,000 resamples) is used for all comparisons.
 
 ---
 
-## I. API and integration reference
+## I. API reference *[verified 10-24 against `main.py`, `schemas.py`]*
 
-Base path: `/api/v1`. Authentication: **none**. Intended binding: localhost. No CORS middleware; use Vite proxy or same-origin built app.
+Base path `/api/v1`. No authentication, no CORS (use the Vite proxy or same origin). FastAPI also serves
+`/docs` and `/openapi.json`. If `dist/` exists at import, it serves `/`, `/assets/*`, `/locus.svg`.
 
-| Method | Path | Request | Response | Notes |
+| Method | Path | Request body | Response | Errors |
 |---|---|---|---|---|
-| GET | `/health` | — | `{status,version,engine}` | Engine readiness |
-| GET | `/environments` | — | `{environments,presets,coordinate_system}` | Union of legacy floor/building |
-| POST | `/sessions` | `SessionCreate` | `Frame` (201) | Empty body selects legacy floor |
-| GET | `/sessions/{id}` | — | `Frame` | Current authoritative frame |
-| DELETE | `/sessions/{id}` | — | 204 | Removes in-memory session |
-| POST | `/sessions/{id}/advance` | `{expected_revision,dt?}` | `Frame` | dt 0.05–1, default 0.2 |
-| PATCH | `/sessions/{id}/controls` | `{expected_revision,...changes}` | `Frame` | Preset + explicit fields; route/speed/seed restart |
-| POST | `/sessions/{id}/reset` | `{expected_revision}` | `Frame` | Creation floor/settings restored |
-| POST | `/sessions/{id}/floor` | `{expected_revision,floor_id}` | `Frame` | Fresh 2-D run on selected floor |
-| POST | `/benchmarks` | `BenchmarkRequest` | `BenchmarkJob` (202) | Async, one active job |
-| GET | `/benchmarks/{id}` | — | `BenchmarkJob` | Status/progress/result |
+| GET | `/health` | none | `{status, version "3.0.0", engine}` | none |
+| GET | `/environments` | none | `{environments[], presets, coordinate_system}` | none |
+| POST | `/sessions` | `SessionCreate`: `environment_id` (default `hospital_floor_01`), `floor_id?`, `settings` | `Frame` (201) | 404 unknown environment, 422 invalid settings, 429 at 64 sessions |
+| GET | `/sessions/{id}` | none | `Frame` | 404 |
+| DELETE | `/sessions/{id}` | none | 204 | none |
+| POST | `/sessions/{id}/advance` | `Advance`: `expected_revision`, `dt` (0.05–1, default 0.2) | `Frame` | 404, 409 stale revision, 422 |
+| PATCH | `/sessions/{id}/controls` | `Controls`: `expected_revision` + any of `scenario`, `noise_std` (0–3), `nlos_bias` (0–10), `dropout` (0–1), `disabled_anchors`, `walls_enabled`, `route`, `speed` (0.2–3), `seed` | `Frame` | 404, 409, 422 |
+| POST | `/sessions/{id}/reset` | `Revision`: `expected_revision` | `Frame` | 404, 409 |
+| POST | `/sessions/{id}/floor` | `FloorSelection`: `expected_revision`, `floor_id` | `Frame` | 404, 409, 422 |
+| POST | `/benchmarks` | `BenchmarkRequest`: `environment_id`, `floor_id?`, `scenarios`, `anchor_counts` (3/4/6/8), `seeds` (≤4), `steps` (10–400), `dt` (0.1–1), `route` (`asset_round`/`held_out`, default `held_out`); at most 25,000 frames | `BenchmarkJob` (202) | 404, 409 job already running, 422 |
+| GET | `/benchmarks/{id}` | none | `BenchmarkJob`: `{id, status, progress, result, error}` | 404 |
 
-Error behavior: 404 unknown session/environment/job; 409 stale revision or concurrent benchmark; 422 invalid parameters/floor/route; 429 session capacity.
+**`Settings`:** `scenario` (clean, noise, high_noise, nlos, packet_loss, anchor_failure, chaos; a preset fills
+`noise_std`/`nlos_bias`/`dropout`, explicit fields override), `disabled_anchors`, `walls_enabled`, `route`
+(default `held_out`), `speed` 1.2, `seed` 12.
 
-Request/response contracts are defined in `schemas.py`. `BenchmarkRequest` route is currently restricted to `asset_round` or `held_out`; benchmark anchor subsets are hardcoded to A1–A8 names.
+**`Frame`:** identity (`session_id`, `environment_id/version/sha256`, `floor_id`, `floor_elevation`,
+`localization_mode "2d_on_known_floor"`), `revision`, `frame_index`, `timestamp`, `settings`, `anchors`,
+`measurements`, `simulator_labels`, `baseline`, `robust`, `tracking`, **`ai`**, **`ai_tracking`**,
+**`ai_metadata`** (`status active/fallback`, `reason`, `model_version`, `feature_version`, `ambiguous`,
+`n_predicted_los/nlos`, `predictions[{anchor_id, p_los, weight}]`, `runtime_ms`), `evaluation`
+(`ground_truth`, `baseline_error`, `proposed_error`, `ai_error`, `covered_95`, `ai_covered_95`, `has_nlos`,
+`has_dropout`), `events`.
 
-External integrations: **none**. Fonts and icons are bundled. No telemetry, cloud, hardware, or third-party runtime API.
-
----
-
-## J. Configuration and running instructions
-
-### Prerequisites
-- Python 3.13 (README tested 3.13.13).
-- Node 22.12+ (tested Node 24.14.0).
-- Windows PowerShell commands are the validated path; macOS/Linux commands are documented but not exercised in the project history.
-
-### First-time setup
-```powershell
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements-lock.txt
-npm.cmd ci
-```
-
-### Run backend
-```powershell
-.\.venv\Scripts\python.exe -m uvicorn backend.locus_x.main:app --host 127.0.0.1 --port 8000
-```
-
-### Run frontend
-```powershell
-npm.cmd run dev -- --port 5173 --strictPort
-```
-In the restricted Windows sandbox described by the docs, add `--configLoader native`.
-
-Open `http://127.0.0.1:5173`; API docs at `http://127.0.0.1:8000/docs`.
-
-### Single-server demo
-```powershell
-npm.cmd run build
-```
-Restart the backend, then open `http://127.0.0.1:8000`. Keep one Uvicorn worker because state is in memory.
-
-### Environment variables / secrets
-None required. No `.env` or credential files are present. API keys, passwords, and private keys were not found. `.gitignore` covers `.env`, caches, `.venv`, `node_modules`, `dist`, `artifacts`, logs.
-
-### Configuration changes
-- `configs/environments/hospital_v3.json` is the runtime source. Restart backend after editing.
-- `scripts/build_hospital_v3.py` deterministically regenerates `hospital_v3.json`; direct edits are overwritten if the script is rerun.
-- `hospital_floor_01.json` is intentionally preserved and hash-tested.
-
-### Verify commands (documented in README; not run here)
-```powershell
-.\.venv\Scripts\python.exe -m pytest --cov=backend.locus_x --cov-report=term-missing -q
-.\.venv\Scripts\python.exe -m ruff check backend/locus_x backend/tests scripts
-.\.venv\Scripts\python.exe -m ruff format --check backend/locus_x backend/tests scripts
-npm.cmd run typecheck
-npm.cmd run lint
-npm.cmd test
-npm.cmd run build
-```
-
-### Benchmarks
-```powershell
-.\.venv\Scripts\python.exe -m backend.locus_x.benchmark --config configs/benchmarks/competition.json
-```
-V3 smoke runs use `configs/benchmarks/v3/{ground,first,second}-smoke.json`. New outputs go to unique timestamped directories; existing `results.json`/`metrics.csv` are protected.
+Notes: `ai_metadata.predictions[].weight` is the **applied** policy weight. `/health`'s `engine` string still
+describes only "robust ranges + Kalman tracking" (does not mention the AI layer).
 
 ---
 
-## K. Bugs, risks, and technical debt
+## J. Running the project
 
-No critical defect was confirmed by static inspection within the documented local single-user scope. The following are confirmed limitations, validation gaps, or risks. "Confirmed" means visible in code/configuration; severity assumes the documented local demo context unless stated otherwise.
+```powershell
+cd C:\Users\chiranjilalkumawat\Downloads\locus-x-main\locus-x-main     # the INNER folder (has package.json)
+python -m uvicorn backend.locus_x.main:app --host 127.0.0.1 --port 8080   # 8000 is blocked on this machine
+npm run dev                                                               # Vite; picks the next free port
+python -m pytest backend/tests -q                                         # 119 pass (verified 10-24)
+```
+Windows PowerShell 5.1 does not support `&&`; chain with `;`. Keep a single Uvicorn worker (in-memory state).
+Frontend verification (`npm run typecheck/lint/test/build`) and `ruff` were not run on 10-24.
 
-| # | Severity | Location | Finding / evidence | Why it matters / recommendation |
-|---|---|---|---|---|
-| 1 | High if publicly exposed; otherwise Low | `backend/locus_x/main.py` all routes | No authentication, authorization, rate limiting, CORS, or tenant isolation; benchmark jobs consume CPU. | Anyone who can reach the port can create sessions/benchmarks and read simulator truth. Keep bound to localhost; add auth/rate limits before any shared deployment. |
-| 2 | Medium | `estimators.py`, `tracking.py`, README/methodology | Documented NLOS underperformance and severe nominal-95% undercoverage; covariance is a local approximation and shared positive bias can be overconfident. | Algorithmic limitation, not a code typo. Report valid/update rates and coverage together; calibrate covariance on independent data before claiming confidence. |
-| 3 | Medium | `schemas.py:225`, `main.py:159-160`, `benchmark.py:18-23` | Benchmark protocol hardcodes `asset_round|held_out` and A1–A8 subsets. | Custom V3 routes/layouts and optimizer-produced anchors cannot be benchmarked without a new protocol. Add explicit-layout mode and versioned protocol before optimizer work. |
-| 4 | Medium | `backend/research/candidates.py:17-26` | Research loader imports files from `artifacts/nlos-audit/reference/*.py`, but `artifacts/` is absent in this checkout. | Research scripts fail unless historical artifacts are restored. Document/restore artifacts or vendor the reference modules. |
-| 5 | Medium | Verification status | No dependency installation, browser surface, or WebGL acceptance in this checkout; docs themselves record a browser-validation gap. | Unit tests and HTTP checks do not prove UI rendering/interactions. Complete a browser pass at desktop/mobile widths before sign-off. |
-| 6 | Low | `building.py:223-224` | Connection alignment validation compares only core `center` and `size`, not `entry`. | A future config could pass validation with mismatched door entry points. Include `entry` in alignment checks. |
-| 7 | Low | `building.py:93-97` | Candidate anchors are only bounds-checked; they may overlap walls, cores, or impractical locations. | Documented as non-certified sites, but an optimizer could select infeasible points. Add static feasibility checks before optimization. |
-| 8 | Low | `estimators.py:63-72` | Huber candidate solve's `success` is not checked before using `candidate.x`; only the final solve is checked. | A failed intermediate fit can degrade the weighted solve. Check candidate success/finite output and fall back explicitly. |
-| 9 | Low | `main.py:112-115` | `DELETE /sessions/{id}` removes the session under `store_lock` but not the per-session lock. | An in-flight mutation can finish after deletion; no data corruption, but ambiguous lifecycle. Acquire the session lock before deletion or mark deleted. |
-| 10 | Low | `benchmark.py:49, 93-95` | Baseline `update_rate` counts valid positions; proposed counts accepted filter updates. | Semantics differ by method. Document clearly or report baseline "valid solve rate" separately. |
-| 11 | Low | `session.py:130-140` | Floor switch builds new settings via `model_copy` and does not call `validate_settings` afterward. | Currently safe because route/anchor IDs are chosen from the target floor, but future schema changes could bypass validation. Validate after the update. |
-| 12 | Low | `main.py:201-203` | Static mount occurs only if `dist/` exists at import; assumes `dist/assets` exists. Building after startup requires restart. | Expected for Vite, but a partially built `dist` can prevent startup. Validate asset directory or fail with a clear message. |
-| 13 | Low | `src/useSession.ts:29` | `sessionStorage.setItem` is not guarded. | Privacy/restricted-storage modes can throw during frame acceptance. Wrap in try/catch and degrade to in-memory reconnect. |
-| 14 | Low | `src/types.ts:52-56` vs `schemas.py:163-173` | Backend `Tracking` returns `state_covariance`; the TS type omits it. | Harmless now, but a contract drift. Add the field or explicitly document it as server-only. |
-| 15 | Low | Docs links | `docs/v3-status.md` and others reference `artifacts/...` evidence that is not in this checkout. | Future readers cannot verify claims locally. Restore/link artifacts or mark them separately distributed. |
-| 16 | Low | Build output (documented) | Three.js scene chunk is large (~900 kB minified / ~244 kB gzip in the report) and Vite emits an advisory. | Affects first load; consider code-splitting/compressing geometry if deployment matters. |
-| 17 | Info | `session.py`, `main.py` | In-memory sessions/jobs; no DB/persistence; one Uvicorn worker supported. | Backend restart loses all state. Do not scale across workers without external state/locking. |
-| 18 | Info | `simulation.py`, docs | Synthetic independent Gaussian noise, deterministic positive wall bias, independent packet loss, scripted outages. | Does not model real multipath, correlated loss, hardware, clock drift, or 3-D propagation. No real-radio claims. |
-| 19 | Info | `session.py`/UI | Manual known-floor 2-D mode only; floor switches reset tracking. | No automatic floor detection, vertical state, cross-floor ranging, or transition handoff. |
-| 20 | Info | `backend/research` | Preserved research code has known lint/format findings and is excluded from production checks. | Keep separate; clean up only with explicit ownership and preserved evidence. |
+---
 
-Potential runtime issues not verified: browser rendering/WebGL behavior, real-world latency under load, concurrent-request races beyond the covered tests, and actual numerical results since dependencies/artifacts are absent.
+## K. Project status *[verified unless marked reported]*
+
+### K1. Results
+
+| Result | Value | Source |
+|---|---|---|
+| Frozen final test, 3,456 runs, seeds 8001–8081 *(reported; derived files in git)* | Baseline 2.710, statistical 3.277, v1 3.302, v2 3.294 m. v2 vs statistical **+0.50%** (CI +0.35…+0.67), rejected. Statistical was **+14.5%** worse than baseline on matched frames | `results_summary.md`, `docs/ai-reliability-final.md` |
+| Ablation, validation seeds 11/22, 432 runs, 51,840 frames *(verified)* | Baseline 2.47, weights-only 2.92, **+ range correction 1.86**, all-three 2.01 m. Gate regresses (+0.066 m); anchor-count scaling inert | `artifacts/ai-reliability/ablation-v3/summary.json` |
+| Live API, NLOS 8 anchors *(verified)* | Baseline 1.50, statistical 1.94, **AI 0.68 m**; chaos 3.60 / 4.02 / 1.85; 3–4 anchors only about 10% better; packet loss 7% worse | live backend runs |
+| Bias head held-out RMSE on NLOS samples *(verified)* | validation 1.22, test 1.26 m (constant 1.89/2.00; wall-count lookup 1.43/1.40) | recomputed |
+| Bias-scale shift, 8 anchors, bias 1/2.5/5/8 *(verified)* | AI 0.50/0.70/0.91/1.38 vs baseline 0.58/1.53/3.62/5.80 m | recomputed |
+| Bias-rule perturbation *(verified)* | 8 anchors: AI still wins. 4 anchors with random per-frame bias: AI 2.73 vs baseline 2.42 (**loses**) | recomputed |
+| Pipeline decomposition, NLOS 8 anchors *(verified)* | plain NLS 1.53 → +Huber 1.86 → +weights 1.95 → +Kalman 2.01 m | recomputed |
+| Tracker covariance *(verified)* | error²/trace(cov) about 10.7 (calibrated about 1); 95% coverage 0.05–0.47 (statistical), 0.43–0.89 (AI) | recomputed |
+| Tests | 119 backend tests pass | verified |
+
+### K2. What works
+- Learned range correction: the only large, significant effect; scales across bias magnitude; survives a misspecified
+  bias rule at 8 anchors.
+- v2 classifier + floor weights recover part of the damage the statistical solver does (NLOS-only 8 anchors).
+- Majority/all-NLOS frames no longer disable the AI (hard fallbacks remain only for fewer than 3 anchors, no
+  statistical fix, non-finite features, model missing).
+- Protocol discipline: preregistration, frozen manifests, paired bootstrap, preserved invalid run.
+
+### K3. Open problems (ranked)
+1. **P0, provenance:** raw final-test arrays deleted; freeze hashes no longer match the working tree; large
+   uncommitted change set; v1 model overwritten in place under the same name (section M).
+2. **P0, no blind test** for the current system. Use seeds 12001–12037, frozen policy, full `ai_final` protocol.
+3. **P1, statistical solver loses to the baseline under NLOS** (the Huber step costs about 0.33 of 0.48 m).
+4. **P1, tracker** hurts at 3–4 anchors; covariance ignores unmodelled bias (overconfident).
+5. **P1, sparse anchors:** 4 anchors about 1.9–2.1 m under NLOS and loses to baseline under bias mismatch.
+6. **P1, simulator realism:** bias is deterministic in wall count; in-dataset F1 0.92–0.97 vs final-test recall 0.67.
+7. **P2:** two-model AI path (v1 only for bias); no accuracy regression test; ruff/frontend tests not rerun;
+   small regressions on packet loss (+7%) and clean (0.05 m tracker error).
+
+### K4. Planned next steps
+Restore and commit the work; decompose the solver/tracker error (plain NLS vs Huber vs weights); test tracker variants
+at 3–4 anchors; build a bias-family generalisation suite; train a map-free bias regressor on v2 features (a ridge
+prototype got validation/test RMSE 1.00/1.15 m without wall counts, better than the current head's 1.22/1.26;
+not yet tested end-to-end); preregister and run once on seeds 12001–12037.
+
+### K5. Real-world readiness
+None claimed. Would require real UWB captures with independent ground truth, several buildings and materials, real
+multipath and packet loss, and on-device latency.
 
 ---
 
 ## L. Testing and verification
 
-### What exists
-- Backend: 4 test modules covering core math, API lifecycle, building validation, and audit regressions.
-- Frontend: Vitest tests for coordinate/CSV/history, workspace/view/layer/metrics, and server-rendered control contracts.
-- Scripts: `scripts/verify_v3_http.py` for live API/proxy checks.
-- Docs record prior executed results: backend 70 passed / 93% coverage; frontend 24 passed; typecheck/lint/build/ruff passed; reference benchmark reproduced. These are **project-reported**, not independently rerun here.
-
-### Performed during this investigation (non-destructive)
-- Parsed every project Python file with `ast.parse`: all passed.
-- Parsed every project JSON file (excluding `package-lock.json`): all passed.
-- No packages installed, no servers started, no test suite executed, no files modified except creating this document.
-
-### Not verified here
-- pytest/Ruff/TypeScript/ESLint/Vitest/build (dependencies absent).
-- Browser interaction, WebGL rendering, responsive layout, keyboard focus, exports.
-- Live HTTP behavior.
-- Historical benchmark numbers (artifacts absent).
-- Real radio/hardware, deployment, multi-worker behavior.
+- Backend (verified 10-24): `python -m pytest backend/tests -q` → **119 passed**. New tests cover policy weights,
+  anchor-count scaling, the frozen policy contents, majority-NLOS gating and correction, no simulator-config reads in the
+  AI path, applied-weight reporting, and the three-method identical-observation invariant (now spying on both
+  `session.solve` and `ai_policy.solve`).
+- Not verified on 10-24: frontend typecheck/lint/tests/build, ruff, browser/WebGL behaviour.
+- Latency (verified, single process, all three methods plus v1 and v2): about 16.6 ms per frame mean, p95 about 20 ms. The
+  frozen test reported 24.6 ms (statistical) and 38.8 ms (v2) measured under 18 parallel workers; not comparable.
 
 ---
 
-## M. Knowledge gaps
+## M. Incidents, drift and knowledge gaps
 
-1. **Historical artifacts absent**: `artifacts/benchmark`, `artifacts/v3-foundation`, and `artifacts/nlos-audit` are referenced but not present. Claimed reference numbers cannot be reproduced or compared locally.
-2. **Git history absent**: the checkout has no `.git`; branch/commit provenance in docs cannot be verified.
-3. **Presentation file**: `APEX_PPT_2.0.pptx` is binary and was not inspected. `docs/presentation-prep/*` was only mapped by headings; it is presentation material, not runtime truth.
-4. **No browser/WebGL verification** in this session; visual correctness and interaction behavior remain unverified.
-5. **No real-radio data or hardware**: the simulator's realism is intentionally limited.
-6. **No optimizer/model**: handoff documents only; no trained reliability model or anchor optimizer exists.
-7. **No deployment/CI**: no Docker, CI, reverse-proxy, TLS, auth, or persistence design.
-8. **Dependency compatibility**: versions are pinned and documented, but installation/runtime on this machine was not exercised.
-9. **`backend/research` runtime**: depends on missing historical reference modules under `artifacts/`.
-10. **Exact historical benchmark runtime/performance** is machine-dependent and not reproducible from source alone.
+- **Deleted artifacts:** on 10-24 `artifacts/ai-reliability/final-test/` was removed with `rm -rf` to make room for a new
+  run. The 12 derived result files are tracked in git (`git checkout -- artifacts/ai-reliability/final-test` restores them).
+  `frames.npz` (33 MB) and `classifier-samples.npz` (22 MB) were never committed and are **lost**; they can be
+  regenerated by running the frozen command at commit `5aef613`. The folder currently holds only a stray
+  `run-catalog.json` from an aborted rerun.
+- **Freeze chain broken in the working tree:** policy hash `4c38a30b…` and `ai_final.py` hash in
+  `final-freeze/manifest.json` no longer match. The frozen results correspond to commit `5aef613` / `4b72560`.
+- **Uncommitted work:** 17+ tracked files modified (about +986/−688 lines) plus new files (`ai_policy.py`,
+  `ai_ablation_v3.py`, `oracle_experiments.py`, `diagnostics/`, tests). Nothing since `4b72560` is committed.
+- **Docs drift:** `docs/ai-reliability-final.md`, `results_summary.md` and `README.md` still say the runtime adapter
+  is v1 and v2 was rejected. The live runtime now uses v2 + the v1 bias head under policy 2.3.0.
+- **Local environment changes:** Vite proxy to 8080; default route `held_out`; Python 3.14 outside `.venv`.
+- **Unknown:** real-hardware behaviour; whether the map-free bias head improves end-to-end positioning; the classifier
+  ceiling under the current design (oracle experiments never completed).
 
 ---
 
-## N. Project glossary
+## N. Glossary additions
 
 | Term | Meaning |
 |---|---|
-| **Anchor** | Known-position range sensor/beacon. Installed anchors A1–A8 produce measurements; candidate anchors C01–C21 are non-emitting sites. |
-| **Floor / Building** | V3 `Floor` extends the legacy `Environment`; `Building` composes floors at configured elevations. |
-| **Known floor** | The user manually selects the floor; localization is 2-D within it. Elevation is configuration, not inference. |
-| **LOS / NLOS** | Line-of-sight vs obstructed range. NLOS injects positive wall-intersection bias. |
-| **UWB / BLE** | Real radio technologies the synthetic model approximates conceptually; none is integrated. |
-| **Measurement** | The only estimator input: anchor ID, anchor position, timestamp, observed range. |
-| **FaultLabel** | Simulator-only truth about availability, LOS/NLOS, walls, true range, injected bias. Never an estimator input. |
-| **Baseline** | NLS localization without robust weighting or motion filtering. |
-| **LOCUS-X method** | Robust Huber solve + residual-consistency trust weights + Kalman tracking. |
-| **Huber loss** | Robust loss that limits outlier influence; scale derived from MAD. |
-| **Trust / reliability weight** | Heuristic relative residual consistency, not a probability or trained classifier. |
-| **Kalman filter** | Linear constant-velocity motion filter over position fixes. |
-| **Innovation gate** | Chi-square threshold (13.82) rejecting motion-inconsistent fixes. |
-| **Joseph form** | Numerically stable covariance update `(I-KH)P(I-KH)ᵀ + KRKᵀ`. |
-| **Coasting / degraded** | Prediction-only tracking while fixes are rejected/missing. |
-| **Unavailable** | After 3 s without an accepted update, position/ellipse are withheld. |
-| **Nominal 95% ellipse** | Gaussian model region from covariance; not calibrated empirical confidence. |
-| **Coverage** | Fraction of available tracking positions inside the nominal ellipse. |
-| **RMSE / P95** | Root mean square error / 95th percentile error over valid estimates. |
-| **Valid rate / update rate** | Available positions ÷ frames / accepted updates ÷ frames. |
-| **Frame** | One authoritative server response containing settings, observations, estimates, tracking, evaluation, events. |
-| **Revision** | Monotonic session version used for optimistic concurrency (409 on stale writes). |
-| **Session** | In-memory authoritative experiment state for one browser run. |
-| **Benchmark job** | Async independent experiment with progress/result; separate from live sessions. |
-| **Smoke run** | Small functional per-floor benchmark, not an accuracy improvement claim. |
-| **Movement region** | Room/corridor rectangle references used to validate routes are walkable. |
-| **Access core** | Stair/lift footprint; aligned vertically across floors; not traversed by the simulator. |
-| **Dwell** | Time the target stays at a route waypoint. |
-| **Cutaway** | Visual-only reduced wall height; does not change propagation. |
-| **Exploded view** | Visual-only vertical spacing between floors. |
+| **p_los / p_nlos** | v2 ensemble's calibrated probability that an anchor's range is line-of-sight / blocked |
+| **Bias head** | Linear layer on v1's hidden layer predicting an anchor's NLOS range error in metres |
+| **Range correction** | `range − p_nlos × predicted_bias` applied before the solve |
+| **Policy** | Rule mapping `p_los` to solver weights, plus correction settings; versioned and hashed |
+| **Majority-NLOS branch** | When fewer than 3 anchors look LOS, AI stays active with floor weights on NLOS anchors |
+| **Additive coupling** | AI weights replace the statistical weights instead of multiplying them |
+| **Frozen final test** | The preregistered 3,456-run evaluation on seeds 8001–8081 (consumed) |
+| **Reserved seeds** | 12001–12037, unevaluated; the only clean test data left |
+| **Matched baseline check** | Comparison restricted to frames where the baseline produced a fix |
 
 ---
 
 ## O. Developer quick reference
 
-### Where features live
-| Feature | Primary files |
+| Task | Files |
 |---|---|
-| Add/change API fields | `backend/locus_x/schemas.py`, then `src/types.ts` |
-| Session lifecycle/revision/reset | `backend/locus_x/session.py`, `main.py` |
-| Range/noise/NLOS/outage model | `backend/locus_x/simulation.py` |
-| Baseline/robust estimator | `backend/locus_x/estimators.py` |
-| Kalman tracking/ellipse | `backend/locus_x/tracking.py` |
-| Error/coverage evaluation | `backend/locus_x/evaluation.py` |
-| Building/floor validation | `backend/locus_x/building.py`, `geometry.py` |
-| Environment loading/route motion | `backend/locus_x/environment.py` |
-| Benchmark protocol/summaries | `backend/locus_x/benchmark.py`, `configs/benchmarks/*` |
-| Hospital geometry | `configs/environments/hospital_v3.json`, `scripts/build_hospital_v3.py` |
-| Browser session/polling | `src/useSession.ts` |
-| Scene/overlays/camera | `src/Scene.tsx`, `src/scene/*` |
-| Controls/diagnostics | `src/Controls.tsx`, `src/EnvironmentPanel.tsx`, `src/Diagnostics.tsx` |
-| Metrics/history/coordinates | `src/workspace.ts`, `src/lib.ts` |
-| Benchmark UI | `src/Benchmark.tsx`, `src/Charts.tsx` |
-| API/proxy config | `backend/locus_x/main.py`, `vite.config.ts` |
+| Change AI weighting / correction / fallback | `ai_policy.py`, `models/ai-reliability-v2/policy-v2.json` (then `--refresh-hash`) |
+| Change classifier features | `reliability_v2.py` (and retrain; checkpoints are SHA-checked) |
+| Change the bias head | `ai_training.py: fit_bias_head`, `reliability.py: predict_full` |
+| Change solver math | `estimators.py` (keep identical-observation invariant) |
+| Change tracker | `tracking.py` (gate parameter, process noise) |
+| Wire AI into the live session | `session.py: compute` |
+| Add an API field | `schemas.py`, then `src/types.ts` |
+| Add an experiment | copy `ai_ablation_v3.py`; never reuse consumed seeds |
 
-### Common tasks and files to inspect first
-- **Change estimator math**: `estimators.py`, `tracking.py`, `session.py`, `methodology.md`, estimator/tracking tests. Preserve the truth boundary and identical-observation invariant.
-- **Change a scenario/preset**: `schemas.py` `PRESETS`, `simulation.py`, `Controls.tsx` labels/notes, `benchmark.py` assumptions.
-- **Change the hospital**: prefer `scripts/build_hospital_v3.py`, regenerate `hospital_v3.json`, run `test_building.py`. Never edit the legacy fixture.
-- **Add a route**: config JSON/authoring script, `route_names`, movement-region validation, `Controls.tsx` (already data-driven), benchmark schema (currently restricted to two route literals).
-- **Add an API endpoint**: `schemas.py` + `main.py` + `session.py`; add API tests; update `types.ts`/`useSession.ts` if the UI uses it.
-- **Change UI layout**: `App.tsx`, `styles.css`, `EnvironmentPanel.tsx`, `Diagnostics.tsx`; keep missing-value/`N/A` semantics.
-- **Change scene geometry**: `scene/Architecture.tsx`, `architectureGeometry.ts`, `Overlays.tsx`; keep geometry visibility independent from propagation settings.
-- **Change history/metrics**: `workspace.ts`, `lib.ts`; preserve reset-on-configuration-change, same-timestamp replacement, 600 cap, and missing-value gaps.
-
-### Tests to run
-From project root after installing dependencies:
-```powershell
-.\.venv\Scripts\python.exe -m pytest -q
-.\.venv\Scripts\python.exe -m ruff check backend/locus_x backend/tests scripts
-.\.venv\Scripts\python.exe -m ruff format --check backend/locus_x backend/tests scripts
-npm.cmd run typecheck
-npm.cmd run lint
-npm.cmd test
-npm.cmd run build
-```
-Focused backend tests: `pytest backend/tests/test_core.py -q`, `test_api.py`, `test_building.py`, `test_audit.py`.
-Focused frontend: `npm.cmd test -- src/workspace.test.tsx src/lib.test.ts` (plus `--configLoader native` in the documented sandbox).
-
-### Debugging common failures
-- **Frontend shows "engine unavailable"**: start FastAPI on 127.0.0.1:8000; check `/api/v1/health`; Vite proxy must target port 8000.
-- **404 on session reconnect**: session was deleted or backend restarted; the app creates a new session automatically on 404.
-- **409 stale revision**: another mutation won; the client refetches and displays the error. Do not send concurrent advances.
-- **422 invalid controls**: check disabled-anchor duplicates/unknown IDs, route name, value ranges.
-- **Position disappears**: tracking is `unavailable` after 3 s without an accepted update; check measurements/anchor count/geometry.
-- **`poor_geometry`**: fewer than 3 usable anchors or near-collinear layout.
-- **NLOS worse than baseline**: known algorithm limitation under broad positive bias; not a frontend bug.
-- **Benchmark 409**: another benchmark is queued/running; wait for completion.
-- **`dist/` not served**: build first, then restart backend; static mount happens at import.
-- **Config not updating**: backend loads JSON once at import; restart it.
-- **Research scripts fail**: restore `artifacts/nlos-audit/reference` first.
-
-### Tight coupling / change-impact map
-- `schemas.py` is the contract hub: backend requests/frames and frontend `types.ts` must remain consistent.
-- `session.py` couples simulation, estimators, tracking, evaluation, and API frame shape. Changes there can affect live UI, tests, and benchmark results.
-- Estimator/tracker changes invalidate historical comparability; use new benchmark versions, never relabel old results.
-- `workspace.ts` metrics/history semantics are mirrored by `Diagnostics.tsx` and tests; changing denominators or reset rules affects all live metrics.
-- Scene overlay logic depends on `Frame` fields (`tracking.position/ellipse`, `evaluation.ground_truth`, `measurements`, `simulator_labels`); contract changes ripple into `Scene.tsx`, `Overlays.tsx`, `Diagnostics.tsx`, and `types.ts`.
-- Building validation and geometry generation must stay in sync with `hospital_v3.json`; route/door/core edits can fail startup.
-- Benchmark protocol and named anchor subsets are shared by CLI and API; changing them changes result comparability.
-
----
-
-## Inspection checklist
-
-### Fully inspected
-- [x] All production backend modules: `schemas.py`, `environment.py`, `building.py`, `geometry.py`, `simulation.py`, `estimators.py`, `tracking.py`, `evaluation.py`, `session.py`, `main.py`, `benchmark.py`.
-- [x] All backend tests: `test_core.py`, `test_api.py`, `test_building.py`, `test_audit.py`.
-- [x] All research modules: `candidates.py`, `experiment.py`, `diagnose.py`.
-- [x] All frontend source: `main.tsx`, `App.tsx`, `useSession.ts`, `workspace.ts`, `lib.ts`, `types.ts`, `Controls.tsx`, `EnvironmentPanel.tsx`, `Diagnostics.tsx`, `Benchmark.tsx`, `Charts.tsx`, `HelpDialog.tsx`, `Scene.tsx`, all `scene/*`.
-- [x] Frontend tests: `lib.test.ts`, `workspace.test.tsx`.
-- [x] All configs: environments, competition, V3 smoke, NLOS audit protocol.
-- [x] Build/config files: `package.json`, `tsconfig.json`, `vite.config.ts`, `eslint.config.js`, `pyproject.toml`, `requirements.txt`, `requirements-lock.txt`, `index.html`, `.gitignore`.
-- [x] Scripts: `build_hospital_v3.py`, `verify_v3_http.py`.
-- [x] Core docs: README, CONTRIBUTING, architecture, methodology, assumptions/limitations, build-status, integration-audit, V3 audit/contract/handoff/status.
-- [x] Full `styles.css` (logic-relevant layout/responsive sections).
-- [x] `public/locus.svg`.
-
-### Skimmed / not exhaustively inspected
-- [ ] `docs/presentation-prep/*` — headings and purpose mapped; presentation content not audited line-by-line.
-- [ ] `APEX_PPT_2.0.pptx` — binary presentation; not opened.
-- [ ] `package-lock.json` — dependency manifest resolved by npm; not audited entry-by-entry.
-- [ ] `README.md` documentation claims vs historical artifacts — artifacts absent, claims cannot be reproduced locally.
-
-### Not present / not applicable
-- [ ] `node_modules/`, `.venv/`, `dist/`, `artifacts/`, `.git/`, CI/deployment files — absent in this checkout.
-- [ ] Database migrations/schema — no database.
-- [ ] ML model/dataset/training pipeline — not implemented.
-- [ ] Real radio/hardware integration — not implemented.
-- [ ] Authentication/authorization — not implemented.
-
----
-
-## Evidence boundary
-
-- Statements about current code behavior are based on direct source inspection with line references where useful.
-- Statements about test/build/benchmark results are **project-reported** in README/docs unless explicitly said to have been run here. Only Python AST parsing and JSON parsing were executed during this investigation.
-- Historical benchmark numbers and artifact links cannot be independently verified in this checkout because `artifacts/` is absent.
-- No secrets, credentials, or private keys were found or exposed.
+Coupling to remember: `schemas.py` is the contract hub; `session.py` and `ai_policy.py` define behaviour for the UI, the
+benchmark and the frozen harness at once; any change to the estimator, tracker or policy invalidates comparability with
+past results, so version the policy and write a new freeze manifest rather than editing old ones.
