@@ -1,0 +1,42 @@
+{
+  "id": "simple_room",
+  "name": "Wi-Fi Test Room · Simple Lab",
+  "width": 10,
+  "height": 8,
+  "description": "Standard 10 x 8 m indoor test room with 4 Wi-Fi AP anchors in the four corners.",
+  "anchors": [
+    {"id": "AP1", "position": [1.0, 1.0]},
+    {"id": "AP2", "position": [9.0, 1.0]},
+    {"id": "AP3", "position": [9.0, 7.0]},
+    {"id": "AP4", "position": [1.0, 7.0]}
+  ],
+  "walls": [
+    {"id": "ext-s", "a": [0, 0], "b": [10, 0], "height": 3.0},
+    {"id": "ext-e", "a": [10, 0], "b": [10, 8], "height": 3.0},
+    {"id": "ext-n", "a": [10, 8], "b": [0, 8], "height": 3.0},
+    {"id": "ext-w", "a": [0, 8], "b": [0, 0], "height": 3.0}
+  ],
+  "rooms": [
+    {"name": "Lab Space", "center": [5.0, 4.0], "size": [9.6, 7.6], "kind": "lab"}
+  ],
+  "routes": {
+    "held_out": [
+      {"position": [2.0, 2.0], "dwell": 1},
+      {"position": [8.0, 2.0], "dwell": 1},
+      {"position": [8.0, 6.0], "dwell": 1},
+      {"position": [2.0, 6.0], "dwell": 1}
+    ],
+    "asset_round": [
+      {"position": [2.0, 2.0], "dwell": 1},
+      {"position": [8.0, 2.0], "dwell": 1},
+      {"position": [8.0, 6.0], "dwell": 1},
+      {"position": [2.0, 6.0], "dwell": 1}
+    ],
+    "walk_test": [
+      {"position": [2.0, 2.0], "dwell": 1},
+      {"position": [8.0, 2.0], "dwell": 1},
+      {"position": [8.0, 6.0], "dwell": 1},
+      {"position": [2.0, 6.0], "dwell": 1}
+    ]
+  }
+}

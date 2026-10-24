@@ -208,6 +208,22 @@ def mutate(session_id, request, operation):
             raise HTTPException(422, str(error)) from error
 
 
+class LiveTelemetryPayload(StrictModel):
+    ranges: dict[str, float] = Field(
+        description="Dictionary mapping anchor_id to measured distance in metres"
+    )
+    dt: float = 0.2
+
+
+@app.post("/api/v1/sessions/{session_id}/live", response_model=Frame)
+def post_live_telemetry(session_id: str, request: LiveTelemetryPayload):
+    session = session_by_id(session_id)
+    if not hasattr(session, "step_live"):
+        raise HTTPException(400, "Live telemetry not supported on this session type")
+    with session.lock:
+        return session.step_live(request.ranges, dt=request.dt)
+
+
 @app.post("/api/v1/sessions/{session_id}/advance", response_model=Frame)
 def advance_session(session_id: str, request: Advance):
     return mutate(session_id, request, lambda session: session.advance(request.dt))

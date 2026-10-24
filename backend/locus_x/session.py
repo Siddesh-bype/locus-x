@@ -14,7 +14,7 @@ from .estimators import solve
 from .evaluation import evaluate
 from .reliability import FeatureHistory, load_default_model
 from .reliability_v2 import FeatureHistoryV2, ReliabilityV2Model
-from .schemas import PRESETS, Controls, Environment, Event, Frame, Settings
+from .schemas import PRESETS, Controls, Environment, Event, FaultLabel, Frame, Measurement, Settings
 from .simulation import generate_measurements
 from .tracking import DEFAULT_GATE_CHI2, MotionTracker
 
@@ -184,6 +184,95 @@ class SimulationSession:
         self.frame_index += 1
         self.revision += 1
         self.frame = self.compute()
+        return self.frame
+
+    def step_live(self, ranges: dict[str, float], dt: float = 0.2) -> Frame:
+        self.timestamp = round(self.timestamp + dt, 8)
+        self.frame_index += 1
+        self.revision += 1
+        self.before_frame = deepcopy(
+            (self.tracker, self.trust, self.ai_tracker, self.ai_features, self.v2_features)
+        )
+        anchor_map = {a.id: a.position for a in self.environment.anchors}
+        measurements = [
+            Measurement(
+                anchor_id=aid,
+                anchor_position=anchor_map[aid],
+                timestamp=self.timestamp,
+                observed_range=max(0.01, float(rng)),
+            )
+            for aid, rng in ranges.items()
+            if aid in anchor_map and rng > 0
+        ]
+        labels: list[FaultLabel] = []
+        baseline = solve(measurements)
+        trust_before = dict(self.trust)
+        robust = solve(measurements, robust=True, trust=self.trust)
+        stat_state = None if self.tracker.state is None else np.array(self.tracker.state)
+        stat_timestamp = self.tracker.timestamp
+        tracking = self.tracker.update(robust, self.timestamp)
+        gate = DEFAULT_GATE_CHI2
+        if _V2_MODEL is not None and _V2_MODEL.available and _V2_CANDIDATE is not None:
+            _, bias_by_anchor = self.ai_model.predict_full(
+                measurements, self.environment, robust, self.ai_features
+            )
+            result = run_v2_policy(
+                v2_model=_V2_MODEL,
+                policy=_V2_POLICY,
+                candidate=_V2_CANDIDATE,
+                measurements=measurements,
+                environment=self.environment,
+                stat_fix=robust,
+                v2_history=self.v2_features,
+                tracker_state=stat_state,
+                tracker_timestamp=stat_timestamp,
+                bias_by_anchor=bias_by_anchor,
+            )
+            ai, ai_metadata, gate = result.estimate, result.metadata, result.gate
+        else:
+            ai_output = self.ai_model.predict(
+                measurements, self.environment, baseline, self.ai_features
+            )
+            ai_metadata = ai_output.metadata
+            if ai_output.weights is not None:
+                ai = solve(
+                    measurements,
+                    robust=True,
+                    trust=trust_before,
+                    ai_weights=dict(ai_output.weights),
+                )
+            else:
+                ai = robust
+        ai_tracking = self.ai_tracker.update(ai, self.timestamp, gate=gate)
+        self.events.append(Event(timestamp=self.timestamp, message="Live Wi-Fi fix received"))
+        self.events = self.events[-20:]
+        self.touched = monotonic()
+        truth = robust.position or (0.0, 0.0)
+        self.frame = Frame(
+            session_id=self.id,
+            environment_id=self.configuration.id,
+            environment_version=(
+                self.configuration.version if isinstance(self.configuration, Building) else "1.0"
+            ),
+            environment_sha256=self.environment_sha256,
+            floor_id=self.environment.id,
+            floor_elevation=floor_elevation(self.environment),
+            revision=self.revision,
+            frame_index=self.frame_index,
+            timestamp=self.timestamp,
+            settings=self.settings,
+            anchors=self.environment.anchors,
+            measurements=measurements,
+            simulator_labels=labels,
+            baseline=baseline,
+            robust=robust,
+            tracking=tracking,
+            ai=ai,
+            ai_tracking=ai_tracking,
+            ai_metadata=ai_metadata,
+            evaluation=evaluate(truth, baseline, tracking, labels, ai, ai_tracking),
+            events=self.events,
+        )
         return self.frame
 
     def reset(self):
