@@ -1,0 +1,12 @@
+count,condition,split,samples,nlos_samples,share_of_stratum,nlos_readings_with_reduced_weight,los_readings_with_reduced_weight
+3,no_loss,B_predicted_los_under_3,61308,45633,0.5493548387096774,16046,1122
+4,no_loss,B_predicted_los_under_3,72112,62601,0.44421446875616005,28954,332
+4,packet_loss,B_predicted_los_under_3,23820,19989,0.6244101918842403,8989,90
+5,no_loss,B_predicted_los_under_3,48217,43356,0.2615826136018402,14904,102
+5,packet_loss,B_predicted_los_under_3,31445,25925,0.5355804605532088,9887,203
+6,no_loss,B_predicted_los_under_3,49666,44293,0.23053286297809134,18028,133
+6,packet_loss,B_predicted_los_under_3,48922,41540,0.52559088955737,19342,240
+7,no_loss,B_predicted_los_under_3,45162,39104,0.18606624917600528,16915,56
+7,packet_loss,B_predicted_los_under_3,55349,44696,0.47144049606487004,21782,230
+8,no_loss,B_predicted_los_under_3,34408,29560,0.1269630416814264,13511,19
+8,packet_loss,B_predicted_los_under_3,52651,41191,0.37328427202087233,20434,213

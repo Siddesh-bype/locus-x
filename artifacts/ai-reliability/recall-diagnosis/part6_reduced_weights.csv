@@ -1,0 +1,3 @@
+split,nlos_readings,nlos_with_reduced_weight,nlos_reduced_share,los_readings,los_with_reduced_weight,los_reduced_share
+B_predicted_los_under_3,437888,188792,0.431142209880152,85172,2740,0.03217019677828394
+not_fallback,244997,43845,0.17896137503724535,867767,803,0.0009253636056683419

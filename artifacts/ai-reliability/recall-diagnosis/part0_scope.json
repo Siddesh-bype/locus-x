@@ -1,0 +1,65 @@
+{
+  "status": "complete",
+  "inspection": "post-hoc diagnostic on inspected data",
+  "seed_manifest": {
+    "manifest": "configs\\ai\\recall-fix-test-seeds-v1.json",
+    "sha256": "61097d1d78fe4377a5507a6d7f68ed005a0500da5ab395af812e22c86ffd083a",
+    "fresh_seeds": [
+      12001,
+      12007,
+      12011,
+      12013,
+      12019,
+      12023,
+      12029,
+      12037
+    ],
+    "excluded_seed_count": 36,
+    "status": "reserved and not evaluated"
+  },
+  "sources": {
+    "final_test": {
+      "path": "artifacts/ai-reliability/final-test",
+      "classifier_samples": 1635824,
+      "frames": 414720,
+      "status": "post-hoc diagnostic on inspected data",
+      "missing": [
+        "per-anchor true range",
+        "per-anchor walls crossed",
+        "per-anchor injected bias",
+        "per-anchor frames since last observation"
+      ]
+    },
+    "validation": {
+      "path": "artifacts/ai-reliability/phase3-v2/dataset/validation",
+      "classifier_samples": 1733609,
+      "frames": 437760,
+      "status": "validation selection data, already inspected",
+      "missing": []
+    },
+    "train": {
+      "path": "artifacts/ai-reliability/phase3-v2/dataset/train",
+      "classifier_samples": 362705,
+      "runs": 1920
+    }
+  },
+  "reuse": {
+    "regenerated_simulations": [],
+    "note": "All parts reuse saved caches. Missing final-test per-anchor truth is reported, not regenerated."
+  },
+  "frozen_hashes": {
+    "models/ai-reliability-v1/config.json": "45001e5436ae460666869d3cfdb199e877277993f2fc537044388c62aef76fe4",
+    "models/ai-reliability-v1/weights.npz": "663d22559f3602771c174a4fb85cf6f980cb0932e3fbc06cf25dc3cf556c90cb",
+    "models/ai-reliability-v1/metrics.json": "bb34dc292cd532c0bbf2cb19541d3cce43a50631a7b2b4469bf69d8d88d23f31",
+    "models/ai-reliability-v2/config.json": "3ae963edce33f18f3d3765c55858eac5f41285b5ebc1db6040bc023cfec88a98",
+    "models/ai-reliability-v2/policy-v2.json": "ff818fd2f2bf77428e2509d9536b3840c912a790278ef3fea35723e037a2e0a7",
+    "models/ai-reliability-v2/promotion.json": "b3374945edf11d967744ca8f648defa026f2fc434de695d40622af9629abc2e8",
+    "models\\ai-reliability-v2\\seed_20261021.npz": "29130abab89b917daa3ac5924c3cea5aebc151f02d50a244339e1d2f06d706a6",
+    "models\\ai-reliability-v2\\seed_20261022.npz": "cd9a0ba748ac68f9a1600462a58b6ac3ba74fa6543caf6f14ac656e01cc9515e",
+    "models\\ai-reliability-v2\\seed_20261023.npz": "e403a7da6fcc446b7dc45af66e8ff9bd3bea79e7082694d603da50735358be61",
+    "models\\ai-reliability-v2\\seed_20261024.npz": "b34ae54f933ab673bb0d2563364b45742ca1ca87f8e16f7fca7b2e4045240556",
+    "models\\ai-reliability-v2\\seed_20261025.npz": "eab83f5032e74c2bfaa725c0dce3fd978320e7a3e772d36b72b68329b86db63e"
+  },
+  "elapsed_seconds": 5085.0679009,
+  "part4_probe_summary": "5-seed capacity, class-weight and learning-curve probes written to part4_*.csv"
+}
