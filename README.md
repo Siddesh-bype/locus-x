@@ -6,6 +6,8 @@ Built by Epoch_12, Vishwakarma Institute of Technology, Pune, for CODE APEX 3.0,
 
 V3 implements **2D localization on a manually selected, known floor**. Building height is configured, not estimated. A trained LOS/NLOS reliability model now feeds a third method, but anchor optimization and integrated floor transitions remain subsequent phases. The Phase 4-6 final test is complete; the v2 candidate improved classification and beat v1 but **did not beat statistical LOCUS-X overall**, so the live runtime remains v1. See the [final report](docs/ai-reliability-final.md), [AI reliability report](docs/ai-reliability.md), [recall diagnosis](docs/ai-reliability-recall-diagnosis.md), [audit](docs/v3-audit.md), [coordinate/configuration contract](docs/v3-contract.md), [team handoff](docs/v3-handoff.md), and [executed checks and limitations](docs/v3-status.md).
 
+Multi-floor positioning is implemented on the local branch `feat/multifloor-positioning`: continuous 3D ranges, a vertical estimate, inferred and route-assisted storey state, multi-floor API sessions and a versioned two-mode protocol. Its limits are explicit: the slab/NLOS model is **synthetic** with no real-radio or calibration claim; coplanar anchors on a single storey **cannot name a floor**; floor probabilities are **likelihood scores, not calibrated posteriors**; and route-assisted floor identity is **configuration, not inference**. Executed evidence, the browser-pass gap and the explicit non-implemented list are in the [multi-floor status](docs/multifloor-status.md).
+
 ## Run locally
 
 Tested on Windows with Python **3.13.13** and Node **24.14.0**. Use Python 3.13 and Node 22.12+ (or 24). Run commands from this directory.

@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import math
 from pathlib import Path
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
@@ -83,7 +84,81 @@ def verify(base_url):
     legacy = call("/sessions", {}, expected=201)
     assert legacy["floor_id"] == legacy["environment_id"] == "hospital_floor_01"
     call("/sessions/" + legacy["session_id"], method="DELETE", expected=204)
-    return {"base_url": base_url, "floors": checks, "legacy_default": "passed"}
+
+    multifloor = []
+    for mode in ("inferred", "route_assisted"):
+        floor_ids = [floor["id"] for floor in building["floors"]]
+        session = call(
+            "/sessions",
+            {
+                "environment_id": building["id"],
+                "settings": {"scenario": "clean", "seed": 29},
+                "multifloor": {"mode": mode, "route_id": "ascent_stairs"},
+            },
+            expected=201,
+        )
+        path = "/sessions/" + session["session_id"]
+        try:
+            assert session["localization_mode"] == f"multifloor_{mode}"
+            assert session["floor_state"] is not None
+            assert session["floor_state"]["source"] == (
+                "route_assisted" if mode == "route_assisted" else "inferred"
+            )
+            # Likelihood scores over every storey, exported as finite numbers.
+            assert sorted(session["floor_probabilities"]) == sorted(floor_ids)
+            assert all(math.isfinite(value) for value in session["floor_probabilities"].values())
+
+            # A client may not choose the storey: the endpoint refuses before mutation.
+            call(
+                path + "/floor",
+                {"expected_revision": session["revision"], "floor_id": "ground"},
+                expected=409,
+            )
+            frame = session
+            for _ in range(16):
+                frame = call(path + "/advance", {"expected_revision": frame["revision"], "dt": 1})
+            # 16 s is inside ascent_stairs' first traverse [15.46, 35.46) s.
+            assert frame["timestamp"] == 16
+            transition = frame["transition"]
+            assert transition is not None
+            if mode == "route_assisted":
+                assert transition["phase"] == "traversing"
+                assert transition["transition_id"] == "ascent-stairs-1"
+                assert transition["connection_id"] == "west-stairs"
+                assert transition["from_floor_id"] == "ground"
+                assert transition["to_floor_id"] == "first"
+                assert 0.0 < transition["progress"] < 1.0
+                assert frame["floor_state"]["source"] == "route_assisted"
+                assert frame["floor_state"]["ambiguous"] is True
+            else:
+                # Inferred mode gets no route witness, only the tracker's own phase.
+                assert transition["phase"] in ("entering", "traversing", "exiting")
+                assert transition["transition_id"] is None
+                assert transition["connection_id"] is None
+                assert frame["floor_state"]["source"] == "inferred"
+                assert frame["floor_state"]["floor_id"] is None
+            probabilities = frame["floor_probabilities"]
+            assert sorted(probabilities) == sorted(floor_ids)
+            assert all(math.isfinite(value) for value in probabilities.values())
+            multifloor.append(
+                {
+                    "mode": mode,
+                    "status": "passed",
+                    "timestamp": frame["timestamp"],
+                    "floor_state": frame["floor_state"],
+                    "transition": transition,
+                    "floor_probabilities": probabilities,
+                    "floor_endpoint": 409,
+                }
+            )
+        finally:
+            call(path, method="DELETE", expected=204)
+    return {
+        "base_url": base_url,
+        "floors": checks,
+        "legacy_default": "passed",
+        "multifloor": multifloor,
+    }
 
 
 if __name__ == "__main__":

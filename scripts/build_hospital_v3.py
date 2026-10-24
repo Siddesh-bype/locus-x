@@ -9,6 +9,14 @@ from pathlib import Path
 
 WIDTH, LENGTH, WALL_HEIGHT = 42, 28, 3.2
 
+# Route timings. Both core entries are the door midpoints on the y = 22 lobby edge and
+# are identical on all three floors, so a vertical traverse changes z only. Every leg
+# duration quoted below assumes the simulator's 1.2 m/s route speed.
+STAIR_ENTRY = [2.5, 22]
+LIFT_ENTRY = [6.5, 22]
+TRAVEL_SECONDS = 20
+LIFT_TRAVEL_SECONDS = 15
+
 
 def room(identifier, name, kind, x0, x1, y0, y1):
     return {
@@ -191,6 +199,8 @@ def make_floor(spec):
         "width": WIDTH,
         "height": LENGTH,
         "anchors": [{"id": f"A{i + 1}", "position": p} for i, p in enumerate(installed)],
+        # Empty means every anchor uses the default 2.6 m mount height.
+        "anchor_mount_heights": {},
         "walls": walls,
         "rooms": rooms,
         "routes": {
@@ -212,10 +222,245 @@ def make_floor(spec):
     }
 
 
+def waypoint(x, y, dwell=0):
+    return {"position": [x, y], "dwell": dwell}
+
+
+def leg(floor_id, waypoints):
+    return {"floor_id": floor_id, "waypoints": waypoints}
+
+
+def reversed_leg(source):
+    """Reverse a leg; every waypoint keeps its own dwell, so the dwell list reverses too."""
+    return leg(source["floor_id"], list(reversed(source["waypoints"])))
+
+
+def transition(identifier, kind, source, target, travel, dwell_before=0, dwell_after=0):
+    # The fixture has exactly one connection per kind, so the kind selects it.
+    return {
+        "id": identifier,
+        "kind": kind,
+        "connection_id": "west-stairs" if kind == "stairs" else "bed-elevator",
+        "from_floor_id": source,
+        "to_floor_id": target,
+        "travel_seconds": travel,
+        "dwell_before": dwell_before,
+        "dwell_after": dwell_after,
+    }
+
+
+def ground_leg(entry):
+    """Short corridor excursion and back, then across the lobby to one core entry."""
+    return leg(
+        "ground",
+        [
+            waypoint(4, 14, 1),
+            waypoint(8.5, 14),
+            waypoint(4, 14),
+            waypoint(4, 19),
+            waypoint(*entry),
+        ],
+    )
+
+
+def ground_loop_leg(entry):
+    """Closed ground leg for loop routes: starts and ends on the same core entry."""
+    return leg(
+        "ground",
+        [
+            waypoint(*entry),
+            waypoint(4, 19),
+            waypoint(4, 14, 1),
+            waypoint(8.5, 14),
+            waypoint(4, 14),
+            waypoint(4, 19),
+            waypoint(*entry),
+        ],
+    )
+
+
+def first_leg(entry):
+    return leg(
+        "first",
+        [
+            waypoint(*entry),
+            waypoint(4, 19),
+            waypoint(5, 14),
+            waypoint(4, 14, 1),
+            waypoint(4, 19),
+            waypoint(*entry),
+        ],
+    )
+
+
+def second_leg(entry):
+    return leg(
+        "second",
+        [
+            waypoint(*entry),
+            waypoint(4, 19),
+            waypoint(7, 14),
+            waypoint(15, 14),
+            waypoint(15, 22, 2),
+            waypoint(15, 14),
+            waypoint(4, 14),
+            waypoint(4, 19),
+            waypoint(*entry),
+        ],
+    )
+
+
+def transition_routes():
+    """Five authoring routes over the two vertical connections.
+
+    Timings at 1.2 m/s. Leg durations (sum of dwells plus straight-line segments):
+
+        ground G     15.4618 s   ground GL    15.9209 s   ground GL-loop  22.4235 s
+        first F1S    15.8394 s   first F1SL   16.7577 s
+        second S2    45.7826 s   second S2L   46.7010 s
+
+    Ascent/descent windows in *height* order, not modulo 40 (each traverse is 20 s
+    except the lift's 15 s):
+
+        ascent_stairs     [15.46, 35.46)  [51.30, 71.30)     period 117.08
+        ascent_lift       [17.92, 32.92)  [53.68, 68.68)     period 117.38
+        descent_stairs    [52.00, 72.00)  [87.84, 107.84)    period 123.30
+        transition_pause  [15.46, 35.46)                     period  57.30
+        cross_floor       [15.84, 35.84) [81.62, 101.62) [117.46, 137.46) [159.88, 179.88)
+                                                                          period 179.88
+
+    The simulator's timed outage is 12 <= timestamp % 40 < 22. Every traverse above
+    overlaps it once per period (interval arithmetic, `w % 40` maps a window onto the
+    circle of length 40; a window that crosses a multiple of 40 is split):
+
+        ascent_stairs     15.46 % 40 = 15.46 -> [15.46, 22) is inside the outage
+                          51.30 % 40 = 11.30 -> [11.30, 31.30) covers [12, 22)
+        ascent_lift       17.92 % 40 = 17.92 -> [17.92, 22) is inside the outage
+                          53.68 % 40 = 13.68 -> [13.68, 28.68) covers [13.68, 22)
+        descent_stairs    52.00 % 40 = 12.00 -> [12.00, 22) is inside the outage
+                          87.84 % 40 =  7.84 -> [7.84, 27.84) covers [12, 22)
+        transition_pause  15.46 % 40 = 15.46 -> [15.46, 22) is inside the outage
+        cross_floor       15.84 % 40 = 15.84 -> [15.84, 22) is inside the outage
+                          81.62 % 40 =  1.62 -> [1.62, 21.62) covers [12, 21.62)
+                         117.46 % 40 = 37.46 -> wraps, [37.46, 40) + [0, 17.46) covers [12, 17.46)
+                         159.88 % 40 = 39.88 -> wraps, [39.88, 40) + [0, 19.88) covers [12, 19.88)
+
+    The 6.22 s `dwell_before` on the first descent traverse delays it from 45.78 s to
+    52.00 s, which is what moves it from 5.78 % 40 (outside) into the outage window.
+    `descent_stairs` is `ascent_stairs` reversed; reversing keeps each waypoint's dwell.
+
+    All of the above is a property of the default speed: `Settings.speed` defaults to
+    1.2 m/s and `multifloor.route.DEFAULT_ROUTE_SPEED` reads that default from the schema.
+    A session that sets a different `speed` rescales every leg duration and therefore shifts
+    every traverse window inside the period, so changing the default means re-timing these
+    routes (a route test pins the current pairing).
+
+    `cross_floor_survey` is looped with one transition per leg, as the schema requires
+    (a loop needs exactly len(legs) transitions). The requested ground -> first ->
+    second -> first -> ground cycle is therefore four closed legs, read cyclically
+    from the last leg: ground -> first -> second -> first -> ground. Every leg starts
+    and ends on a core entry, so the wrap from the ground leg into the first-floor leg
+    is the fourth traverse, not a horizontal jump.
+    """
+    ground_stairs = ground_leg(STAIR_ENTRY)
+    ground_lift = ground_leg(LIFT_ENTRY)
+    first_stairs = first_leg(STAIR_ENTRY)
+    first_lift = first_leg(LIFT_ENTRY)
+    second_stairs = second_leg(STAIR_ENTRY)
+    second_lift = second_leg(LIFT_ENTRY)
+    return [
+        {
+            "id": "ascent_stairs",
+            "name": "Stair ascent to the second floor",
+            "loop": False,
+            "legs": [ground_stairs, first_stairs, second_stairs],
+            "transitions": [
+                transition("ascent-stairs-1", "stairs", "ground", "first", TRAVEL_SECONDS),
+                transition("ascent-stairs-2", "stairs", "first", "second", TRAVEL_SECONDS),
+            ],
+        },
+        {
+            "id": "ascent_lift",
+            "name": "Lift ascent to the second floor",
+            "loop": False,
+            "legs": [ground_lift, first_lift, second_lift],
+            "transitions": [
+                transition(
+                    "ascent-lift-1",
+                    "elevator",
+                    "ground",
+                    "first",
+                    LIFT_TRAVEL_SECONDS,
+                    dwell_before=2,
+                    dwell_after=2,
+                ),
+                transition(
+                    "ascent-lift-2",
+                    "elevator",
+                    "first",
+                    "second",
+                    LIFT_TRAVEL_SECONDS,
+                    dwell_before=2,
+                    dwell_after=2,
+                ),
+            ],
+        },
+        {
+            "id": "descent_stairs",
+            "name": "Stair descent to the ground floor",
+            "loop": False,
+            "legs": [
+                reversed_leg(second_stairs),
+                reversed_leg(first_stairs),
+                reversed_leg(ground_stairs),
+            ],
+            "transitions": [
+                transition(
+                    "descent-stairs-1",
+                    "stairs",
+                    "second",
+                    "first",
+                    TRAVEL_SECONDS,
+                    dwell_before=6.22,
+                ),
+                transition("descent-stairs-2", "stairs", "first", "ground", TRAVEL_SECONDS),
+            ],
+        },
+        {
+            "id": "transition_pause",
+            "name": "Stair ascent with a pause on the first floor",
+            "loop": False,
+            "legs": [ground_stairs, first_stairs],
+            "transitions": [
+                transition(
+                    "transition-pause-1",
+                    "stairs",
+                    "ground",
+                    "first",
+                    TRAVEL_SECONDS,
+                    dwell_after=6,
+                )
+            ],
+        },
+        {
+            "id": "cross_floor_survey",
+            "name": "Looping survey of all three floors",
+            "loop": True,
+            "legs": [first_stairs, second_stairs, first_stairs, ground_loop_leg(STAIR_ENTRY)],
+            "transitions": [
+                transition("cross-floor-1", "stairs", "first", "second", TRAVEL_SECONDS),
+                transition("cross-floor-2", "stairs", "second", "first", TRAVEL_SECONDS),
+                transition("cross-floor-3", "stairs", "first", "ground", TRAVEL_SECONDS),
+                transition("cross-floor-4", "stairs", "ground", "first", TRAVEL_SECONDS),
+            ],
+        },
+    ]
+
+
 def build():
     return {
-        "schema_version": "3.0",
-        "version": "3.0.0",
+        "schema_version": "3.1",
+        "version": "3.1.0",
         "id": "hospital_v3",
         "name": "Meridian Hospital",
         "description": "Fictional three-floor hospital for synthetic localization experiments.",
@@ -234,6 +479,12 @@ def build():
                 ("bed-elevator", "elevator", "lift-west"),
             ]
         ],
+        # Metres above the selected floor datum; used by the 3D projection.
+        "target_device_height": 1.2,
+        # Synthetic model assumption: metres of added range per intervening floor slab.
+        "slab_bias_per_slab": 1.5,
+        # Route models are declared in the schema; cost/outage arithmetic is in transition_routes().
+        "transition_routes": transition_routes(),
         "validation": {
             "units": "metres",
             "source": "fictional-procedural",

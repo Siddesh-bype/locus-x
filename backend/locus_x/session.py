@@ -8,7 +8,7 @@ from uuid import uuid4
 import numpy as np
 
 from .ai_policy import candidate_from_policy, load_policy_file, run_v2_policy
-from .building import Building
+from .building import Building, parse_anchor_key
 from .environment import floor_elevation, resolve_floor, route_position
 from .estimators import solve
 from .evaluation import evaluate
@@ -55,6 +55,16 @@ class SimulationSession:
     def validate_settings(self, settings):
         if len(settings.disabled_anchors) != len(set(settings.disabled_anchors)):
             raise ValueError("Disabled anchor IDs must be unique")
+        if settings.disabled_anchor_keys:
+            # A 2D environment has no floors, so a floor-qualified key cannot be honoured.
+            if len(settings.disabled_anchor_keys) != len(set(settings.disabled_anchor_keys)):
+                raise ValueError("Floor-scoped anchor keys must be unique")
+            for key in settings.disabled_anchor_keys:
+                parse_anchor_key(key)
+            raise ValueError(
+                f"Floor-scoped anchor key {settings.disabled_anchor_keys[0]!r} cannot be "
+                "applied to a 2D session; use disabled_anchors with a bare anchor ID"
+            )
         if settings.route not in self.environment.routes:
             raise ValueError("Unknown target route")
         if set(settings.disabled_anchors) - {a.id for a in self.environment.anchors}:

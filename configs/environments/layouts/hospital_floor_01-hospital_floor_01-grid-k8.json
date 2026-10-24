@@ -1,0 +1,472 @@
+{
+  "id": "hospital_floor_01-grid-k8-ed516fdc",
+  "name": "North wing \u00b7 Hospital floor 01 \u00b7 grid layout k=8",
+  "description": "Synthetic institutional floor. Asset cart moves through a central corridor and treatment rooms.",
+  "width": 30.0,
+  "height": 20.0,
+  "anchors": [
+    {
+      "id": "A1",
+      "position": [
+        9.0,
+        6.4
+      ]
+    },
+    {
+      "id": "A2",
+      "position": [
+        15.2,
+        6.4
+      ]
+    },
+    {
+      "id": "A3",
+      "position": [
+        22.8,
+        6.4
+      ]
+    },
+    {
+      "id": "A4",
+      "position": [
+        9.0,
+        12.4
+      ]
+    },
+    {
+      "id": "A5",
+      "position": [
+        15.2,
+        12.4
+      ]
+    },
+    {
+      "id": "A6",
+      "position": [
+        22.8,
+        12.4
+      ]
+    },
+    {
+      "id": "A7",
+      "position": [
+        9.4,
+        16.5
+      ]
+    },
+    {
+      "id": "A8",
+      "position": [
+        15.0,
+        19.4
+      ]
+    }
+  ],
+  "walls": [
+    {
+      "id": "ext-s",
+      "a": [
+        0.0,
+        0.0
+      ],
+      "b": [
+        30.0,
+        0.0
+      ],
+      "height": 2.8
+    },
+    {
+      "id": "ext-e",
+      "a": [
+        30.0,
+        0.0
+      ],
+      "b": [
+        30.0,
+        20.0
+      ],
+      "height": 2.8
+    },
+    {
+      "id": "ext-n",
+      "a": [
+        30.0,
+        20.0
+      ],
+      "b": [
+        0.0,
+        20.0
+      ],
+      "height": 2.8
+    },
+    {
+      "id": "ext-w",
+      "a": [
+        0.0,
+        20.0
+      ],
+      "b": [
+        0.0,
+        0.0
+      ],
+      "height": 2.8
+    },
+    {
+      "id": "south-1",
+      "a": [
+        0.0,
+        7.0
+      ],
+      "b": [
+        3.0,
+        7.0
+      ],
+      "height": 2.8
+    },
+    {
+      "id": "south-2",
+      "a": [
+        5.0,
+        7.0
+      ],
+      "b": [
+        13.0,
+        7.0
+      ],
+      "height": 2.8
+    },
+    {
+      "id": "south-3",
+      "a": [
+        15.0,
+        7.0
+      ],
+      "b": [
+        23.0,
+        7.0
+      ],
+      "height": 2.8
+    },
+    {
+      "id": "south-4",
+      "a": [
+        25.0,
+        7.0
+      ],
+      "b": [
+        30.0,
+        7.0
+      ],
+      "height": 2.8
+    },
+    {
+      "id": "s-divider-1",
+      "a": [
+        10.0,
+        0.0
+      ],
+      "b": [
+        10.0,
+        7.0
+      ],
+      "height": 2.8
+    },
+    {
+      "id": "s-divider-2",
+      "a": [
+        20.0,
+        0.0
+      ],
+      "b": [
+        20.0,
+        7.0
+      ],
+      "height": 2.8
+    },
+    {
+      "id": "north-1",
+      "a": [
+        0.0,
+        13.0
+      ],
+      "b": [
+        3.0,
+        13.0
+      ],
+      "height": 2.8
+    },
+    {
+      "id": "north-2",
+      "a": [
+        5.0,
+        13.0
+      ],
+      "b": [
+        13.0,
+        13.0
+      ],
+      "height": 2.8
+    },
+    {
+      "id": "north-3",
+      "a": [
+        15.0,
+        13.0
+      ],
+      "b": [
+        23.0,
+        13.0
+      ],
+      "height": 2.8
+    },
+    {
+      "id": "north-4",
+      "a": [
+        25.0,
+        13.0
+      ],
+      "b": [
+        30.0,
+        13.0
+      ],
+      "height": 2.8
+    },
+    {
+      "id": "n-divider-1",
+      "a": [
+        10.0,
+        13.0
+      ],
+      "b": [
+        10.0,
+        20.0
+      ],
+      "height": 2.8
+    },
+    {
+      "id": "n-divider-2",
+      "a": [
+        20.0,
+        13.0
+      ],
+      "b": [
+        20.0,
+        20.0
+      ],
+      "height": 2.8
+    }
+  ],
+  "rooms": [
+    {
+      "name": "TREATMENT 01",
+      "center": [
+        5.0,
+        3.5
+      ],
+      "size": [
+        9.6,
+        6.6
+      ],
+      "kind": "treatment"
+    },
+    {
+      "name": "IMAGING",
+      "center": [
+        15.0,
+        3.5
+      ],
+      "size": [
+        9.6,
+        6.6
+      ],
+      "kind": "imaging"
+    },
+    {
+      "name": "SUPPLIES",
+      "center": [
+        25.0,
+        3.5
+      ],
+      "size": [
+        9.6,
+        6.6
+      ],
+      "kind": "storage"
+    },
+    {
+      "name": "PATIENT WARD",
+      "center": [
+        5.0,
+        16.5
+      ],
+      "size": [
+        9.6,
+        6.6
+      ],
+      "kind": "ward"
+    },
+    {
+      "name": "NURSES\u2019 STATION",
+      "center": [
+        15.0,
+        16.5
+      ],
+      "size": [
+        9.6,
+        6.6
+      ],
+      "kind": "station"
+    },
+    {
+      "name": "TREATMENT 02",
+      "center": [
+        25.0,
+        16.5
+      ],
+      "size": [
+        9.6,
+        6.6
+      ],
+      "kind": "treatment"
+    }
+  ],
+  "routes": {
+    "asset_round": [
+      {
+        "position": [
+          4.0,
+          10.0
+        ],
+        "dwell": 2.0
+      },
+      {
+        "position": [
+          24.0,
+          10.0
+        ],
+        "dwell": 1.0
+      },
+      {
+        "position": [
+          24.0,
+          16.0
+        ],
+        "dwell": 3.0
+      },
+      {
+        "position": [
+          24.0,
+          10.0
+        ],
+        "dwell": 0.0
+      },
+      {
+        "position": [
+          14.0,
+          10.0
+        ],
+        "dwell": 0.0
+      },
+      {
+        "position": [
+          14.0,
+          4.0
+        ],
+        "dwell": 2.0
+      },
+      {
+        "position": [
+          14.0,
+          10.0
+        ],
+        "dwell": 0.0
+      },
+      {
+        "position": [
+          4.0,
+          10.0
+        ],
+        "dwell": 0.0
+      },
+      {
+        "position": [
+          4.0,
+          16.0
+        ],
+        "dwell": 2.0
+      },
+      {
+        "position": [
+          4.0,
+          10.0
+        ],
+        "dwell": 0.0
+      }
+    ],
+    "held_out": [
+      {
+        "position": [
+          24.0,
+          4.0
+        ],
+        "dwell": 1.0
+      },
+      {
+        "position": [
+          24.0,
+          10.0
+        ],
+        "dwell": 0.0
+      },
+      {
+        "position": [
+          4.0,
+          10.0
+        ],
+        "dwell": 1.0
+      },
+      {
+        "position": [
+          4.0,
+          4.0
+        ],
+        "dwell": 2.0
+      },
+      {
+        "position": [
+          4.0,
+          10.0
+        ],
+        "dwell": 0.0
+      },
+      {
+        "position": [
+          14.0,
+          10.0
+        ],
+        "dwell": 1.0
+      },
+      {
+        "position": [
+          14.0,
+          16.0
+        ],
+        "dwell": 3.0
+      },
+      {
+        "position": [
+          14.0,
+          10.0
+        ],
+        "dwell": 0.0
+      },
+      {
+        "position": [
+          24.0,
+          10.0
+        ],
+        "dwell": 0.0
+      }
+    ]
+  }
+}

@@ -6,12 +6,13 @@ import Controls from './Controls';
 import Diagnostics from './Diagnostics';
 import EnvironmentPanel from './EnvironmentPanel';
 import { fromScene, toScene } from './lib';
+import MultifloorStatus from './MultifloorStatus';
 import { slabRectangles } from './scene/architectureGeometry';
 import type { Building, Environment, Frame, Sample } from './types';
 import {
-  DEFAULT_LAYERS, EXPLODE_GAP, INITIAL_VIEW, displayElevation, ellipsePoints,
+  DEFAULT_LAYERS, EXPLODE_GAP, INITIAL_VIEW, displayElevation, elevatedTrajectorySegments, ellipsePoints,
   floorForFrame, floorsOf, recordFrame, sceneFloors, settingsKey, toggleLayer,
-  trajectorySegments, viewReducer, windowMetrics,
+  trajectorySegments, transitionLabel, viewReducer, windowMetrics,
 } from './workspace';
 
 const building = buildingJson as unknown as Building;
@@ -32,6 +33,19 @@ function frame(overrides: Partial<Frame> = {}): Frame {
   };
 }
 
+/** A confident multi-floor frame; overrides make it ambiguous or route-assisted. */
+function multifloorFrame(overrides: Partial<Frame> = {}): Frame {
+  const base = frame();
+  return {
+    ...base, floor_id: 'first', floor_elevation: 4.2, localization_mode: 'multifloor_inferred',
+    floor_state: { floor_id: 'first', source: 'inferred', confidence: 0.91, ambiguous: false },
+    elevation_estimate: 5.35, floor_probabilities: { ground: 0.01, first: 0.98, second: 0.01 },
+    baseline: { ...base.baseline, position: null, status: 'not_applicable', reason: 'The single-floor 2D baseline does not apply to a multi-floor session' },
+    evaluation: { ...base.evaluation, baseline_error: null, ground_truth_elevation: 5.4, covered_95: true },
+    ...overrides,
+  };
+}
+
 describe('shared floor and scene contract', () => {
   it('adapts legacy metadata without copying or changing geometry', () => {
     const [floor] = floorsOf(legacy);
@@ -48,6 +62,16 @@ describe('shared floor and scene contract', () => {
     expect(() => floorForFrame(legacy, active)).toThrow('do not match');
     expect(() => floorForFrame(building, { ...active, floor_id: 'roof' })).toThrow('does not match');
     expect(() => floorForFrame(building, { ...active, floor_elevation: 0 })).toThrow('does not match');
+  });
+  it('returns no floor for an honest multi-floor ambiguity instead of guessing', () => {
+    const ambiguous = frame({
+      floor_id: null, floor_elevation: null, localization_mode: 'multifloor_inferred',
+      floor_state: { floor_id: null, source: 'inferred', confidence: null, ambiguous: true },
+    });
+    expect(floorForFrame(building, ambiguous)).toBeNull();
+    // A legacy frame may never drop its floor.
+    expect(() => floorForFrame(legacy, { ...ambiguous, environment_id: legacy.id, localization_mode: '2d_on_known_floor' })).toThrow('missing');
+    expect(() => floorForFrame(building, { ...ambiguous, floor_elevation: 4.2 })).toThrow('elevation');
   });
   it('shows precisely the selected floor, or all floors in building and exploded views', () => {
     expect(sceneFloors(building, 'first', 'floor').map(f => f.floor.id)).toEqual(['first']);
@@ -118,6 +142,18 @@ describe('view and layer controls', () => {
     const samples: Sample[] = [0, 1, 2, 3, 4, 5, 6].map(t => ({ t, baseline: 1, proposed: t === 2 ? null : 1, proposedPosition: t === 2 ? null : [t, 1], floor_id: t === 4 ? 'first' : 'ground' }));
     expect(trajectorySegments(samples, 'proposedPosition', 'ground')).toEqual([[[0, 1], [1, 1]], [[5, 1], [6, 1]]]);
   });
+  it('draws multi-floor trails at their own elevation and breaks on a missing height', () => {
+    const samples: Sample[] = [
+      { t: 0, baseline: null, proposed: 1, truth: [1, 2], truthElevation: 1.2 },
+      { t: 1, baseline: null, proposed: 1, truth: [2, 3], truthElevation: 3.3 },
+      { t: 2, baseline: null, proposed: null, truth: [3, 4], truthElevation: null },
+      { t: 3, baseline: null, proposed: 1, truth: [4, 5], truthElevation: 5.4 },
+      { t: 4, baseline: null, proposed: 1, truth: [5, 6], truthElevation: 5.4 },
+    ];
+    expect(elevatedTrajectorySegments(samples, 'truth', 'truthElevation')).toEqual([
+      [[1, 1.2, -2], [2, 3.3, -3]], [[4, 5.4, -5], [5, 5.4, -6]],
+    ]);
+  });
 });
 
 describe('truthful comparison windows', () => {
@@ -175,7 +211,7 @@ describe('truthful comparison windows', () => {
 describe('rendered control contracts', () => {
   it('renders backend-selected floors and configuration route choices', () => {
     const current = frame({ floor_id: 'first', floor_elevation: 4.2 });
-    const markup = renderToStaticMarkup(<EnvironmentPanel environment={building} environments={[legacy, building]} floor={building.floors[1]} frame={current} busy={false} update={async () => true} selectEnvironment={vi.fn()} selectFloor={vi.fn()} layers={DEFAULT_LAYERS} setLayer={vi.fn()} resetLayers={vi.fn()} cutaway setCutaway={vi.fn()} />);
+    const markup = renderToStaticMarkup(<EnvironmentPanel environment={building} environments={[legacy, building]} floor={building.floors[1]} frame={current} busy={false} update={async () => true} selectEnvironment={vi.fn()} selectFloor={vi.fn()} selectMode={vi.fn()} layers={DEFAULT_LAYERS} setLayer={vi.fn()} resetLayers={vi.fn()} cutaway setCutaway={vi.fn()} />);
     expect(markup).toContain('aria-label="Select First floor" aria-pressed="true"');
     expect(markup).toContain('aria-label="Select Ground floor" aria-pressed="false"');
     expect(markup).toContain('aria-label="Select Second floor"');
@@ -199,5 +235,55 @@ describe('rendered control contracts', () => {
     expect(markup).toContain('unavailable');
     expect(markup).toContain('0 available ellipses');
     expect(markup).toContain('0/1');
+  });
+  it('shows the multi-floor storey, its source and confidence without inventing a floor', () => {
+    const confident = multifloorFrame();
+    const markup = renderToStaticMarkup(<MultifloorStatus frame={confident} floors={building.floors} />);
+    expect(markup).toContain('First floor');
+    expect(markup).toContain('source-badge inferred');
+    expect(markup).toContain('91.0%');
+    expect(markup).toContain('5.35 m');
+    expect(markup).toContain('Truth elevation');
+    expect(markup).not.toContain('Floor ambiguous');
+
+    const ambiguous = multifloorFrame({
+      floor_id: null, floor_elevation: null, elevation_estimate: 3.3,
+      floor_state: { floor_id: null, source: 'inferred', confidence: null, ambiguous: true },
+      transition: { phase: 'traversing', transition_id: null, connection_id: null, from_floor_id: null, to_floor_id: null, progress: null },
+    });
+    const unknown = renderToStaticMarkup(<MultifloorStatus frame={ambiguous} floors={building.floors} />);
+    expect(unknown).toContain('Floor ambiguous');
+    expect(unknown).toContain('No storey is claimed');
+    expect(unknown).toContain('Traversing · no route witness');
+    expect(unknown).not.toContain('First floor');
+  });
+  it('labels a route-assisted traverse with its connector but a 2D frame with nothing', () => {
+    expect(transitionLabel({ phase: 'entering', transition_id: 't', connection_id: 'west-stairs', from_floor_id: 'ground', to_floor_id: 'first', progress: 0.2 })).toBe('Entering connector · West stairs');
+    const assisted = multifloorFrame({
+      floor_id: null, floor_elevation: null, localization_mode: 'multifloor_route_assisted',
+      floor_state: { floor_id: null, source: 'route_assisted', confidence: null, ambiguous: true },
+      transition: { phase: 'exiting', transition_id: 'west-up', connection_id: 'west-stairs', from_floor_id: 'ground', to_floor_id: 'first', progress: 0.75 },
+    });
+    const markup = renderToStaticMarkup(<MultifloorStatus frame={assisted} floors={building.floors} />);
+    expect(markup).toContain('route assisted');
+    expect(markup).toContain('Exiting connector · West stairs');
+    expect(markup).toContain('75.0% through the traverse');
+    expect(renderToStaticMarkup(<MultifloorStatus frame={frame()} floors={building.floors} />)).toBe('');
+  });
+  it('reports the 3D pipeline honestly in diagnostics instead of faking a 2D baseline', () => {
+    const current = multifloorFrame();
+    const history = recordFrame(recordFrame([], null, { ...current, timestamp: 0 }), { ...current, timestamp: 0 }, { ...current, timestamp: 1, frame_index: 1 });
+    const markup = renderToStaticMarkup(<Diagnostics frame={current} floor={building.floors[1]} history={history} technical />);
+    expect(markup).toContain('3D PIPELINE');
+    expect(markup).toContain('no 2D baseline exists');
+    expect(markup).toContain('Device elevation · estimate');
+    expect(markup).toContain('5.35 m');
+    expect(markup).toContain('Truth elevation');
+    expect(markup).not.toContain('Known floor elevation');
+    expect(markup).not.toContain('Range observations');
+    // A baseline that never ran is absent, not a 0 % result.
+    const baselineColumn = [...markup.matchAll(/<th scope="row">[^<]+<\/th><td>([^<]*)<\/td>/g)].map(match => match[1]);
+    expect(baselineColumn).toHaveLength(7);
+    expect(baselineColumn.every(value => value === '—' || value === 'N/A')).toBe(true);
   });
 });
