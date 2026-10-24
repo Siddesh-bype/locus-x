@@ -481,11 +481,11 @@ Reading rules that the printed caveat enforces:
   frame count.** `floor_accuracy` is 6,603 correct out of **11,970 frames that have a
   truth storey** (`floor_frames`), i.e. 0.552; the other 4,830 of the 16,800 frames are
   mid-traverse, where the route reports no truth storey and the metric is excluded
-  (`multifloor/evaluation.py:98-99`). Ambiguity 0.561, by contrast, is over all 16,800
-  frames. Of the 5,367 misses, roughly 4,590 are abstentions — frames whose `ambiguous`
-  flag is set outside the excluded mid-traverse band — and 777 are frames where a storey
-  was reported and was wrong. The per-scenario rows show the split; a single headline
-  number invites the wrong reading.
+  (`multifloor/evaluation.py:98-99`). **Every one of the 5,367 misses is an abstention** —
+  the storey was withheld — and none is a confidently wrong storey. Ambiguity 0.561 is over
+  all 16,800 frames, and because 4,053 mid-traverse frames also carry the ambiguity flag,
+  `ambiguous_frames` (9,420) cannot be compared with the 11,970 denominator directly. A
+  single headline number invites the wrong reading.
 - **Route-assisted transition success is freshness by construction.** The storey comes
   from the configured route, so `126/126` says the pipeline settles on the route's target
   floor within the tolerance window; it is not evidence of floor inference and must not be
@@ -499,21 +499,64 @@ Reading rules that the printed caveat enforces:
   floor, not all ranges; the filter keeps accepting updates, so the metric demonstrates
   wiring rather than recovery from a blackout (see below).
 
-The floor-accuracy split is printed from the inferred artifact by:
+The split is re-derived frame by frame from the same streams the run used — it re-runs the
+inferred localizer, so it takes about nine minutes and prints totals that reproduce
+`mode_totals` exactly:
 
 ```powershell
-& ".\.venv\Scripts\python.exe" -c "import json; total = next(t for t in json.load(open('artifacts/multifloor-benchmark-runs/inferred/results.json', encoding='utf-8'))['mode_totals'] if t['mode'] == 'inferred'); correct = round(total['floor_accuracy'] * total['floor_frames']); misses = total['floor_frames'] - correct; mid = total['frames'] - total['floor_frames']; abstained = total['ambiguous_frames'] - mid; print('frames:', total['frames']); print('floor_frames:', total['floor_frames']); print('mid-traverse (no truth storey):', mid); print('correct:', correct); print('misses:', misses); print('abstained:', abstained); print('reported and wrong:', misses - abstained)"
+@'
+from backend.locus_x.environment import load_environments
+from backend.locus_x.multifloor.benchmark import MultiFloorBenchmarkConfig, _run_stream
+from backend.locus_x.multifloor.coordinates import anchor_key, floor_anchors
+
+config = MultiFloorBenchmarkConfig.model_validate_json(
+    open("configs/benchmarks/v3/multifloor-inferred.json", encoding="utf-8").read()
+)
+building = load_environments()[config.environment_id]
+routes = {route.id: route for route in building.transition_routes}
+keys = [anchor_key(anchor.floor_id, anchor.anchor_id) for anchor in floor_anchors(building)]
+counts = dict.fromkeys(
+    ("frames", "floor_frames", "correct", "miss", "miss_ambiguous", "miss_confident",
+     "mid", "mid_ambiguous", "mid_reported"), 0
+)
+for scenario in config.scenarios:
+    for route_id in config.routes:
+        for seed in config.seeds:
+            records, _, _ = _run_stream(building, config, routes[route_id], scenario, seed, keys)
+            for record in records:
+                if record["mode"] != "inferred":
+                    continue
+                counts["frames"] += 1
+                counts["mid" if record["truth_floor_id"] is None else "floor_frames"] += 1
+                if record["truth_floor_id"] is None:
+                    counts["mid_ambiguous"] += record["ambiguous"]
+                    counts["mid_reported"] += record["floor_id"] is not None
+                elif record["floor_correct"]:
+                    counts["correct"] += 1
+                else:
+                    counts["miss"] += 1
+                    counts["miss_ambiguous"] += record["ambiguous"]
+                    counts["miss_confident"] += not record["ambiguous"]
+for key, value in counts.items():
+    print(f"{key}: {value}")
+'@ | & ".\.venv\Scripts\python.exe" -
 ```
 
 ```
 frames: 16800
 floor_frames: 11970
-mid-traverse (no truth storey): 4830
 correct: 6603
-misses: 5367
-abstained: 4590
-reported and wrong: 777
+miss: 5367
+miss_ambiguous: 5367
+miss_confident: 0
+mid: 4830
+mid_ambiguous: 4053
+mid_reported: 784
 ```
+
+`mid_reported` counts mid-traverse frames that still carry a `floor_id` while the route
+reports no truth storey; the metric leaves them unscored, so they neither confirm nor
+refute the claim.
 
 The two artifacts were compared against each other for the deterministic fields:
 
@@ -701,8 +744,9 @@ strings are the text the page displayed.
 
 ### Defects observed in the browser pass
 
-Two cosmetic/contract defects were found. Neither is fixed on this branch; both are
-recorded here rather than quietly patched after the evidence run.
+Two defects were found, one cosmetic and one a contract gap in the payload. Neither is
+fixed on this branch; both are recorded here rather than quietly patched after the evidence
+run. A third observation turned out not to be a defect and is noted for completeness.
 
 - **`2D baseline —m`.** The diagnostics header appends the unit to an unavailable value,
   rendering `2D baseline —m` in every multi-floor session. The table cells below it are
