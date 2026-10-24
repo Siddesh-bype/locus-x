@@ -1,13 +1,13 @@
 {
-  "policy_version": "2.0.0",
-  "policy_id": "hard_t005_f005_min3",
+  "policy_version": "2.3.0",
+  "policy_id": "hard_t025_f008_active_majority_rc",
   "mode": "hard",
-  "floor": 0.05,
-  "threshold": 0.05,
-  "fallback_min_predicted_los": 3,
-  "fallback_min_predicted_los_when_4plus": 3,
-  "ai_weight_rule": "1 if p_los >= threshold else floor + (1-floor)*p_los/threshold",
-  "final_weight": "statistical_weight * ai_weight",
+  "floor": 0.08,
+  "threshold": 0.25,
+  "fallback_min_predicted_los": 0,
+  "fallback_min_predicted_los_when_4plus": 0,
+  "ai_weight_rule": "1 if p_los >= threshold else floor + (1-floor)*p_los/threshold; majority-NLOS keeps predicted-NLOS anchors at the floor weight instead of falling back",
+  "final_weight": "ai_weight (replaces the statistical weight; additive coupling)",
   "selection_rule": "no >+0.5% relative regression with a bootstrap interval entirely above zero in any scenario x anchor-count slice or anchor count; then largest mean paired improvement over the current policy on solvable mixed-fault, majority-NLOS and all-NLOS frames; then lowest fallback rate; then hard before soft and fixed grid order",
   "validation": {
     "path": "artifacts\\ai-reliability\\phase4-final\\policy\\selection.json",
@@ -53,5 +53,17 @@
       }
     }
   },
-  "policy_sha256": "4c38a30b7bfb19f19b9d67bd05b79c2183e4cf4ff62020d7cbb17e15d2abfca8"
+  "range_correction": {
+    "enabled": true,
+    "source": "v1 bias head (learned, per anchor)",
+    "min_p_nlos": 0.25,
+    "scale": 1.0,
+    "formula": "observed_range - scale*p_nlos*predicted_bias, applied only when p_nlos > min_p_nlos"
+  },
+  "ablation_evidence": {
+    "path": "artifacts/ai-reliability/ablation-v3/summary.json",
+    "seeds": "validation 11,22",
+    "finding": "anchor-count scaling had no effect (<=0.002 m); the tighter NLOS gate regressed RMSE by +0.066 m [+0.025,+0.107]; both removed."
+  },
+  "policy_sha256": "cda0e29824a1f9cf00dc86c9dc96392f2883ac88a75c8122ef4317584f74a5b1"
 }

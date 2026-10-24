@@ -30,6 +30,7 @@ def solve(
     robust: bool = False,
     trust: dict[str, float] | None = None,
     ai_weights: dict[str, float] | None = None,
+    bias_corrections: dict[str, float] | None = None,
 ) -> Estimate:
     start = perf_counter()
 
@@ -41,7 +42,11 @@ def solve(
         return failure("insufficient", "At least three valid, distinct anchors are required")
     try:
         anchors = np.asarray([m.anchor_position for m in valid], dtype=float)
-        ranges = np.asarray([m.observed_range for m in valid])
+        corrections = bias_corrections or {}
+        ranges = np.asarray([
+            max(0.01, m.observed_range - corrections.get(m.anchor_id, 0.0))
+            for m in valid
+        ])
         singular = np.linalg.svd(anchors - anchors.mean(axis=0), compute_uv=False)
         if singular[0] < 1e-6 or singular[1] / singular[0] < 0.025:
             return failure("poor_geometry", "Anchor layout is collinear or nearly collinear")
@@ -75,7 +80,11 @@ def solve(
                 ]
             )
             if ai_weights is not None:
-                weights = weights * np.array(
+                # P1: Additive coupling — AI weights replace stat weights directly.
+                # Multiplicative coupling (old: weights *= ai_weights) had zero marginal
+                # effect when the robust solver already downweighted an anchor, making AI
+                # redundant on the measurements it should correct most.
+                weights = np.array(
                     [np.clip(ai_weights.get(m.anchor_id, 1.0), 0.0, 1.0) for m in valid]
                 )
             result = least_squares(

@@ -76,7 +76,7 @@ class Settings(StrictModel):
     dropout: float = Field(default=0, ge=0, le=1)
     disabled_anchors: list[str] = Field(default_factory=list, max_length=32)
     walls_enabled: bool = True
-    route: str = "asset_round"
+    route: str = "held_out"
     speed: float = Field(default=1.2, ge=0.2, le=3)
     seed: int = Field(default=12, ge=0, le=2**31 - 1)
 

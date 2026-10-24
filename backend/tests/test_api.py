@@ -77,7 +77,7 @@ def test_unknown_environment_and_extra_truth_rejected():
 def test_ai_metadata_exposes_version_and_fallback():
     frame = client.post("/api/v1/sessions", json={"settings": {"scenario": "clean"}}).json()
     metadata = frame["ai_metadata"]
-    assert metadata["model_version"] == "ai-reliability-v1"
+    assert metadata["model_version"] == "ai-reliability-v2"
     assert metadata["status"] in ("active", "fallback")
     path = f"/api/v1/sessions/{frame['session_id']}"
     frame = client.patch(
@@ -87,7 +87,7 @@ def test_ai_metadata_exposes_version_and_fallback():
         f"{path}/advance", json={"expected_revision": frame["revision"], "dt": 1}
     ).json()
     assert frame["ai_metadata"]["status"] == "fallback"
-    assert frame["ai_metadata"]["model_version"] == "ai-reliability-v1"
+    assert frame["ai_metadata"]["model_version"] == "ai-reliability-v2"
 
 
 def test_scenario_only_initialization_uses_preset():
@@ -125,3 +125,16 @@ def test_benchmark_job_lifecycle_and_actual_output():
         "ai",
     }
     assert job["result"]["rows"][0]["rmse"] < 1e-5
+
+
+def test_ai_metadata_reports_the_weights_actually_applied():
+    frame = client.post("/api/v1/sessions", json={"settings": {"scenario": "nlos"}}).json()
+    path = f"/api/v1/sessions/{frame['session_id']}"
+    weights = []
+    for _ in range(12):
+        frame = client.post(
+            f"{path}/advance", json={"expected_revision": frame["revision"], "dt": 0.5}
+        ).json()
+        weights += [p["weight"] for p in frame["ai_metadata"]["predictions"]]
+    assert weights and min(weights) < 1.0
+    assert all(0.0 <= w <= 1.0 for w in weights)

@@ -26,7 +26,8 @@ from .ai_evaluation import _settings, base_variants, mixed_variants
 from .ai_phase3 import _nlos_group
 from .environment import load_environments, resolve_floor, route_position
 from .estimators import solve
-from .policy_v2 import load_policy, policy_hash, policy_weights
+from .ai_policy import candidate_from_policy, policy_hash, run_v2_policy
+from .policy_v2 import load_policy
 from .reliability import FeatureHistory, ReliabilityModel
 from .reliability_v2 import FeatureHistoryV2, ReliabilityV2Model
 from .simulation import generate_measurements
@@ -145,13 +146,7 @@ def _models():
     if not v2.available:
         raise RuntimeError(f"v2 model is unavailable: {v2.error}")
     policy = load_policy(POLICY)
-    candidate = {
-        "threshold": float(policy["threshold"]),
-        "floor": float(policy["floor"]),
-        "fallback": "min3",
-        "mode": str(policy["mode"]),
-    }
-    return v1, v2, policy, candidate
+    return v1, v2, policy, candidate_from_policy(policy)
 
 
 @cache
@@ -222,7 +217,9 @@ def evaluate_run(spec: dict) -> dict:
         previous_timestamp = stat_tracker.timestamp
         stat_tracking = stat_tracker.update(stat_fix, timestamp)
 
-        v1_output = v1_model.predict(measurements, environment, stat_fix, v1_history)
+        v1_output, bias_by_anchor = v1_model.predict_full(
+            measurements, environment, stat_fix, v1_history
+        )
         v1_estimate = stat_fix
         v1_solve_ms = 0.0
         if v1_output.weights is not None:
@@ -232,36 +229,23 @@ def evaluate_run(spec: dict) -> dict:
             v1_solve_ms = float(v1_estimate.runtime_ms)
         v1_tracking = v1_tracker.update(v1_estimate, timestamp)
 
-        v2_output = v2_model.predict(
-            measurements,
-            environment,
-            stat_fix,
-            v2_history,
-            previous_state,
-            previous_timestamp,
+        v2_result = run_v2_policy(
+            v2_model=v2_model,
+            policy=policy,
+            candidate=candidate,
+            measurements=measurements,
+            environment=environment,
+            stat_fix=stat_fix,
+            v2_history=v2_history,
+            tracker_state=previous_state,
+            tracker_timestamp=previous_timestamp,
+            bias_by_anchor=bias_by_anchor,
         )
-        predictions = v2_output.metadata.predictions
-        v2_weights = None
-        v2_fallback = True
-        v2_changed = False
-        if predictions:
-            nlos = np.asarray([1.0 - prediction.p_los for prediction in predictions])
-            weights, v2_fallback, v2_changed = policy_weights(
-                nlos, len(predictions), candidate
-            )
-            if weights is not None:
-                v2_weights = {
-                    prediction.anchor_id: weights[str(index)]
-                    for index, prediction in enumerate(predictions)
-                }
-        v2_estimate = stat_fix
-        v2_solve_ms = 0.0
-        if v2_weights is not None:
-            v2_estimate = solve(
-                measurements, robust=True, ai_weights=v2_weights
-            )
-            v2_solve_ms = float(v2_estimate.runtime_ms)
-        v2_tracking = v2_tracker.update(v2_estimate, timestamp)
+        predictions = v2_result.metadata.predictions
+        v2_fallback = v2_result.fallback
+        v2_changed = v2_result.changed
+        v2_solve_ms = float(v2_result.estimate.runtime_ms) if v2_result.weights else 0.0
+        v2_tracking = v2_tracker.update(v2_result.estimate, timestamp, gate=v2_result.gate)
 
         n_available = len(measurements)
         n_nlos = sum(label.kind == "nlos" for label in labels)
@@ -319,7 +303,7 @@ def evaluate_run(spec: dict) -> dict:
             float(
                 baseline.runtime_ms
                 + stat_fix.runtime_ms
-                + v2_output.metadata.runtime_ms
+                + v2_result.metadata.runtime_ms
                 + v2_solve_ms
                 + v2_tracking.runtime_ms
             )
@@ -327,7 +311,7 @@ def evaluate_run(spec: dict) -> dict:
         output["v1_fallback"].append(int(v1_output.weights is None))
         output["v2_fallback"].append(int(v2_fallback))
         output["v2_changed"].append(int(v2_changed))
-        output["v2_metadata_ms"].append(float(v2_output.metadata.runtime_ms))
+        output["v2_metadata_ms"].append(float(v2_result.metadata.runtime_ms))
 
         v1_probabilities = {
             prediction.anchor_id: prediction.p_los
@@ -660,6 +644,7 @@ def build_reports(
     _write_csv(output / "classifier.csv", classifier_rows)
     _write_csv(output / "calibration.csv", calibration)
     _write_json(output / "latency.json", latency)
+    total_frames = int(len(frames["run_id"]))
     _write_json(
         output / "summary.json",
         {
@@ -671,13 +656,19 @@ def build_reports(
                 "policy_sha256": policy_hash(policy),
                 "selection": policy["selection_rule"],
             },
+            # P3: Aggregate fallback/changed rates — useful for diagnosing how often AI
+            # actually fires. Fallback means the policy returned full-fallback (no AI weights);
+            # changed means at least one anchor weight was below 1.0.
+            "v2_fallback_rate": float(np.mean(frames["v2_fallback"])) if total_frames > 0 else None,
+            "v2_changed_rate": float(np.mean(frames["v2_changed"])) if total_frames > 0 else None,
+            "v1_fallback_rate": float(np.mean(frames["v1_fallback"])) if total_frames > 0 else None,
             "metrics": metrics,
             "bootstrap": bootstrap,
             "nlos_groups": groups,
             "classifier": classifier_rows,
             "latency": latency,
             "runs": len(specs),
-            "frames": int(len(frames["run_id"])),
+            "frames": total_frames,
             "classifier_samples": int(len(samples["y"])),
         },
     )

@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 from pathlib import Path
 from time import perf_counter
@@ -16,6 +15,12 @@ from time import perf_counter
 import numpy as np
 
 from .ai_phase3 import load_frames, load_samples
+from .ai_policy import (  # noqa: F401  (re-exported public API)
+    _jsonable,
+    load_policy_file,
+    policy_hash,
+    policy_weights,
+)
 from .environment import load_environments, resolve_floor
 from .estimators import solve
 from .tracking import MotionTracker
@@ -66,18 +71,8 @@ def candidate_grid() -> list[dict]:
     return candidates
 
 
-def _jsonable(value):
-    if isinstance(value, dict):
-        return {str(key): _jsonable(item) for key, item in value.items()}
-    if isinstance(value, (list, tuple)):
-        return [_jsonable(item) for item in value]
-    if isinstance(value, np.generic):
-        return value.item()
-    if isinstance(value, np.ndarray):
-        return value.tolist()
-    if isinstance(value, float) and not np.isfinite(value):
-        return None
-    return value
+def load_policy(path: Path | str = POLICY_PATH) -> dict:
+    return load_policy_file(path)
 
 
 def write_json(path: Path, payload: dict) -> None:
@@ -97,55 +92,6 @@ def write_csv(path: Path, rows: list[dict]) -> None:
         writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
-
-
-def policy_hash(policy: dict) -> str:
-    core = {key: value for key, value in policy.items() if key != "policy_sha256"}
-    encoded = json.dumps(_jsonable(core), sort_keys=True, separators=(",", ":")).encode()
-    return hashlib.sha256(encoded).hexdigest()
-
-
-def load_policy(path: Path | str = POLICY_PATH) -> dict:
-    path = Path(path)
-    policy = json.loads(path.read_text(encoding="utf-8"))
-    expected = policy.get("policy_sha256")
-    actual = policy_hash(policy)
-    if expected != actual:
-        raise ValueError("policy checksum mismatch")
-    return policy
-
-
-def policy_weights(
-    probabilities_nlos: np.ndarray,
-    available: int,
-    candidate: dict,
-) -> tuple[dict[str, float] | None, bool, bool]:
-    """Return (weights, fallback, changed). ``probabilities_nlos`` is per anchor."""
-    if available < 3 or len(probabilities_nlos) != available:
-        return None, True, False
-    probabilities_nlos = np.asarray(probabilities_nlos, dtype=float)
-    if not np.isfinite(probabilities_nlos).all():
-        return None, True, False
-    p_los = np.clip(1.0 - probabilities_nlos, 0.0, 1.0)
-    predicted_los = int(np.sum(p_los >= 0.5))
-    minimum = 3
-    if candidate["fallback"] == "min2_if4" and available >= 4:
-        minimum = 2
-    if predicted_los < minimum:
-        return None, True, False
-    floor = float(candidate["floor"])
-    if candidate["mode"] == "soft":
-        weights = np.maximum(floor, p_los)
-    else:
-        threshold = float(candidate["threshold"])
-        weights = np.where(
-            p_los >= threshold,
-            1.0,
-            floor + (1.0 - floor) * (p_los / max(threshold, 1e-12)),
-        )
-    weights = np.clip(weights, 0.0, 1.0)
-    changed = bool(np.any(weights < 1.0 - 1e-12))
-    return {str(index): float(value) for index, value in enumerate(weights)}, False, changed
 
 
 def _measurements_for_frame(frame, environment, index, timestamp):
@@ -737,6 +683,16 @@ def _evaluate_candidate_worker(payload):
     return evaluate_candidate(candidate, force=force)
 
 
+def refresh_policy_hash(path: Path = POLICY_PATH) -> str:
+    """Recompute and write the policy_sha256 field after editing threshold/floor values."""
+    path = Path(path)
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    raw.pop("policy_sha256", None)
+    raw["policy_sha256"] = policy_hash(raw)
+    path.write_text(json.dumps(raw, indent=2) + "\n", encoding="utf-8")
+    return raw["policy_sha256"]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--compare", action="store_true")
@@ -744,7 +700,16 @@ def main() -> None:
     parser.add_argument("--select", action="store_true")
     parser.add_argument("--force", action="store_true")
     parser.add_argument("--workers", type=int, default=1)
+    parser.add_argument(
+        "--refresh-hash",
+        action="store_true",
+        help="Recompute policy_sha256 after manually editing threshold/floor in policy-v2.json",
+    )
     args = parser.parse_args()
+    if args.refresh_hash:
+        new_hash = refresh_policy_hash()
+        print(json.dumps({"policy_sha256": new_hash}))
+        return
     if args.compare:
         print(json.dumps(compare_g5_v1(), indent=2, default=_jsonable))
     if args.run_candidates:
