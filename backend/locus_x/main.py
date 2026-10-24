@@ -13,6 +13,7 @@ from pydantic import Field, model_validator
 from .benchmark import run_benchmark
 from .building import Building
 from .environment import load_environments, resolve_floor
+from .multifloor.session import MultiFloorSession
 from .optimization import (
     OptimizerConfig,
     PlacementPolicy,
@@ -36,7 +37,7 @@ from .schemas import (
 from .session import SimulationSession
 
 environments = load_environments()
-sessions: dict[str, SimulationSession] = {}
+sessions: dict[str, SimulationSession | MultiFloorSession] = {}
 jobs: dict[str, dict] = {}
 store_lock = RLock()
 executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="benchmark")
@@ -142,7 +143,10 @@ def create_session(request: SessionCreate):
     if environment is None:
         raise HTTPException(404, "Unknown environment")
     try:
-        session = SimulationSession(environment, request.settings, request.floor_id)
+        if request.multifloor is None:
+            session = SimulationSession(environment, request.settings, request.floor_id)
+        else:
+            session = _multifloor_session(environment, request)
     except ValueError as error:
         raise HTTPException(422, str(error)) from error
     with store_lock:
@@ -153,6 +157,30 @@ def create_session(request: SessionCreate):
             raise HTTPException(429, "Local session capacity reached; delete unused sessions")
         sessions[session.id] = session
     return session.frame
+
+
+def _multifloor_session(environment, request: SessionCreate) -> MultiFloorSession:
+    """Validate the multi-floor opt-in before a session object exists (422 on refusal)."""
+    if not isinstance(environment, Building):
+        raise ValueError("Multi-floor sessions require a building environment")
+    if request.floor_id is not None:
+        raise ValueError(
+            "A multi-floor storey is derived, not selected; omit floor_id and let the "
+            "ranges (or the configured route) report it"
+        )
+    options = request.multifloor
+    routes = {route.id for route in environment.transition_routes}
+    if options.route_id not in routes:
+        raise ValueError(
+            f"Unknown multi-floor route {options.route_id!r}; available routes are {sorted(routes)}"
+        )
+    return MultiFloorSession(
+        environment,
+        request.settings,
+        mode=options.mode,
+        route_id=options.route_id,
+        device_height=options.device_height,
+    )
 
 
 @app.get("/api/v1/sessions/{session_id}", response_model=Frame)
@@ -197,6 +225,16 @@ def reset(session_id: str, request: Revision):
 
 @app.post("/api/v1/sessions/{session_id}/floor", response_model=Frame)
 def select_floor(session_id: str, request: FloorSelection):
+    session = session_by_id(session_id)
+    if isinstance(session, MultiFloorSession):
+        # Never let a client force a floor: the reported storey is derived from ranges
+        # (inferred) or the configured route (route assisted), both of which are
+        # documented, auditable sources. A client-chosen floor would be neither.
+        raise HTTPException(
+            409,
+            "A multi-floor storey is derived, not selected; the floor endpoint is "
+            "unavailable for this session",
+        )
     return mutate(session_id, request, lambda session: session.select_floor(request.floor_id))
 
 

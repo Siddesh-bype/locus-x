@@ -1,0 +1,23 @@
+{
+  "mode": "route_assisted",
+  "environment_id": "hospital_v3",
+  "scenarios": [
+    "clean",
+    "noise",
+    "high_noise",
+    "nlos",
+    "packet_loss",
+    "anchor_failure",
+    "chaos"
+  ],
+  "routes": [
+    "ascent_stairs",
+    "ascent_lift",
+    "descent_stairs",
+    "transition_pause",
+    "cross_floor_survey"
+  ],
+  "seeds": [37, 43],
+  "steps": 240,
+  "dt": 0.5
+}

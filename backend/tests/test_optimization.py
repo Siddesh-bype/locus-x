@@ -79,6 +79,7 @@ def optimized_v1(v1, tiny_config):
 
 # ---------------------------------------------------------------- legality --
 
+
 def test_derived_sites_are_legal_and_deterministic(v1):
     first = derive_wall_sites(v1)
     second = derive_wall_sites(v1)
@@ -162,7 +163,7 @@ def test_anchors_are_separated_and_reference_real_sites(optimized_v1, v1):
     validate_layout(optimized_v1.selected, v1, legal, policy)
     positions = [a.position for a in optimized_v1.selected.anchors]
     for i, first in enumerate(positions):
-        for second in positions[i + 1:]:
+        for second in positions[i + 1 :]:
             import math
 
             assert math.dist(first, second) >= policy.min_anchor_separation
@@ -177,6 +178,7 @@ def test_insufficient_legal_sites_rejected(v1, tiny_config):
 
 
 # ------------------------------------------------------- reproducibility ----
+
 
 def test_same_config_and_seeds_reproduce_identical_output(v1, tiny_config):
     first = optimize_placement(v1, budget=3, config=tiny_config)
@@ -215,6 +217,7 @@ def test_different_seeds_change_the_search_surface(v1):
 
 # ------------------------------------------------------- round-trip ---------
 
+
 def test_generated_v1_config_round_trips_and_simulates(v1, optimized_v1):
     raw = build_environment_config(v1, "hospital_floor_01", optimized_v1.selected)
     rebuilt = validate_environment_config(raw)
@@ -240,9 +243,7 @@ def test_generated_v3_config_preserves_other_floors(v3, tiny_config):
         a.model_dump() for a in result.selected.anchors
     ]
     assert ground.anchor_layout_id == result.selected.layout_id
-    assert [a.model_dump() for a in first.anchors] == [
-        a.model_dump() for a in source_first.anchors
-    ]
+    assert [a.model_dump() for a in first.anchors] == [a.model_dump() for a in source_first.anchors]
     assert first.anchor_layout_id == source_first.anchor_layout_id
     frame = SimulationSession(rebuilt, Settings(scenario="noise"), "ground").frame
     assert frame.environment_id == rebuilt.id
@@ -257,6 +258,7 @@ def test_optimized_environment_ids_never_collide_with_sources(v1, optimized_v1):
 
 
 # ------------------------------------------------- split hygiene / leakage --
+
 
 def test_splits_reject_shared_seeds_and_heldout_route_reuse():
     development = SplitConfig(route="asset_round", seeds=[1, 2], scenarios=["clean"], steps=10)
@@ -294,12 +296,11 @@ def test_search_never_evaluates_heldout_split(v1, tiny_config, monkeypatch):
 
 def test_default_protocol_splits_are_disjoint():
     config = OptimizerConfig()
-    validate_splits(
-        config.development_split, config.validation_split, config.held_out_split
-    )
+    validate_splits(config.development_split, config.validation_split, config.held_out_split)
 
 
 # ---------------------------------------------- estimator isolation ---------
+
 
 def test_comparison_holds_estimator_fixed(v1, optimized_v1, tiny_config):
     layouts = reference_layouts(v1, "hospital_floor_01", 4, optimized_v1.selected)
@@ -339,6 +340,7 @@ def test_layout_change_does_not_change_estimator_contract(v1, optimized_v1):
 
 
 # ---------------------------------------------- historical artifacts -------
+
 
 def test_optimizing_does_not_modify_historical_configs_or_benchmarks():
     watched = [CONFIG_V1, CONFIG_V3, PROTOCOL]
@@ -386,6 +388,7 @@ def test_benchmark_protocol_still_runs_after_optimization(tmp_path):
 
 # ---------------------------------------------- archive / unsuccessful -----
 
+
 def test_unsuccessful_layouts_are_preserved_in_archive(optimized_v1):
     assert len(optimized_v1.archive) > 1
     totals = [entry.objective_total for entry in optimized_v1.archive]
@@ -408,6 +411,7 @@ def test_objective_components_are_reported_individually(optimized_v1):
 
 
 # ---------------------------------------------- grid layout ---------------
+
 
 def test_grid_layout_is_deterministic_and_legal(v1):
     legal, _, _ = candidate_sites(v1)

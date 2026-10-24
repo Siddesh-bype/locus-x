@@ -75,6 +75,9 @@ class Settings(StrictModel):
     nlos_bias: float = Field(default=2.5, ge=0, le=10)
     dropout: float = Field(default=0, ge=0, le=1)
     disabled_anchors: list[str] = Field(default_factory=list, max_length=32)
+    # "<floor_id>:<anchor_id>" disables one anchor; disabled_anchors keeps its legacy
+    # "this ID on every floor" meaning.
+    disabled_anchor_keys: list[str] = Field(default_factory=list, max_length=32)
     walls_enabled: bool = True
     route: str = "asset_round"
     speed: float = Field(default=1.2, ge=0.2, le=3)
@@ -92,10 +95,19 @@ PRESETS: dict[str, dict] = {
 }
 
 
+class MultifloorOptions(StrictModel):
+    """Opt-in multi-floor session. Absent means the legacy 2D session, unchanged."""
+
+    mode: Literal["route_assisted", "inferred"]
+    route_id: str = Field(min_length=1)
+    device_height: float | None = Field(default=None, gt=0, lt=4)
+
+
 class SessionCreate(StrictModel):
     environment_id: str = "hospital_floor_01"
     floor_id: str | None = None
     settings: Settings = Field(default_factory=Settings)
+    multifloor: MultifloorOptions | None = None
 
 
 class Controls(StrictModel):
@@ -105,6 +117,7 @@ class Controls(StrictModel):
     nlos_bias: float | None = Field(default=None, ge=0, le=10)
     dropout: float | None = Field(default=None, ge=0, le=1)
     disabled_anchors: list[str] | None = Field(default=None, max_length=32)
+    disabled_anchor_keys: list[str] | None = Field(default=None, max_length=32)
     walls_enabled: bool | None = None
     route: str | None = None
     speed: float | None = Field(default=None, ge=0.2, le=3)
@@ -173,6 +186,36 @@ class Tracking(StrictModel):
     runtime_ms: float
 
 
+class FloorState(StrictModel):
+    """The reported storey, with where it came from and whether it is trusted.
+
+    ``source`` is the only honest answer to "why is this the floor?": ``configured``
+    means geometry selected it before the run, ``route_assisted`` means the route said
+    so, ``inferred`` means the ranges decided. ``floor_id`` is ``None`` while the
+    storey is ambiguous, and an ambiguous frame never carries confidence.
+    """
+
+    floor_id: str | None
+    source: Literal["configured", "route_assisted", "inferred"]
+    confidence: float | None
+    ambiguous: bool
+
+
+class TransitionState(StrictModel):
+    """One vertical traverse, as far as the tracker currently knows it.
+
+    Only the tracker names a phase; the connector and target are configuration, and
+    an inferred-mode traverse carries no ids because no route witness is consulted.
+    """
+
+    phase: Literal["entering", "traversing", "exiting", "reacquiring"]
+    transition_id: str | None = None
+    connection_id: str | None = None
+    from_floor_id: str | None = None
+    to_floor_id: str | None = None
+    progress: float | None = None
+
+
 class Evaluation(StrictModel):
     ground_truth: Point
     baseline_error: float | None
@@ -180,6 +223,10 @@ class Evaluation(StrictModel):
     covered_95: bool | None
     has_nlos: bool
     has_dropout: bool
+    # Device elevation of the truth target. Legacy 2D sessions leave it null because
+    # their truth is a floor-plane point; multi-floor sessions fill it so a truth
+    # marker can be drawn at its real height without guessing.
+    ground_truth_elevation: float | None = None
 
 
 class Event(StrictModel):
@@ -193,9 +240,13 @@ class Frame(StrictModel):
     environment_id: str
     environment_version: str
     environment_sha256: str
-    floor_id: str
-    floor_elevation: float
-    localization_mode: Literal["2d_on_known_floor"] = "2d_on_known_floor"
+    # None only for a multi-floor frame whose storey is ambiguous; legacy sessions
+    # always populate both.
+    floor_id: str | None
+    floor_elevation: float | None
+    localization_mode: Literal[
+        "2d_on_known_floor", "multifloor_route_assisted", "multifloor_inferred"
+    ] = "2d_on_known_floor"
     revision: int
     frame_index: int
     timestamp: float
@@ -208,6 +259,11 @@ class Frame(StrictModel):
     tracking: Tracking
     evaluation: Evaluation
     events: list[Event]
+    # Additive, null for every legacy frame: no existing key or value changes.
+    floor_state: FloorState | None = None
+    transition: TransitionState | None = None
+    elevation_estimate: float | None = None
+    floor_probabilities: dict[str, float] | None = None
 
 
 class BenchmarkRequest(StrictModel):

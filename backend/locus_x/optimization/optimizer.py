@@ -70,9 +70,7 @@ def optimize_placement(
     resolved_floor_id = floor.id
     legal, site_records, source = candidate_sites(configuration, resolved_floor_id, policy)
     if len(legal) < budget:
-        raise ValueError(
-            f"Only {len(legal)} legal candidate sites; cannot place {budget} anchors"
-        )
+        raise ValueError(f"Only {len(legal)} legal candidate sites; cannot place {budget} anchors")
 
     archive: list[LayoutArchiveEntry] = []
     archive_index: dict[str, int] = {}

@@ -115,12 +115,8 @@ def run_optimization(
         "validation_split": config.validation_split.model_dump(),
         "policy": policy.model_dump(),
         "optimization": {str(b): results[b].model_dump() for b in budgets},
-        "comparisons": {
-            f"{b}/{e}": reports[(b, e)].model_dump() for (b, e) in reports
-        },
-        "environment_configs": {
-            f"{b}/{kind}": configs[(b, kind)] for (b, kind) in configs
-        },
+        "comparisons": {f"{b}/{e}": reports[(b, e)].model_dump() for (b, e) in reports},
+        "environment_configs": {f"{b}/{kind}": configs[(b, kind)] for (b, kind) in configs},
         "runtime_seconds": perf_counter() - start,
         "notes": (
             "Selection used development + validation splits only. Held-out rows are "
@@ -154,11 +150,7 @@ def write_artifacts(output: Path, payload: dict) -> None:
     (output / "manifest.json").write_text(
         json.dumps(payload, indent=2, allow_nan=False), encoding="utf-8"
     )
-    rows = [
-        row
-        for report in payload["comparisons"].values()
-        for row in report["rows"]
-    ]
+    rows = [row for report in payload["comparisons"].values() for row in report["rows"]]
     fieldnames = list(rows[0]) if rows else []
     # Flatten per_region_rmse for CSV consumers.
     flat_rows = []
@@ -188,9 +180,7 @@ def main():
     parser.add_argument("--environment", default="hospital_floor_01")
     parser.add_argument("--floor", default=None)
     parser.add_argument("--budgets", type=int, nargs="+", default=[8])
-    parser.add_argument(
-        "--protocol", type=Path, default=None, help="Optional OptimizerConfig JSON"
-    )
+    parser.add_argument("--protocol", type=Path, default=None, help="Optional OptimizerConfig JSON")
     parser.add_argument(
         "--baseline-only", action="store_true", help="Skip the LOCUS-X estimator comparison"
     )

@@ -3,7 +3,7 @@ from pathlib import Path
 
 import numpy as np
 
-from .building import Building, Floor
+from .building import Building, Floor, config_model
 from .geometry import intersects as intersects
 from .schemas import Environment, Point, Waypoint
 
@@ -14,7 +14,7 @@ def load_environments() -> dict[str, Environment | Building]:
     environments = {}
     for path in sorted(CONFIG_DIR.glob("*.json")):
         raw = json.loads(path.read_text(encoding="utf-8"))
-        model = Building if raw.get("schema_version") == "3.0" else Environment
+        model = config_model(raw)
         data = model.model_validate(raw)
         if data.id in environments:
             raise ValueError(f"Duplicate environment ID: {data.id}")

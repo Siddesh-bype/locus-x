@@ -13,7 +13,7 @@ import hashlib
 import json
 import math
 
-from ..building import Building
+from ..building import Building, config_model
 from ..schemas import Anchor, Environment
 from .protocol import Layout
 from .sites import wall_clearance
@@ -51,10 +51,7 @@ def make_layout(
         budget=len(sites),
         anchors=anchors,
         site_ids=site_ids,
-        selection={
-            anchor.id: site
-            for anchor, site in zip(anchors, site_ids, strict=True)
-        },
+        selection={anchor.id: site for anchor, site in zip(anchors, site_ids, strict=True)},
         layout_hash=digest,
         provenance=provenance or {},
     )
@@ -210,5 +207,4 @@ def build_environment_config(
 
 def validate_environment_config(raw: dict) -> Environment | Building:
     """Round-trip a generated configuration through the existing parsers."""
-    model = Building if raw.get("schema_version") == "3.0" else Environment
-    return model.model_validate(raw)
+    return config_model(raw).model_validate(raw)

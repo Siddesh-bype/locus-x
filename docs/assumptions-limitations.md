@@ -6,6 +6,17 @@ The original single-floor reference remains available. V3 adds a fictional three
 
 V3 functional results are versioned separately from the reference. The browser tool in the V3 implementation session had no available browser, so WebGL appearance, responsive screenshots and real UI click/keyboard acceptance remain unverified here. See [V3 status](v3-status.md) for executed checks and [handoff](v3-handoff.md) for pending work. Historical statements below about one evaluated floor describe the original reference benchmark.
 
+## Multi-floor positioning update
+
+The multi-floor work on branch `feat/multifloor-positioning` adds continuous 3D ranging, a vertical estimate, inferred and route-assisted storey state, and a two-mode evaluation protocol. See [multi-floor status](multifloor-status.md) for the executed evidence and the full "not implemented" list. Its limits are not small print:
+
+- **The slab/NLOS model is synthetic.** Cross-floor attenuation is a configured simulator term chosen to make storeys separable; it is not a measured propagation model. No real-radio, calibration or deployment claim is made.
+- **Coplanar anchors on one storey cannot name a floor.** If every anchor visible to the device lies on a single storey, the vertical geometry does not distinguish that storey from its neighbours. This is a geometric limitation, not a bug; multi-floor observability needs anchors on more than one storey or another vertical witness.
+- **Floor probabilities are likelihood scores, not calibrated posteriors.** They are exported as finite numbers and used to decide a storey, but no calibration was performed and they must not be read as confidence guarantees.
+- **Route-assisted floor identity is configuration, not inference.** In that mode the storey follows the selected route; its floor accuracy is reported as `n/a`, and its transition success measures freshness/settling by construction. It must not be compared with the inferred mode as a better result.
+
+An inferred session is legitimately ambiguous at cold start and during vertical unobservability, and reports a null storey rather than guessing. Recovery under the mandated fault matrix is also degenerate: the timed outage leaves enough anchors that updates keep firing, so it demonstrates wiring rather than recovery from a total blackout.
+
 ## What this demonstrates
 
 A complete local loop from synthetic observations through independently evaluated localization and an interactive 3-D display. It allows repeatable exploration of observability, inconsistent ranges, filter lag, uncertainty, outages and recovery.
